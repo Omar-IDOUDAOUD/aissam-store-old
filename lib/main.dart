@@ -51,6 +51,13 @@ class AissamStore extends StatelessWidget {
             fontSize: 11,
             // height: 1,
           ),
+          headline6: TextStyle(
+            color: CstColors.b,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+            fontSize: 9.5,
+            // height: 1,
+          ),
         ),
       ),
       home: Home(),

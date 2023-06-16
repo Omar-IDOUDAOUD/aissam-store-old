@@ -1,11 +1,27 @@
 import 'package:aissam_store/view/home/nav_bar/nav_bar.dart';
+import 'package:aissam_store/view/home/tabs/main/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
 
-  final PageController _pageController = PageController(initialPage: 0);
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  late final PageController _pageController;
+  int _activeTabIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _pageController =
+        PageController(initialPage: _activeTabIndex, keepPage: true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +31,12 @@ class Home extends StatelessWidget {
           Positioned.fill(
             child: PageView(
               controller: _pageController,
+              onPageChanged: (index) {
+                _activeTabIndex = index; 
+                setState(() {});
+              },
               children: [
-                const ColoredBox(
-                  color: Colors.blue,
-                ),
-                const ColoredBox(
-                  color: Colors.yellow,
-                ),
+                MainTab(),
               ],
             ),
           ),
@@ -30,7 +45,8 @@ class Home extends StatelessWidget {
             right: 0,
             left: 0,
             child: NavBar(
-              onPageChange: (int index) {
+              activeIndex: _activeTabIndex,
+              onIndexChange: (int index) {
                 _pageController.animateToPage(
                   index,
                   duration: 500.milliseconds,
