@@ -5,15 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ImageView extends StatefulWidget {
-  const ImageView(
-      {Key? key,
-      required this.images,
-      required this.pageController,
-      required this.buildImageHeight})
-      : super(key: key);
+  const ImageView({
+    Key? key,
+    required this.images,
+    required this.pageController,
+    required this.buildImageHeight,
+    this.tag = 'NO-TAG'
+  }) : super(key: key);
   final List<String> images;
   final PageController pageController;
   final Future<double> Function(int i) buildImageHeight;
+  final String tag;
   // final Function onPageChanged;
   @override
   State<ImageView> createState() => _ImageViewState();
@@ -58,10 +60,13 @@ class _ImageViewState extends State<ImageView> {
                 curve: Curves.linearToEaseOut,
               );
             },
-            child: Image.asset(
-              widget.images.elementAt(i),
-              fit: BoxFit.contain,
-              alignment: Alignment.topCenter,
+            child: Hero(
+              tag: widget.tag,
+              child: Image.asset(
+                widget.images.elementAt(i),
+                fit: BoxFit.contain,
+                alignment: Alignment.topCenter,
+              ),
             ),
           );
         },

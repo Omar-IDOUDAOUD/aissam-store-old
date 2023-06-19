@@ -92,6 +92,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             images: _images,
             pageController: _imageViewCtrl,
             buildImageHeight: _getImageHeight,
+            tag: _images.elementAt(_activeImgIndex)
           ),
           Positioned(
             child: SingleChildScrollView(
@@ -132,7 +133,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                               );
                             },
                             onFullScreen: () {
-                              //
+                              Get.toNamed(
+                                '/fullscreen_image',
+                                arguments: {
+                                  'image_tag_index': _activeImgIndex,
+                                  'images': _images, 
+                                },
+                              );
                             },
                           ),
                         ),
