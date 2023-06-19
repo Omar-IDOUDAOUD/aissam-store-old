@@ -28,81 +28,88 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 80,
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.6),
         boxShadow: [
           BoxShadow(
-            color: Colors.black54.withOpacity(.4),
+            color: Colors.black54.withOpacity(.2),
             blurRadius: 35,
             offset: Offset(0, 0),
             blurStyle: BlurStyle.outer,
           )
         ],
       ),
-      clipBehavior: Clip.antiAlias,
-      padding: EdgeInsets.only(top: 10),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 10,
-          sigmaY: 10,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            NavBarItem(
-              focus: focusItem == 0,
-              iconPath: 'assets/icons/home.svg',
-              onTap: () {
-                widget.onIndexChange(0);
-                setState(() {
-                  focusItem = 0;
-                });
-              },
+      child: SizedBox(
+        height: 80,
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 10,
+              sigmaY: 10,
             ),
-            NavBarItem(
-              focus: focusItem == 1,
-              iconPath: 'assets/icons/star.svg',
-              onTap: () {
-                widget.onIndexChange(1);
-                setState(() {
-                  focusItem = 1;
-                });
-              },
-            ),
-            NavBarItem(
-              focus: focusItem == 2,
-              iconPath: 'assets/icons/search.svg',
-              onTap: () {
-                widget.onIndexChange(2);
-                setState(() {
-                  focusItem = 2;
-                });
-              },
-            ),
-            NavBarItem(
-              focus: focusItem == 3,
-              iconPath: 'assets/icons/box_alt.svg',
-              onTap: () {
-                widget.onIndexChange(3);
-                setState(() {
-                  focusItem = 3;
-                });
-              },
-            ),
-            NavBarItem(
-              focus: focusItem == 4,
-              iconPath: 'assets/icons/user.svg',
-              onTap: () {
-                widget.onIndexChange(4);
+            child: ColoredBox(
+              color: Colors.white.withOpacity(0.7),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    NavBarItem(
+                      focus: focusItem == 0,
+                      iconPath: 'assets/icons/home.svg',
+                      onTap: () {
+                        widget.onIndexChange(0);
+                        setState(() {
+                          focusItem = 0;
+                        });
+                      },
+                    ),
+                    NavBarItem(
+                      focus: focusItem == 1,
+                      iconPath: 'assets/icons/star.svg',
+                      onTap: () {
+                        widget.onIndexChange(1);
+                        setState(() {
+                          focusItem = 1;
+                        });
+                      },
+                    ),
+                    NavBarItem(
+                      focus: focusItem == 2,
+                      iconPath: 'assets/icons/search.svg',
+                      onTap: () {
+                        widget.onIndexChange(2);
+                        setState(() {
+                          focusItem = 2;
+                        });
+                      },
+                    ),
+                    NavBarItem(
+                      focus: focusItem == 3,
+                      iconPath: 'assets/icons/box_alt.svg',
+                      onTap: () {
+                        widget.onIndexChange(3);
+                        setState(() {
+                          focusItem = 3;
+                        });
+                      },
+                    ),
+                    NavBarItem(
+                      focus: focusItem == 4,
+                      iconPath: 'assets/icons/user.svg',
+                      onTap: () {
+                        widget.onIndexChange(4);
 
-                setState(() {
-                  focusItem = 4;
-                });
-              },
+                        setState(() {
+                          focusItem = 4;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ],
+          ),
         ),
       ),
     );

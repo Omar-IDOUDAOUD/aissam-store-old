@@ -1,6 +1,9 @@
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/home/home.dart';
+import 'package:aissam_store/view/product_dets/product_details.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 void main() {
@@ -60,7 +63,19 @@ class AissamStore extends StatelessWidget {
           ),
         ),
       ),
-      home: Home(),
+      getPages: [
+        GetPage(
+          name: '/',
+          page: () => Home(),
+        ),
+        GetPage(
+          name: '/product_details',
+          page: () => ProductDetails(),
+          transitionDuration: 400.milliseconds,
+          transition: Transition.cupertino,
+          showCupertinoParallax: false,
+        ),
+      ],
     );
   }
 }
