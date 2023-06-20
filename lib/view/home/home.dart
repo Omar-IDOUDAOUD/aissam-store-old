@@ -1,4 +1,5 @@
 import 'package:aissam_store/view/home/nav_bar/nav_bar.dart';
+import 'package:aissam_store/view/home/tabs/favorites/favorites.dart';
 import 'package:aissam_store/view/home/tabs/main/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,11 +33,12 @@ class _HomeState extends State<Home> {
             child: PageView(
               controller: _pageController,
               onPageChanged: (index) {
-                _activeTabIndex = index; 
+                _activeTabIndex = index;
                 setState(() {});
               },
               children: [
                 MainTab(),
+                FavoritesTab(),
               ],
             ),
           ),

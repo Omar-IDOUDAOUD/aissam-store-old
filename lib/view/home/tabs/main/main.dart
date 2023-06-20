@@ -17,7 +17,6 @@ class MainTab extends StatefulWidget {
 }
 
 class _MainTabState extends State<MainTab> {
-  final ValueKey _key = ValueKey('value');
 
   final List<Map> _items = [
     {

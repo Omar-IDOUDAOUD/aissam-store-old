@@ -42,11 +42,11 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
       });
   }
 
-
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.dispose(); 
+    _controller.dispose();
+    super.dispose();
   }
 
   final _anDur = 300.milliseconds;

@@ -12,12 +12,14 @@ class ProductCard extends StatelessWidget {
     required this.price,
     required this.colorsNumber,
     this.isHot = false,
+    this.favorited = false,
   }) : super(key: key);
   final String title;
   final String imagePath;
   final double price;
   final int colorsNumber;
   final bool isHot;
+  final bool favorited;
 
   final _w = Get.size.width * 0.37;
 
