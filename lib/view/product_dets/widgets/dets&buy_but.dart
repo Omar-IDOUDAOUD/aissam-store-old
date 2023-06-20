@@ -36,7 +36,7 @@ class DetsAndBuyButton extends StatelessWidget {
                       title,
                       style: Get.textTheme.headline2!.copyWith(height: 1.25),
                     ),
-                    _getTextH4('$price MAD', CstColors.a),
+                    _getTextH4('${price.toStringAsFixed(2)} MAD', CstColors.a),
                     const SizedBox(height: 7),
                     _getTextH4('Details', CstColors.b),
                     _getRichText('Material', '12-gouge cashmere'),

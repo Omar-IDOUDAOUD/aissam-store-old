@@ -89,11 +89,10 @@ class _ProductDetailsState extends State<ProductDetails> {
       body: Stack(
         children: [
           ImageView(
-            images: _images,
-            pageController: _imageViewCtrl,
-            buildImageHeight: _getImageHeight,
-            tag: _images.elementAt(_activeImgIndex)
-          ),
+              images: _images,
+              pageController: _imageViewCtrl,
+              buildImageHeight: _getImageHeight,
+              tag: _images.elementAt(_activeImgIndex)),
           Positioned(
             child: SingleChildScrollView(
               controller: _scrollController,
@@ -137,7 +136,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 '/fullscreen_image',
                                 arguments: {
                                   'image_tag_index': _activeImgIndex,
-                                  'images': _images, 
+                                  'images': _images,
                                 },
                               );
                             },
@@ -162,11 +161,25 @@ class _ProductDetailsState extends State<ProductDetails> {
                             );
                           },
                           onColorChange: (int i) {
-                            //
+                            setState(() {
+                              _activeClrIndex = i;
+                            });
                           },
                           images: _images,
                           activeImageIndex: _activeImgIndex,
                           activeColorIndex: _activeClrIndex,
+                          colors: [
+                            Colors.brown,
+                            Colors.greenAccent,
+                            Colors.purpleAccent,
+                            Colors.redAccent,
+                          ],
+                          colorsNames: [
+                            'brown',
+                            'Green accent',
+                            'Purple',
+                            'Red accent',
+                          ],
                         ),
                         const DetsAndBuyButton(
                           price: 185.00,

@@ -92,7 +92,7 @@ class ProductCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '$price MAD',
+                  '${price.toStringAsFixed(2)} MAD',
                   style: Get.textTheme.headline4!.copyWith(
                     color: CstColors.a,
                     fontWeight: FontWeight.bold,

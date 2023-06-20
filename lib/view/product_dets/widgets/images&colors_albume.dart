@@ -10,13 +10,15 @@ class ImagesAndColorsAlbum extends StatefulWidget {
       required this.onColorChange,
       required this.images,
       this.colors,
+      this.colorsNames,
       this.activeImageIndex = 0,
       this.activeColorIndex})
       : super(key: key);
   final Function(int i) onPictureChange;
   final Function(int i)? onColorChange;
   final List<String> images;
-  final List<Colors>? colors;
+  final List<Color>? colors;
+  final List<String>? colorsNames;
   final int activeImageIndex;
   final int? activeColorIndex;
 
@@ -33,13 +35,13 @@ class _ImagesAndColorsAlbumState extends State<ImagesAndColorsAlbum> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _controller = PageController(); 
+    _controller = PageController();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.dispose(); 
+    _controller.dispose();
     super.dispose();
   }
 
@@ -104,9 +106,10 @@ class _ImagesAndColorsAlbumState extends State<ImagesAndColorsAlbum> {
                             itemBuilder: (_, i) {
                               return _ListColor(
                                 focus: widget.activeColorIndex == i,
-                                color: Colors.greenAccent,
+                                color: widget.colors!.elementAt(i),
+                                colorName: widget.colorsNames!.elementAt(i),
                                 onTap: () {
-                                  //
+                                  widget.onColorChange!(i);
                                 },
                               );
                             },
@@ -138,8 +141,8 @@ class _ImagesAndColorsAlbumState extends State<ImagesAndColorsAlbum> {
         child: DecoratedBox(
           decoration: BoxDecoration(
               color: CstColors.a,
-              borderRadius: const BorderRadius.horizontal(
-                  right: Radius.circular(4))),
+              borderRadius:
+                  const BorderRadius.horizontal(right: Radius.circular(4))),
         ),
       );
 
@@ -223,10 +226,15 @@ class _ListImageState extends State<_ListImage> {
 
 class _ListColor extends StatefulWidget {
   const _ListColor(
-      {Key? key, required this.color, required this.focus, required this.onTap})
+      {Key? key,
+      required this.color,
+      required this.focus,
+      required this.onTap,
+      required this.colorName})
       : super(key: key);
   final Color color;
   final bool focus;
+  final String colorName;
   final Function() onTap;
   @override
   State<_ListColor> createState() => __ListColorState();
@@ -279,16 +287,19 @@ class __ListColorState extends State<_ListColor> {
               child: ColoredBox(
                 color: Colors.white.withOpacity(.8),
                 child: Center(
-                  child: Text(
-                    "Gold Orange",
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    style: Get.textTheme.headline6!.copyWith(
-                      color: CstColors.a,
-                      height: 1,
-                      fontSize: 8,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      widget.colorName,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: Get.textTheme.headline6!.copyWith(
+                        color: CstColors.a,
+                        height: 1,
+                        fontSize: 8,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

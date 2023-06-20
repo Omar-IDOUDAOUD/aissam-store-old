@@ -69,7 +69,6 @@ class AissamStore extends StatelessWidget {
           name: '/',
           page: () => Home(),
           transition: Transition.cupertino,
-
         ),
         GetPage(
           name: '/product_details',
@@ -77,14 +76,14 @@ class AissamStore extends StatelessWidget {
           // transitionDuration: 400.milliseconds,
           transition: Transition.cupertino,
           // showCupertinoParallax: false,
-          // maintainState: 
+          // maintainState:
         ),
         GetPage(
           name: '/fullscreen_image',
           page: () => FullScreenImage(),
           transition: Transition.fadeIn,
-showCupertinoParallax: false
-, opaque: false
+          showCupertinoParallax: false,
+          opaque: false,
         )
       ],
     );
