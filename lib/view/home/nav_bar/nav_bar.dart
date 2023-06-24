@@ -21,6 +21,7 @@ class _NavBarState extends State<NavBar> {
 
   @override
   void initState() {
+    super.initState();
     // TODO: implement initState
     focusItem = widget.activeIndex;
     if (super.mounted) setState(() {});

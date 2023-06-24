@@ -28,6 +28,7 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
 
   @override
   void initState() {
+    super.initState();
     // TODO: implement initState
     _controller = ScrollController()
       ..addListener(() {
