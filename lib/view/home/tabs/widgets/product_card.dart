@@ -32,6 +32,7 @@ class ProductCard extends StatelessWidget {
       child: SizedBox(
         width: _w,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 170,
@@ -108,6 +109,7 @@ class ProductCard extends StatelessWidget {
             ),
             Text(
               title,
+              textAlign: TextAlign.start,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: Get.textTheme.headline3!.copyWith(

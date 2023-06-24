@@ -7,7 +7,9 @@ abstract class CstColors {
 /// light gray: 858585
   static Color b = HexColor('#858585');
 /// dark gray: 696969
-  static Color c = HexColor('#696969');
+  static Color c = HexColor('#696969'); 
+/// green: 62AA9D
+  static Color g = HexColor('#62AA9D');
 
 /// light yellow: FFEDCA
   static Color d = HexColor('#FFEDCA');

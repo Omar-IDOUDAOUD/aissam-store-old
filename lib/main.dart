@@ -2,7 +2,7 @@ import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/fullscreen_image/fullscreen_image.dart';
 import 'package:aissam_store/view/home/home.dart';
 import 'package:aissam_store/view/product_dets/product_details.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:aissam_store/view/testing/test.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -17,6 +17,7 @@ class AissamStore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: TextTheme(
@@ -84,8 +85,10 @@ class AissamStore extends StatelessWidget {
           transition: Transition.fadeIn,
           showCupertinoParallax: false,
           opaque: false,
-        )
+        ),
+        GetPage(name: '/testing', page: () => TestPage()),
       ],
+      initialRoute: '/home',
     );
   }
 }
