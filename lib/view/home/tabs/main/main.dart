@@ -1,6 +1,6 @@
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
-import 'package:aissam_store/view/home/more_products/more_products.dart';
+import 'package:aissam_store/view/more_products/more_products.dart';
 import 'package:aissam_store/view/home/tabs/main/widgets/header.dart';
 import 'package:aissam_store/view/home/tabs/widgets/categorie_item.dart';
 import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
