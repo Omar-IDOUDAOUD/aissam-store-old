@@ -1,5 +1,5 @@
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategorieItem extends StatefulWidget {
@@ -84,7 +84,7 @@ class _CategorieItemState extends State<CategorieItem> {
             SizedBox(height: 2),
             Text(
               widget.title,
-              style: Get.textTheme.headline5!.copyWith(
+              style: Get.textTheme.displayLarge !.copyWith(
                 color: _checked ? CstColors.g : CstColors.b,
               ),
             )

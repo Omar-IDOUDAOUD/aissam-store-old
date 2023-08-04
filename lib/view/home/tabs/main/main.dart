@@ -17,7 +17,6 @@ class MainTab extends StatefulWidget {
 }
 
 class _MainTabState extends State<MainTab> {
-
   final List<Map> _items = [
     {
       'img': 'assets/images/image_1 1x.png',
@@ -65,13 +64,13 @@ class _MainTabState extends State<MainTab> {
               _paddedWidget(
                 Text(
                   'Good Morning \nZahra',
-                  style: Get.textTheme.headline1!.copyWith(height: 1.2),
+                  style: Get.textTheme.headlineLarge!.copyWith(height: 1.1),
                 ),
               ),
               const SizedBox(
                 height: 10,
               ),
-              _listTitle('Categories'),
+              _listTitle('Collections'),
               const SizedBox(height: 10),
               _listedItems(
                 (_, i) => CategorieItem(
@@ -120,7 +119,8 @@ class _MainTabState extends State<MainTab> {
           duration: 500.milliseconds,
           curve: Curves.linearToEaseOut,
           child: _clearMoreProducts
-             ? SizedBox.shrink() : PhysicalModel(
+              ? SizedBox.shrink()
+              : PhysicalModel(
                   color: Colors.transparent,
                   elevation: 100,
                   shadowColor: Colors.black,
@@ -132,20 +132,19 @@ class _MainTabState extends State<MainTab> {
                       });
                       500.milliseconds.delay().then((value) {
                         setState(() {
-                          _clearMoreProducts = true; 
+                          _clearMoreProducts = true;
                         });
-                      }); 
+                      });
                     },
                     collection: ProductsCollections.BestSelling,
                   ),
-                )
-              ,
+                ),
         ),
       ],
     );
   }
 
-  bool _clearMoreProducts= true; 
+  bool _clearMoreProducts = true;
 
   Widget _paddedWidget(Widget child) {
     return Padding(
@@ -160,13 +159,13 @@ class _MainTabState extends State<MainTab> {
         children: [
           Text(
             title,
-            style: Get.textTheme.headline2,
+            style: Get.textTheme.headlineMedium,
           ),
           const Spacer(),
           GestureDetector(
             onTap: () {
               setState(() {
-                          _clearMoreProducts = false; 
+                _clearMoreProducts = false;
                 _showMorePoducts = true;
               });
             },
@@ -174,7 +173,7 @@ class _MainTabState extends State<MainTab> {
               children: [
                 Text(
                   'See all',
-                  style: Get.textTheme.headline4,
+                  style: Get.textTheme.bodySmall,
                 ),
                 const SizedBox(
                   width: 5,

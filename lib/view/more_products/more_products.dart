@@ -128,10 +128,10 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
                     _getCollectionName(),
                   ),
                   style: _minimizeTitle
-                      ? Get.textTheme.headline2!.copyWith(
+                      ? Get.textTheme.headlineMedium!.copyWith(
                           color: CstColors.a,
                         )
-                      : Get.textTheme.headline1!.copyWith(
+                      : Get.textTheme.headlineLarge!.copyWith(
                           color: CstColors.a,
                         ),
                   duration: _anDur,
@@ -143,11 +143,11 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
                     curve: _anCur,
                     child: Text(widget.subTitle!),
                     style: _minimizeTitle
-                        ? Get.textTheme.headline5!.copyWith(
+                        ? Get.textTheme.bodyMedium!.copyWith(
                             color: CstColors.c,
                             height: 1,
                           )
-                        : Get.textTheme.headline4!.copyWith(
+                        : Get.textTheme.bodyLarge!.copyWith(
                             color: CstColors.c,
                             height: 1,
                           ),

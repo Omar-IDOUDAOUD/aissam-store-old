@@ -129,7 +129,7 @@ class _ImagesAndColorsAlbumState extends State<ImagesAndColorsAlbum> {
   Widget get _getNoColorAvailabeTxt => Center(
         child: Text(
           'No color availabe',
-          style: Get.textTheme.headline5!.copyWith(
+          style: Get.textTheme.bodyMedium!.copyWith(
             fontStyle: FontStyle.italic,
           ),
         ),
@@ -293,7 +293,7 @@ class __ListColorState extends State<_ListColor> {
                       widget.colorName,
                       textAlign: TextAlign.center,
                       maxLines: 2,
-                      style: Get.textTheme.headline6!.copyWith(
+                      style: Get.textTheme.bodySmall!.copyWith(
                         color: CstColors.a,
                         height: 1,
                         fontSize: 8,

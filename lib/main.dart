@@ -17,50 +17,76 @@ class AissamStore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: TextTheme(
-          headline1: TextStyle(
+          headlineLarge: TextStyle(
+            //h1
             color: CstColors.a,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 26,
             // height: 1.3,
           ),
-          headline2: TextStyle(
+          headlineMedium: TextStyle(
+            //h2
             color: CstColors.a,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 20,
             // height: 1,
           ),
-          headline3: TextStyle(
+          headlineSmall: TextStyle(
+            //3
             color: CstColors.c,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
-            fontSize: 16,
+            fontSize: 18,
             // height: 1,
           ),
-          headline4: TextStyle(
+          bodyLarge: TextStyle(
+            //h4
             color: CstColors.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
-            fontSize: 12.5,
+            fontSize: 15,
             // height: 1,
           ),
-          headline5: TextStyle(
+          bodyMedium: TextStyle(
+            //h5
             color: CstColors.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
-            fontSize: 11,
+            fontSize: 13,
             // height: 1,
           ),
-          headline6: TextStyle(
+          bodySmall: TextStyle(
+            //h6
             color: CstColors.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
-            fontSize: 9.5,
+            fontSize: 11.5,
+            // height: 1,
+          ),
+          displayLarge: TextStyle(
+            color: CstColors.b,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+            fontSize: 10.5,
+            // height: 1,
+          ),
+          displayMedium: TextStyle(
+            color: CstColors.b,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+            fontSize: 10,
+            // height: 1,
+          ),
+          displaySmall: TextStyle(
+            color: CstColors.b,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+            fontSize: 8.5,
             // height: 1,
           ),
         ),

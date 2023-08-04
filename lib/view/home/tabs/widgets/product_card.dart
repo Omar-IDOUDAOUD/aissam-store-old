@@ -1,4 +1,4 @@
-import 'package:aissam_store/core/constants/colors.dart'; 
+import 'package:aissam_store/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -20,7 +20,7 @@ class ProductCard extends StatelessWidget {
   final bool isHot;
   final bool favorited;
 
-  final _w = Get.size.width * 0.37;
+  final double _w = 120;
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +74,9 @@ class ProductCard extends StatelessWidget {
                                   height: 14),
                               Text(
                                 'HOT',
-                                style: Get.textTheme.headline6!.copyWith(
+                                style: Get.textTheme.displayLarge!.copyWith(
                                   color: CstColors.e,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.normal,
                                 ),
                               ),
                             ],
@@ -95,23 +95,26 @@ class ProductCard extends StatelessWidget {
               children: [
                 Text(
                   '${price.toStringAsFixed(2)} MAD',
-                  style: Get.textTheme.headline4!.copyWith(
+                  style: Get.textTheme.bodyMedium!.copyWith(
                     color: CstColors.a,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SvgPicture.asset(
                   'assets/icons/favorite.svg',
-                  height: 20,
+                  height: 18,
                 )
               ],
+            ),
+            SizedBox(
+              height: 4,
             ),
             Text(
               title,
               textAlign: TextAlign.start,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Get.textTheme.headline3!.copyWith(
+              style: Get.textTheme.bodyMedium!.copyWith(
                 color: CstColors.c,
                 height: 1.3,
               ),
@@ -127,7 +130,7 @@ class ProductCard extends StatelessWidget {
                 ),
                 Text(
                   '$colorsNumber color',
-                  style: Get.textTheme.headline4!.copyWith(
+                  style: Get.textTheme.displayLarge!.copyWith(
                     color: CstColors.c,
                     // fontWeight: FontWeight.bold,
                   ),

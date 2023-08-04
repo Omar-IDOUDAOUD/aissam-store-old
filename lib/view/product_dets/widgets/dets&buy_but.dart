@@ -1,6 +1,7 @@
 // ignore: file_names
 
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/product_dets/widgets/add_to_card_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -34,11 +35,16 @@ class DetsAndBuyButton extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: Get.textTheme.headline2!.copyWith(height: 1.25),
+                      style: Get.textTheme.headlineSmall!.copyWith(
+                        height: 1.25,
+                        fontWeight: FontWeight.w500,
+                        color: CstColors.a,
+                      ),
                     ),
-                    _getTextH4('${price.toStringAsFixed(2)} MAD', CstColors.a),
+                    _getBodySmallText('${price.toStringAsFixed(2)} MAD',
+                        CstColors.a, FontWeight.w700),
                     const SizedBox(height: 7),
-                    _getTextH4('Details', CstColors.b),
+                    _getBodySmallText('Details', CstColors.b, FontWeight.w600),
                     _getRichText('Material', '12-gouge cashmere'),
                     _getRichText('Shipping', 'in 2 to 5 days'),
                     _getRichText('Returns', 'ithin 30 days'),
@@ -62,13 +68,14 @@ class DetsAndBuyButton extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 7),
-          _getTextH4('Description', CstColors.b),
-          _getTextH4(
+          const SizedBox(height: 0),
+          _getBodySmallText('Description', CstColors.b, FontWeight.w600),
+          _getBodyMediumText(
               'Our cult-favorite premium jersey is super-soft, effortiess and made to last. it comes in our cult-favorite muted blush',
-              CstColors.a),
+              CstColors.a,
+              FontWeight.w500),
           const SizedBox(height: 7),
-          _getTextH4('Chat with seller', CstColors.b),
+          _getBodySmallText('Chat with seller', CstColors.b, FontWeight.w600),
           _getChatWithSellerMethod('Phone Call', '+21276858745', () {}),
           _getChatWithSellerMethod('WhatsApp', '', () {})
         ],
@@ -80,9 +87,9 @@ class DetsAndBuyButton extends StatelessWidget {
       String label, String subLabel, Function onTap) {
     return Row(
       children: [
-        _getTextH4(label, CstColors.a),
+        _getBodySmallText(label, CstColors.a, FontWeight.w600),
         const Spacer(),
-        _getTextH4(subLabel, CstColors.c),
+        _getBodyMediumText(subLabel, CstColors.c, FontWeight.normal),
         const SizedBox(
           width: 5,
         ),
@@ -100,16 +107,16 @@ class DetsAndBuyButton extends StatelessWidget {
         children: [
           TextSpan(
             text: '$txt1: ',
-            style: Get.textTheme.headline4!.copyWith(
+            style: Get.textTheme.bodySmall!.copyWith(
               color: CstColors.a,
               fontWeight: FontWeight.w600,
             ),
           ),
           TextSpan(
             text: txt2,
-            style: Get.textTheme.headline4!.copyWith(
+            style: Get.textTheme.bodySmall!.copyWith(
               color: CstColors.b,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -117,12 +124,22 @@ class DetsAndBuyButton extends StatelessWidget {
     );
   }
 
-  Widget _getTextH4(String text, Color color) {
+  Widget _getBodySmallText(String text, Color color, FontWeight fontWeight) {
     return Text(
       text,
-      style: Get.textTheme.headline4!.copyWith(
+      style: Get.textTheme.bodySmall!.copyWith(
         color: color,
-        fontWeight: FontWeight.w600,
+        fontWeight: fontWeight,
+      ),
+    );
+  }
+
+  Widget _getBodyMediumText(String text, Color color, FontWeight fontWeight) {
+    return Text(
+      text,
+      style: Get.textTheme.bodyMedium!.copyWith(
+        color: color,
+        fontWeight: fontWeight,
       ),
     );
   }
@@ -134,7 +151,7 @@ class DetsAndBuyButton extends StatelessWidget {
           ),
           Text(
             '35 review',
-            style: Get.textTheme.headline5!.copyWith(
+            style: Get.textTheme.bodySmall!.copyWith(
               color: CstColors.a,
               fontWeight: FontWeight.bold,
             ),
@@ -153,26 +170,48 @@ class _BuyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 80,
-      decoration: BoxDecoration(
-        color: CstColors.a,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
-      child: Column(
-        children: [
-          SvgPicture.asset('assets/icons/bag.svg'),
-          const SizedBox(
-            height: 8,
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (_) {
+            return AddToCartBottomSheet();
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
           ),
-          Text(
-            'Add to cart',
-            textAlign: TextAlign.center,
-            style: Get.textTheme.headline4!
-                .copyWith(color: Colors.white, height: 1.2),
-          )
-        ],
+          isDismissible: true,
+          isScrollControlled: true,
+        );
+        // Get.bottomSheet(
+        //   AddToCardBottomSheet(),
+        //   backgroundColor: Colors.white ,
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        //   ),
+        // );
+      },
+      child: Container(
+        width: 80,
+        decoration: BoxDecoration(
+          color: CstColors.a,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+        child: Column(
+          children: [
+            SvgPicture.asset('assets/icons/bag.svg'),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              'Add to cart',
+              textAlign: TextAlign.center,
+              style: Get.textTheme.bodyMedium!
+                  .copyWith(color: Colors.white, height: 1.2),
+            )
+          ],
+        ),
       ),
     );
   }

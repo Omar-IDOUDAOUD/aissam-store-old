@@ -3,11 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-
-
-
-
-
 class Header extends StatelessWidget {
   const Header({Key? key}) : super(key: key);
 
@@ -37,18 +32,18 @@ class AissamLogo extends StatelessWidget {
         children: [
           TextSpan(
             text: 'AISSAM',
-            style: Get.textTheme.headline2!.copyWith(
+            style: Get.textTheme.headlineMedium!.copyWith(
               fontWeight: FontWeight.w600,
               height: 1,
             ),
           ),
           TextSpan(
               text: ' STORE\n',
-              style: Get.textTheme.headline2!
-                  .copyWith(fontWeight: FontWeight.w400, height: 1)),
+              style: Get.textTheme.headlineMedium!
+                  .copyWith(fontWeight: FontWeight.w300, height: 1)),
           TextSpan(
             text: "FOR WOMEN'S CLOTHING",
-            style: Get.textTheme.headline5!.copyWith(
+            style: Get.textTheme.bodySmall!.copyWith(
                 fontWeight: FontWeight.w400,
                 color: CstColors.a,
                 letterSpacing: 0.5,

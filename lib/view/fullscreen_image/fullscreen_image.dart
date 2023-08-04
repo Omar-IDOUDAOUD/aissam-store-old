@@ -50,19 +50,18 @@ class _FullScreenImageState extends State<FullScreenImage> {
                       children: [
                         TextSpan(
                           text: (_activeIndex + 1).toString(),
-                          style: Get.textTheme.headline2!.copyWith(
+                          style: Get.textTheme.headlineMedium!.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
                         TextSpan(
                           text: '/${_images.length}',
-                          style: Get.textTheme.headline5!.copyWith(
+                          style: Get.textTheme.bodySmall!.copyWith(
                             color: Colors.white.withOpacity(.7),
                             fontWeight: FontWeight.normal,
                           ),
                         ),
-
                         //
                       ],
                     ),

@@ -25,8 +25,6 @@ class ImageViewNavButtons extends StatefulWidget {
 }
 
 class _ImageViewNavButtonsState extends State<ImageViewNavButtons> {
-
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -126,9 +124,9 @@ class _ImageViewNavButtonsState extends State<ImageViewNavButtons> {
           SvgPicture.asset('assets/icons/flam.svg', height: 14),
           Text(
             'Best Seller',
-            style: Get.textTheme.headline6!.copyWith(
+            style: Get.textTheme.displayLarge!.copyWith(
               color: CstColors.e,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,68 +41,19 @@ class FavoritesTab extends StatelessWidget {
             children: [
               Text(
                 'Favorites',
-                style: Get.textTheme.headline1,
+                style: Get.textTheme.headlineLarge!
+                    .copyWith(fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              SvgPicture.asset(
-                'assets/icons/search.svg',
-                height: 25,
-              )
+              Text(
+                '+15',
+                style: Get.textTheme.headlineMedium!
+                    .copyWith(color: CstColors.b, fontWeight: FontWeight.w400),
+              ),
             ],
           ),
         ),
-        _paddedWidget(
-          Text(
-            '+40 favotires',
-            style: Get.textTheme.headline4!.copyWith(height: 1),
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        _listTitle('This week', '15 favorite this week'),
-        const SizedBox(height: 10),
-        _listedItems(
-          (_, i) => ProductCard(
-            colorsNumber: _items[i]['colors_number'],
-            imagePath: _items[i]['img'],
-            price: _items[i]['price'],
-            title: _items[i]['title'],
-            isHot: _items[i]['is_hot'],
-            favorited: true,
-          ),
-          261,
-          3,
-        ),
-        _listTitle('Last week', '3 favorite lst week'),
-        const SizedBox(height: 10),
-        _listedItems(
-          (_, i) => ProductCard(
-            colorsNumber: _items[i]['colors_number'],
-            imagePath: _items[i]['img'],
-            price: _items[i]['price'],
-            title: _items[i]['title'],
-            isHot: _items[i]['is_hot'],
-            favorited: true,
-          ),
-          261,
-          3,
-        ),
-        _listTitle('Last month', '30 favorite last month'),
-        const SizedBox(height: 10),
-        _listedItems(
-          (_, i) => ProductCard(
-            colorsNumber: _items[i]['colors_number'],
-            imagePath: _items[i]['img'],
-            price: _items[i]['price'],
-            title: _items[i]['title'],
-            isHot: _items[i]['is_hot'],
-            favorited: true,
-          ),
-          261,
-          3,
-        ),
-      ],
+      ], 
     );
   }
 
@@ -118,12 +70,12 @@ class FavoritesTab extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Get.textTheme.headline2,
+            style: Get.textTheme.headlineMedium,
           ),
           const Spacer(),
           Text(
             subTitle,
-            style: Get.textTheme.headline4,
+            style: Get.textTheme.headlineMedium,
           ),
         ],
       ),
