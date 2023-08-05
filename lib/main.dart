@@ -41,7 +41,7 @@ class AissamStore extends StatelessWidget {
             color: CstColors.c,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
-            fontSize: 18,
+            fontSize: 17,
             // height: 1,
           ),
           bodyLarge: TextStyle(

@@ -1,7 +1,9 @@
 // ignore: file_names
 
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/view/product_dets/widgets/add_to_card_bottom_sheet.dart';
+import 'package:aissam_store/view/product_dets/add_to_cart/add_to_card_bottom_sheet.dart';
+import 'package:aissam_store/view/product_dets/add_to_cart/add_to_cart_button.dart';
+import 'package:aissam_store/view/product_dets/add_to_cart/proceed_to_checkout_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -165,30 +167,108 @@ class DetsAndBuyButton extends StatelessWidget {
       );
 }
 
-class _BuyButton extends StatelessWidget {
+class _BuyButton extends StatefulWidget {
   const _BuyButton({Key? key}) : super(key: key);
+
+  @override
+  State<_BuyButton> createState() => _BuyButtonState();
+}
+
+class _BuyButtonState extends State<_BuyButton>
+    with SingleTickerProviderStateMixin {
+  late final OverlayState _addToCartButtonOverLayState;
+  late final OverlayEntry _addToCartButtonOverLayEntry;
+  late final OverlayEntry _proceedToCartButtonOverLayEntry;
+  late final AnimationController _addToCartButtonOverLayAnCtrl;
+  late final Animation<Offset> _addToCartButtonOverLayAn;
+  final Duration _animationDur = 600.milliseconds;
+
+  @override
+  void initState() {
+    super.initState();
+    _addToCartButtonOverLayAnCtrl =
+        AnimationController(vsync: this, duration: _animationDur);
+    // ..addListener(() {
+    //   _addToCartButtonOverLayState.setState(() {});
+    // });
+    _addToCartButtonOverLayAn =
+        Tween<Offset>(begin: Offset(0, 100), end: Offset.zero).animate(
+            CurvedAnimation(
+                parent: _addToCartButtonOverLayAnCtrl,
+                curve: Curves.linearToEaseOut));
+
+    _addToCartButtonOverLayState = Overlay.of(context);
+    _addToCartButtonOverLayEntry = OverlayEntry(
+      builder: (_) {
+        return AddToCartButton(
+          animation: _addToCartButtonOverLayAn,
+          animationDur: _animationDur,
+          isProceedToCartState: _isProceedToCartState,
+        );
+      },
+    );
+    _proceedToCartButtonOverLayEntry = OverlayEntry(
+      builder: (_) {
+        return ProceedToCheckoutButton(
+          animation: _addToCartButtonOverLayAn,
+          animationDur: _animationDur,
+          isProceedToCartState: _isProceedToCartState,
+        );
+      },
+    );
+  }
+
+  bool _isProceedToCartState = false;
+
+  void _closeButton() {
+    print('closing button');
+    _addToCartButtonOverLayAnCtrl.reverse().then((value) {
+      _addToCartButtonOverLayEntry.remove();
+      _proceedToCartButtonOverLayEntry.remove();
+      _isProceedToCartState = false;
+      // _addToCartButtonOverLayState.dispose();
+    });
+  }
+
+  void _openButton() {
+    200.milliseconds.delay().then((value) {
+      _addToCartButtonOverLayState.rearrange(
+          [_addToCartButtonOverLayEntry, _proceedToCartButtonOverLayEntry]);
+      // _addToCartButtonOverLayState.insert(_addToCartButtonOverLayEntry);
+      // _addToCartButtonOverLayState.insert(_proceedToCartButtonOverLayEntry);
+      _addToCartButtonOverLayAnCtrl.forward();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         showModalBottomSheet(
+          constraints: BoxConstraints(maxHeight: Get.height * 0.9),
           context: context,
+          enableDrag: true,
+          isScrollControlled: true,
           builder: (_) {
-            return AddToCartBottomSheet();
+            return AddToCartBottomSheet(
+              onDispose: _closeButton,
+              animationDur: _animationDur,
+              onNext: () {
+                _addToCartButtonOverLayState.setState(() {
+                  _isProceedToCartState = true;
+                });
+              },
+            );
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
           ),
-          isDismissible: true,
-          isScrollControlled: true,
         );
+        _openButton();
+
         // Get.bottomSheet(
         //   AddToCardBottomSheet(),
         //   backgroundColor: Colors.white ,
-        //   shape: RoundedRectangleBorder(
-        //     borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        //   ),
         // );
       },
       child: Container(
