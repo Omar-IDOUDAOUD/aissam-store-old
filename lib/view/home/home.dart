@@ -12,8 +12,9 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  late final PageController _pageController;
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  // late final PageController _pageController;
+  late final TabController _tabController;
   int _activeTabIndex = 0;
 
   @override
@@ -21,8 +22,22 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
 
-    _pageController =
-        PageController(initialPage: _activeTabIndex, keepPage: true);
+    // _pageController =
+    //     PageController(initialPage: _activeTabIndex, keepPage: true);
+    _tabController = TabController(length: 3, vsync: this)
+      ..addListener(() {
+        setState(() {
+          _activeTabIndex = _tabController.index;
+        });
+      });
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    // TODO: implement dispose
+    _tabController.dispose(); 
   }
 
   @override
@@ -30,20 +45,28 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                _activeTabIndex = index;
-                setState(() {});
-              },
-              children: [
-                MainTab(),
-                FavoritesTab(),
-                SearchTab(),
-              ],
-            ),
+          TabBarView(
+            controller: _tabController,
+            children: [
+              MainTab(),
+              FavoritesTab(),
+              SearchTab(),
+            ],
           ),
+          // Positioned.fill(
+          //   child: PageView(
+          //     controller: _pageController,
+          //     onPageChanged: (index) {
+          //       _activeTabIndex = index;
+          //       setState(() {});
+          //     },
+          //     children: [
+          //       MainTab(),
+          //       FavoritesTab(),
+          //       SearchTab(),
+          //     ],
+          //   ),
+          // ),
           Positioned(
             bottom: 0,
             right: 0,
@@ -51,7 +74,7 @@ class _HomeState extends State<Home> {
             child: NavBar(
               activeIndex: _activeTabIndex,
               onIndexChange: (int index) {
-                _pageController.animateToPage(
+                _tabController.animateTo(
                   index,
                   duration: 500.milliseconds,
                   curve: Curves.linearToEaseOut,

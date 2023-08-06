@@ -13,8 +13,7 @@ class FullScreenImage extends StatefulWidget {
 class _FullScreenImageState extends State<FullScreenImage> {
   @override
   void initState() {
-    super.initState();
-    print('initState');
+    super.initState(); 
     _images = Get.arguments['images'];
     _activeIndex = Get.arguments['image_tag_index'];
     _tag = Get.arguments['images'][_activeIndex];
@@ -27,8 +26,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
   late final PageController _controller;
 
   @override
-  Widget build(BuildContext context) {
-    print('build');
+  Widget build(BuildContext context) { 
     return Scaffold(
       backgroundColor: CstColors.a.withOpacity(.8),
       body: Column(

@@ -1,346 +1,313 @@
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, curly_braces_in_flow_control_structures
+
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/home/tabs/search/widgets/history_part.dart';
+import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
+import 'package:aissam_store/view/home/tabs/search/widgets/search_bar_persistent.dart';
+import 'package:aissam_store/view/home/tabs/search/widgets/searching_part.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class SearchTab extends StatefulWidget {
-  const SearchTab({Key? key}) : super(key: key);
+  const SearchTab({super.key});
 
   @override
   State<SearchTab> createState() => _SearchTabState();
 }
 
-class _SearchTabState extends State<SearchTab>
-    with SingleTickerProviderStateMixin {
+class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
+  late final ValueNotifier<bool> _isSearchBarFloatingNotifier;
+  late final ScrollController _scrollController;
+  late final TextEditingController _searchController;
+  late final FocusNode _searchFocusNode;
+  late final TabController _tabController;
+  late final TabController _searchResultsTabController;
+  late final ValueNotifier _searchResultsTabsAppearanceNotifier;
+  bool _searchResultsTabsAppearanceAn1 = false;
+  bool _searchResultsTabsAppearanceAn2 = false;
+  bool _showSearchResultsTitle = false;
+  double? _titleHeaderHeight;
+
+  @override
+  void dispose() {
+    _isSearchBarFloatingNotifier.dispose();
+    _scrollController.dispose();
+    _searchFocusNode.dispose();
+    _searchController.dispose();
+    _tabController.dispose();
+    _searchResultsTabController.dispose();
+    _searchResultsTabsAppearanceNotifier.dispose();
+    super.dispose();
+  }
+
+
+  void _showResultsTabs() async {
+    _searchResultsTabsAppearanceAn1 = true;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+    await 200.milliseconds.delay();
+    _searchResultsTabsAppearanceAn2 = true;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+  }
+
+  void _hideResultsTabs() async {
+    _searchResultsTabsAppearanceAn2 = false;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+    await 200.milliseconds.delay();
+    _searchResultsTabsAppearanceAn1 = false;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+  }
+
+
+  double _getTitleHeaderHeight() {
+    if (_titleHeaderHeight != null) return _titleHeaderHeight!;
+    final RenderBox renderBox =
+        _titleHeaderKey.currentContext?.findRenderObject() as RenderBox;
+
+    final Size size = renderBox.size;
+    _titleHeaderHeight = size.height + 20;
+    return _titleHeaderHeight!;
+  }
+
+  double get _getScrollOffset =>
+      _scrollController.hasClients ? _scrollController.offset : 0;
+
+  final _titleHeaderKey = GlobalKey();
+  @override
+  void initState() {
+    super.initState();
+    _isSearchBarFloatingNotifier = ValueNotifier(false);
+    _scrollController = ScrollController()
+      ..addListener(() {
+        if (_getScrollOffset <= _getTitleHeaderHeight() + 20)
+          _isSearchBarFloatingNotifier.value = false;
+        else
+          _isSearchBarFloatingNotifier.value = true;
+      });
+    _searchFocusNode = FocusNode();
+    _tabController = TabController(length: 5, vsync: this)
+      ..addListener(() async {
+        if (_tabController.index >= 2)
+          _showResultsTabs();
+        else
+          _hideResultsTabs();
+      });
+    _searchResultsTabController = TabController(length: 3, vsync: this);
+    _searchController = TextEditingController()
+      ..addListener(() {
+        if (_searchController.text.isEmpty && _tabController.index != 0) {
+          _showHistory();
+        } else if (_searchController.text.isNotEmpty &&
+            _tabController.index != 1) {
+          _showSuggestions();
+        }
+      });
+    _searchResultsTabsAppearanceNotifier = ValueNotifier(false);
+  }
+
+  Future<void> _changeSearchResultType(int partIndex) async {
+    _tabController.animateTo(partIndex, duration: 200.milliseconds);
+    return await 200.milliseconds.delay();
+  }
+
+  void _onSeachingFocus() {
+    _scrollController
+        .animateTo(_getTitleHeaderHeight(),
+            duration: 600.milliseconds, curve: Curves.linearToEaseOut)
+        .then((value) {
+      _isSearchBarFloatingNotifier.value = false;
+      _searchFocusNode.requestFocus();
+    });
+  }
+
+  void _showHistory() {
+    _updateHeader(false);
+    _tabController.animateTo(0, duration: 200.milliseconds);
+  }
+
+  void _showSuggestions() {
+    _updateHeader(false);
+    _tabController.animateTo(1, duration: 200.milliseconds);
+  }
+
+  void _showResults() {
+    _updateHeader(true);
+    _scrollController.animateTo(0,
+        duration: 200.milliseconds, curve: Curves.linearToEaseOut);
+    _tabController.animateTo(_searchResultsTabController.index + 2, duration: 200.milliseconds);
+  }
+
+  void _updateHeader(showResultHeader) {
+    if (_showSearchResultsTitle == showResultHeader) return;
+    setState(() {
+      _showSearchResultsTitle = showResultHeader;
+      _titleHeaderHeight = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
-      headerSliverBuilder: (_, b) => [
-        SliverPersistentHeader(
-          floating: false,
-          pinned: false,
-          delegate: TitleHeader(
-            title: 'Search Resultes',
-            title2: 'White style abayas',
-            title3: '20 resultes',
+      physics: BouncingScrollPhysics(),
+      controller: _scrollController,
+      headerSliverBuilder: (_, __) => [
+        SliverPadding(
+          padding: EdgeInsets.only(top: 20, right: 25, left: 25),
+          sliver: SliverToBoxAdapter(
+            child: AnimatedSize(
+              duration: 200.milliseconds,
+              child: Column(
+                key: _titleHeaderKey,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _showSearchResultsTitle ? 'Search Results' : 'Search',
+                    style: Get.textTheme.headlineLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  if (_showSearchResultsTitle) SizedBox(height: 5),
+                  Text(
+                    _showSearchResultsTitle
+                        ? 'White Style Abayas'
+                        : "Let's find something",
+                    style: Get.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      height: 1.2,
+                      color: CstColors.a,
+                    ),
+                  ),
+                  if (_showSearchResultsTitle)
+                    Text(
+                      '20 result',
+                      style: Get.textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        height: 1.2,
+                        color: CstColors.b,
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
         SliverPersistentHeader(
-          pinned: false,
+          pinned: true,
           floating: true,
-          delegate: HeaderSearchBar(),
+          delegate: SearchBarHeaderPersistent(
+            isFloatingNotifier: _isSearchBarFloatingNotifier,
+            focusNode: _searchFocusNode,
+            onTap: () async {
+              if (_tabController.index >= 2) _showSuggestions();
+              await 100.milliseconds.delay();
+              _onSeachingFocus();
+            },
+            controller: _searchController,
+            onCommit: () async {
+              _searchFocusNode.unfocus();
+              _showResults();
+            },
+          ),
         ),
-        SliverPersistentHeader(
-          pinned: false,
-          floating: true,
-          delegate: HeaderTabBar(c: _tabCtrl),
+        SliverToBoxAdapter(
+          child: ValueListenableBuilder(
+              valueListenable: _searchResultsTabsAppearanceNotifier,
+              builder: (_, __, ___) {
+                return AnimatedSize(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  duration: 200.milliseconds,
+                  child: !_searchResultsTabsAppearanceAn1
+                      ? SizedBox.shrink()
+                      : Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 5),
+                            child: AnimatedOpacity(
+                              duration: 200.milliseconds,
+                              opacity: _searchResultsTabsAppearanceAn2 ? 1 : 0,
+                              child: SizedBox(
+                                height: 25,
+                                child: TabBar(
+                                  splashBorderRadius: BorderRadius.circular(7),
+                                  controller: _searchResultsTabController,
+                                  isScrollable: true,
+                                  indicatorSize: TabBarIndicatorSize.label,
+                                  indicator: BoxDecoration(
+                                      color: CstColors.g,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  indicatorPadding: EdgeInsets.only(top: 22.5),
+                                  labelPadding:
+                                      EdgeInsets.symmetric(horizontal: 5),
+                                  onTap: (i) async {
+                                    await _changeSearchResultType(i + 2);
+                                    _searchResultsTabsAppearanceNotifier
+                                        .notifyListeners();
+                                  },
+                                  tabs: [
+                                    _getSearchResultsTypeTab('All', 20, 0),
+                                    _getSearchResultsTypeTab(
+                                        'Bset Selling', 5, 1),
+                                    _getSearchResultsTypeTab(
+                                        'Most liked', 15, 2),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                );
+              }),
         ),
       ],
-      body: PageView(
+      body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: _tabController,
         children: [
-          ListView(
-            children: [
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.red),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.blue),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.yellow),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.red),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.blue),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.yellow),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.red),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.blue),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.yellow),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.red),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.blue),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.yellow),
-              ),
-            ],
-          )
+          // HISTORY PART
+          HistoryPart(), //0
+          SearchingPart(), //1
+          ResultesPart(testTmage: 'assets/images/image_2.png'), //2
+          ResultesPart(testTmage: 'assets/images/image_3.png'), //3
+          ResultesPart(testTmage: 'assets/images/image_4.png'), //4
         ],
       ),
     );
   }
 
-  late TabController _tabCtrl;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _tabCtrl = TabController(length: 2, vsync: this);
-  }
-}
-
-class TitleHeader extends SliverPersistentHeaderDelegate {
-  final String title;
-  final String title2;
-  final String? title3;
-
-  TitleHeader({required this.title, required this.title2, this.title3});
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(shrinkOffset);
-    return SizedBox.expand(
-      child: Title(
-        title: title,
-        title2: title2,
-        title3: title3,
-      ),
-    );
-  }
-
-  double get _fixExtent => title3 != null ? 95 : 80;
-  @override
-  // TODO: implement maxExtent
-  double get maxExtent => _fixExtent;
-
-  @override
-  // TODO: implement minExtent
-  double get minExtent => _fixExtent;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
-  }
-}
-
-class Title extends StatelessWidget {
-  const Title(
-      {Key? key, required this.title, required this.title2, this.title3})
-      : super(key: key);
-  final String title;
-  final String title2;
-  final String? title3;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, right: 25, left: 25),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _getSearchResultsTypeTab(String title, int resultsAmount, int index) {
+    return Tab(
+      child: Row(
         children: [
           Text(
             title,
-            style: Get.textTheme.headline1!.copyWith(
-              color: CstColors.a,
-              fontWeight: FontWeight.w400,
-            ),
+            style: Get.textTheme.bodyMedium!.copyWith(
+                color: _searchResultsTabController.index == index
+                    ? CstColors.g
+                    : CstColors.b,
+                fontWeight: _searchResultsTabController.index == index
+                    ? FontWeight.w500
+                    : FontWeight.w400
+                // color: MaterialStateColor.resolveWith((states) => )
+                ),
           ),
-          if (title3 != null)
-            SizedBox(
-              height: 5,
-            ),
-          Text(
-            title2,
-            style: Get.textTheme.headline4!.copyWith(
-              color: CstColors.a,
-              fontWeight: title3 != null ? FontWeight.w500 : FontWeight.bold,
-              height: 1,
-            ),
+          SizedBox(
+            width: 4,
           ),
-          if (title3 != null)
-            Text(
-              title3!,
-              style: Get.textTheme.headline5!.copyWith(
-                color: CstColors.b.withOpacity(.8),
-                fontWeight: FontWeight.bold,
-                height: 1.4,
+          DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
+              color: _searchResultsTabController.index == index
+                  ? CstColors.g
+                  : CstColors.b,
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              child: Text(
+                resultsAmount.toString(),
+                style:
+                    Get.textTheme.displaySmall!.copyWith(color: Colors.white),
               ),
             ),
+          )
         ],
-      ),
-    );
-  }
-}
-
-class HeaderTabBar extends SliverPersistentHeaderDelegate {
-  final TabController c;
-
-  HeaderTabBar({required this.c});
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    // TODO: implement build
-    return SizedBox(
-      height: _fixExtent,
-      child: ColoredBox(
-        color: Colors.white,
-        child: Center(
-          child: TabBar(
-            controller: c,
-            isScrollable: true,
-            indicator: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
-              color: CstColors.g,
-            ),
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorPadding: EdgeInsets.only(
-              top: _fixExtent - 5,
-            ),
-            labelPadding: EdgeInsets.symmetric(horizontal: 5),
-            tabs: [
-              Tab(
-                // height: _fixExtent,
-                child: Row(
-                  children: [
-                    Text(
-                      'data data',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: CstColors.g.withOpacity(c.index == 0 ? .5 : .0),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Text('5'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Tab(
-                child: Text(
-                  'data',
-                  style: TextStyle(color: Colors.black),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  final double _fixExtent = 50;
-
-  @override
-  // TODO: implement maxExtent
-  double get maxExtent => _fixExtent;
-
-  @override
-  // TODO: implement minExtent
-  double get minExtent => _fixExtent;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    // TODO: implement shouldRebuild
-    return true;
-  }
-}
-
-class HeaderSearchBar extends SliverPersistentHeaderDelegate {
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(shrinkOffset);
-    return SizedBox.expand(
-      child: SearchBar(),
-    );
-  }
-
-  final double _fixExtent = 72;
-  @override
-  // TODO: implement maxExtent
-  double get maxExtent => _fixExtent;
-
-  @override
-  // TODO: implement minExtent
-  double get minExtent => _fixExtent;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
-  }
-}
-
-class SearchBar extends StatelessWidget {
-  const SearchBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-      child: TextField(
-        style: Get.textTheme.headline3!.copyWith(color: CstColors.a),
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: Colors.grey[300],
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 5, vertical: 18),
-          prefixIconConstraints: const BoxConstraints(
-            minWidth: 40,
-          ),
-          prefixIcon: SvgPicture.asset(
-            'assets/icons/search_small.svg',
-            // height: 10,
-            // width: 10,
-            fit: BoxFit.scaleDown,
-          ),
-          isCollapsed: true,
-          hintText: 'Search here...',
-          hintStyle: Get.textTheme.headline3!.copyWith(
-            color: CstColors.b.withOpacity(.5),
-          ),
-        ),
       ),
     );
   }

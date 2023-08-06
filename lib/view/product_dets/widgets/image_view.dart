@@ -51,8 +51,7 @@ class _ImageViewState extends State<ImageView> {
         itemCount: widget.images.length,
         itemBuilder: (_, i) {
           return GestureDetector(
-            onTap: () {
-              print('tapped');
+            onTap: () { 
               widget.pageController.animateToPage(
                 widget.pageController.page!.toInt() + 1,
                 duration: 200.milliseconds,

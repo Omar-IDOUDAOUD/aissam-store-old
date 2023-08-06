@@ -44,7 +44,7 @@ class _MainTabState extends State<MainTab> {
   bool _showMorePoducts = false;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Stack(
       fit: StackFit.expand,
       children: [
