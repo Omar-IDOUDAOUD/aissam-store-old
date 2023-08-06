@@ -1,272 +1,49 @@
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/public/text_field.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class SearchTab extends StatefulWidget {
-  const SearchTab({Key? key}) : super(key: key);
+class _SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
+  _SearchBarHeaderPersistent(
+      {required this.focusNode,
+      // this.isFloating = false,
+      this.onTap,
+      required this.isFloatingNotifier});
 
-  @override
-  State<SearchTab> createState() => _SearchTabState();
-}
-
-class _SearchTabState extends State<SearchTab>
-    with SingleTickerProviderStateMixin {
-  @override
-  Widget build(BuildContext context) {
-    return NestedScrollView(
-      headerSliverBuilder: (_, b) => [
-        SliverPersistentHeader(
-          floating: false,
-          pinned: false,
-          delegate: TitleHeader(
-            title: 'Search Resultes',
-            title2: 'White style abayas',
-            title3: '20 resultes',
-          ),
-        ),
-        SliverPersistentHeader(
-          pinned: false,
-          floating: true,
-          delegate: HeaderSearchBar(),
-        ),
-        SliverPersistentHeader(
-          pinned: false,
-          floating: true,
-          delegate: HeaderTabBar(c: _tabCtrl),
-        ),
-      ],
-      body: PageView(
-        children: [
-          ListView(
-            children: [
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.red),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.blue),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.yellow),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.red),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.blue),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.yellow),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.red),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.blue),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.yellow),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.red),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.blue),
-              ),
-              SizedBox(
-                width: 20,
-                height: 100,
-                child: ColoredBox(color: Colors.yellow),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  late TabController _tabCtrl;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _tabCtrl = TabController(length: 2, vsync: this);
-  }
-}
-
-class TitleHeader extends SliverPersistentHeaderDelegate {
-  final String title;
-  final String title2;
-  final String? title3;
-
-  TitleHeader({required this.title, required this.title2, this.title3});
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(shrinkOffset);
-    return SizedBox.expand(
-      child: Title(
-        title: title,
-        title2: title2,
-        title3: title3,
-      ),
-    );
-  }
-
-  double get _fixExtent => title3 != null ? 95 : 80;
-  @override
-  // TODO: implement maxExtent
-  double get maxExtent => _fixExtent;
-
-  @override
-  // TODO: implement minExtent
-  double get minExtent => _fixExtent;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
-  }
-}
-
-class Title extends StatelessWidget {
-  const Title(
-      {Key? key, required this.title, required this.title2, this.title3})
-      : super(key: key);
-  final String title;
-  final String title2;
-  final String? title3;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, right: 25, left: 25),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: Get.textTheme.headline1!.copyWith(
-              color: CstColors.a,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          if (title3 != null)
-            SizedBox(
-              height: 5,
-            ),
-          Text(
-            title2,
-            style: Get.textTheme.headline4!.copyWith(
-              color: CstColors.a,
-              fontWeight: title3 != null ? FontWeight.w500 : FontWeight.bold,
-              height: 1,
-            ),
-          ),
-          if (title3 != null)
-            Text(
-              title3!,
-              style: Get.textTheme.headline5!.copyWith(
-                color: CstColors.b.withOpacity(.8),
-                fontWeight: FontWeight.bold,
-                height: 1.4,
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class HeaderTabBar extends SliverPersistentHeaderDelegate {
-  final TabController c;
-
-  HeaderTabBar({required this.c});
+  // final ScrollController scrollController;
+  final FocusNode focusNode;
+  // final bool isFloating;
+  final Function()? onTap;
+  final ValueNotifier<bool> isFloatingNotifier;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     // TODO: implement build
-    return SizedBox(
-      height: _fixExtent,
-      child: ColoredBox(
-        color: Colors.white,
-        child: Center(
-          child: TabBar(
-            controller: c,
-            isScrollable: true,
-            indicator: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
-              color: CstColors.g,
-            ),
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorPadding: EdgeInsets.only(
-              top: _fixExtent - 5,
-            ),
-            labelPadding: EdgeInsets.symmetric(horizontal: 5),
-            tabs: [
-              Tab(
-                // height: _fixExtent,
-                child: Row(
-                  children: [
-                    Text(
-                      'data data',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: CstColors.g.withOpacity(c.index == 0 ? .5 : .0),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Text('5'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Tab(
-                child: Text(
-                  'data',
-                  style: TextStyle(color: Colors.black),
-                ),
-              )
-            ],
-          ),
+    // print(
+    //     "$shrinkOffset, value: ${shrinkOffset <= _fixExtent / 2 && shrinkOffset >= 0}");
+    return Padding(
+      padding: EdgeInsets.only(top: 20, right: 25, left: 25),
+      child: GestureDetector(
+        onTap: onTap,
+        child: ValueListenableBuilder<bool>(
+          valueListenable: isFloatingNotifier,
+          builder: (context, v, c) {
+            return CustomTextField(
+              onTap: onTap,
+              focusNode: focusNode,
+              enabled: !v,
+              isFloating: v,
+            );
+          },
         ),
       ),
     );
   }
 
-  final double _fixExtent = 50;
+  static const double _fixExtent = 78;
 
   @override
   // TODO: implement maxExtent
@@ -279,69 +56,135 @@ class HeaderTabBar extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     // TODO: implement shouldRebuild
-    return true;
+    return false;
   }
 }
 
-class HeaderSearchBar extends SliverPersistentHeaderDelegate {
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(shrinkOffset);
-    return SizedBox.expand(
-      child: SearchBar(),
-    );
-  }
-
-  final double _fixExtent = 72;
-  @override
-  // TODO: implement maxExtent
-  double get maxExtent => _fixExtent;
+class SearchTab extends StatefulWidget {
+  const SearchTab({super.key});
 
   @override
-  // TODO: implement minExtent
-  double get minExtent => _fixExtent;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
-  }
+  State<SearchTab> createState() => _SearchTabState();
 }
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({Key? key}) : super(key: key);
+class _SearchTabState extends State<SearchTab> {
+  late final ScrollController _scrollController;
+  late final FocusNode _searchFocusNode;
+  final ValueNotifier<bool> _isSearchBarFloatingNotifier = ValueNotifier(false);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _scrollController = ScrollController()
+      ..addListener(() {
+        print('listenner--------------------------------ééééé');
+        if (_getScrollOffset <= _getTitleHeaderHeight() + 20)
+          _isSearchBarFloatingNotifier.value = false;
+        else
+          _isSearchBarFloatingNotifier.value = true;
+      });
+    _searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _scrollController.dispose();
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  double? _titleHeaderHeight;
+
+  double _getTitleHeaderHeight() {
+    if (_titleHeaderHeight != null) return _titleHeaderHeight!;
+    final RenderBox renderBox =
+        _titleHeaderKey.currentContext?.findRenderObject() as RenderBox;
+
+    final Size size = renderBox.size;
+    print('title height: $size');
+    _titleHeaderHeight = size.height + 20;
+    return _titleHeaderHeight!;
+  }
+
+  void _onRequestBarSearch() {
+    print("/////////////////////////");
+    _scrollController
+        .animateTo(_getTitleHeaderHeight(),
+            duration: 600.milliseconds, curve: Curves.linearToEaseOut)
+        .then((value) {
+      _isSearchBarFloatingNotifier.value = false;
+      _searchFocusNode.requestFocus();
+    });
+  }
+
+  double get _getScrollOffset =>
+      _scrollController.hasClients ? _scrollController.offset : 0;
+
+  final _titleHeaderKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-      child: TextField(
-        style: Get.textTheme.headline3!.copyWith(color: CstColors.a),
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: Colors.grey[300],
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 5, vertical: 18),
-          prefixIconConstraints: const BoxConstraints(
-            minWidth: 40,
-          ),
-          prefixIcon: SvgPicture.asset(
-            'assets/icons/search_small.svg',
-            // height: 10,
-            // width: 10,
-            fit: BoxFit.scaleDown,
-          ),
-          isCollapsed: true,
-          hintText: 'Search here...',
-          hintStyle: Get.textTheme.headline3!.copyWith(
-            color: CstColors.b.withOpacity(.5),
+   
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: [
+        SliverPadding(
+          // key: _titleHeaderKey,
+          padding: EdgeInsets.only(top: 20, right: 25, left: 25),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              key: _titleHeaderKey,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Search',
+                  style: Get.textTheme.headlineLarge!.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  "Let's find something",
+                  style: Get.textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w500,
+                    height: 1.2,
+                    color: CstColors.a,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
+
+        SliverPersistentHeader(
+          pinned: true,
+          floating: true,
+          delegate: _SearchBarHeaderPersistent(
+            isFloatingNotifier: _isSearchBarFloatingNotifier,
+            focusNode: _searchFocusNode,
+            // isFloating: ,
+            onTap: _onRequestBarSearch,
+          ),
+        ),
+        // SliverToBoxAdapter(
+        // ),
+
+        SliverPadding(
+          padding: EdgeInsets.only(top: 20),
+          sliver: SliverList.builder(
+            itemCount: Colors.accents.length,
+            itemBuilder: (_, i) {
+              return SizedBox(
+                height: 100,
+                child: ColoredBox(
+                  color: Colors.accents.elementAt(i),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
