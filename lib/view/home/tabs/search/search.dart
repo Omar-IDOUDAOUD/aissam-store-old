@@ -78,7 +78,7 @@ class _SearchTabState extends State<SearchTab> {
     super.initState();
     _scrollController = ScrollController()
       ..addListener(() {
-        print('listenner--------------------------------ééééé');
+        // print('listenner--------------------------------ééééé');
         if (_getScrollOffset <= _getTitleHeaderHeight() + 20)
           _isSearchBarFloatingNotifier.value = false;
         else
@@ -103,13 +103,13 @@ class _SearchTabState extends State<SearchTab> {
         _titleHeaderKey.currentContext?.findRenderObject() as RenderBox;
 
     final Size size = renderBox.size;
-    print('title height: $size');
+    // print('title height: $size');
     _titleHeaderHeight = size.height + 20;
     return _titleHeaderHeight!;
   }
 
   void _onRequestBarSearch() {
-    print("/////////////////////////");
+    // print("/////////////////////////");
     _scrollController
         .animateTo(_getTitleHeaderHeight(),
             duration: 600.milliseconds, curve: Curves.linearToEaseOut)
@@ -126,7 +126,7 @@ class _SearchTabState extends State<SearchTab> {
 
   @override
   Widget build(BuildContext context) {
-   
+   print("SEARCH BUILD"); 
     return CustomScrollView(
       controller: _scrollController,
       slivers: [

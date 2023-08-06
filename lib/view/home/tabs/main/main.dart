@@ -45,6 +45,7 @@ class _MainTabState extends State<MainTab> {
 
   @override
   Widget build(BuildContext context) {
+    print('BUILD MAIN'); 
     return Stack(
       fit: StackFit.expand,
       children: [

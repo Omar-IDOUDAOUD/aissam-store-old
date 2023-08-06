@@ -21,6 +21,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
+        
     return ValueListenableBuilder<double?>(
       valueListenable: notifier,
       builder: (context, v, c) {
@@ -98,6 +99,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
 
   @override
   Widget build(BuildContext context) {
+    print('FAVORITE BUILD'); 
     return CustomScrollView(
       // padding: ,
       controller: _scrollController,
