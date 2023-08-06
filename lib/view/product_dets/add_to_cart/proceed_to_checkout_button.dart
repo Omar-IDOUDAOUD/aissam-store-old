@@ -90,12 +90,11 @@ class _ProceedToCheckoutButtonState extends State<ProceedToCheckoutButton> {
                                 ),
                               ),
                             ],
-                          ),
-                          // uncomment this:
-                          // SvgPicture.asset(
-                          //   'assets/icons/arrow_right.svg',
-                          //   color: Colors.white,
-                          // )
+                          ), 
+                          SvgPicture.asset(
+                            'assets/icons/arrow_right.svg',
+                            color: Colors.white,
+                          )
                         ],
                       ),
                     ),
