@@ -79,8 +79,7 @@ class _TestPageState extends State<TestPage> {
 class ph extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-        print(shrinkOffset); 
+      BuildContext context, double shrinkOffset, bool overlapsContent) { 
     return SizedBox.expand(
       child: ColoredBox(color: Colors.grey),
     );

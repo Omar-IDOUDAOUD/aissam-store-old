@@ -78,7 +78,7 @@ class SearchTab extends StatefulWidget {
 }
 
 class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
-  final ValueNotifier<bool> _isSearchBarFloatingNotifier = ValueNotifier(false);
+  late final ValueNotifier<bool> _isSearchBarFloatingNotifier;
   late final ScrollController _scrollController;
   late final TextEditingController _searchController;
   late final FocusNode _searchFocusNode;
@@ -88,13 +88,27 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   bool _searchResultsTabsAppearanceAn1 = false; // for AnimatedSize widget
   bool _searchResultsTabsAppearanceAn2 = false; // for AnimatedContainer widget
 
+  
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _isSearchBarFloatingNotifier.dispose(); 
+    _scrollController.dispose();
+    _searchFocusNode.dispose();
+    _searchController.dispose();
+    _tabController.dispose(); 
+    _searchResultsTabController.dispose(); 
+    _searchResultsTabsAppearanceNotifier.dispose(); 
+    super.dispose();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _isSearchBarFloatingNotifier = ValueNotifier(false);
     _scrollController = ScrollController()
-      ..addListener(() {
-        // print('listenner--------------------------------ééééé');
+      ..addListener(() { 
         if (_getScrollOffset <= _getTitleHeaderHeight() + 20)
           _isSearchBarFloatingNotifier.value = false;
         else
@@ -141,14 +155,6 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     return await 200.milliseconds.delay();
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _scrollController.dispose();
-    _searchFocusNode.dispose();
-    _searchController.dispose();
-    super.dispose();
-  }
 
   double? _titleHeaderHeight;
 
@@ -180,9 +186,9 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   final _titleHeaderKey = GlobalKey();
 
   @override
-  Widget build(BuildContext context) {
-    print("SEARCH BUILD");
+  Widget build(BuildContext context) { 
     return NestedScrollView(
+      physics: BouncingScrollPhysics(),
       controller: _scrollController,
       headerSliverBuilder: (_, __) => [
         SliverPadding(
@@ -261,8 +267,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                                   indicatorPadding: EdgeInsets.only(top: 22.5),
                                   labelPadding:
                                       EdgeInsets.symmetric(horizontal: 5),
-                                  onTap: (i) async {
-                                    print(i);
+                                  onTap: (i) async { 
                                     await _changePart(i + 2);
                                     _searchResultsTabController.animateTo(i);
                                     // setState(() {});

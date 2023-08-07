@@ -220,8 +220,7 @@ class _BuyButtonState extends State<_BuyButton>
 
   bool _isProceedToCartState = false;
 
-  void _closeButton() {
-    print('closing button');
+  void _closeButton() { 
     _addToCartButtonOverLayAnCtrl.reverse().then((value) {
       _addToCartButtonOverLayEntry.remove();
       _proceedToCartButtonOverLayEntry.remove();

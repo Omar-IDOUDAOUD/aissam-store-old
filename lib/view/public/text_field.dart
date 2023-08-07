@@ -39,8 +39,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   void _showSubmitButton(String v) {
     if (_showSubmitSuffix ?? false) return;
     if (v.isNotEmpty && widget.onCommit != null)
-      setState(() {
-        print('CASE ONE');
+      setState(() { 
         _showSubmitSuffix = true;
       });
     else
@@ -50,8 +49,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   void _showClearButton(String v) {
     if (!(_showSubmitSuffix ?? true)) return;
     if (v.isNotEmpty && widget.onClear != null)
-      setState(() {
-        print('CASE THREE');
+      setState(() { 
         _showSubmitSuffix = false;
       });
     else
@@ -89,8 +87,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           fontWeight: FontWeight.w400,
           height: 1.6,
         ),
-        onChanged: (v) {
-          print("ON CHANGED----------------");
+        onChanged: (v) { 
           if (v.isEmpty)
             _hidePrefixButton();
           else

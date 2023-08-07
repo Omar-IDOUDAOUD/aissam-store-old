@@ -71,7 +71,7 @@ class FavoritesTab extends StatefulWidget {
 
 class _FavoritesTabState extends State<FavoritesTab> {
   late final ScrollController _scrollController;
-  ValueNotifier<double?> _scrollHeaderNotifier = ValueNotifier(0); //
+  late ValueNotifier<double?> _scrollHeaderNotifier ;  //
   static const double _fixHeaderExtent = 70;
 
   @override
@@ -87,20 +87,23 @@ class _FavoritesTabState extends State<FavoritesTab> {
           _scrollHeaderNotifier.value = null;
         }
       });
+      _scrollHeaderNotifier = ValueNotifier(0);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     _scrollController.dispose();
+    _scrollHeaderNotifier .dispose(); 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('FAVORITE BUILD');
     return CustomScrollView(
       // padding: ,
+
+      physics: BouncingScrollPhysics(),
       controller: _scrollController,
       slivers: [
         SliverPersistentHeader(
@@ -117,7 +120,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
           sliver: SliverToBoxAdapter(
             child: CustomTextField(
               onClear: () {},
-              onCommit: (){},
+              onCommit: () {},
               focusNode: FocusNode(),
             ),
           ),
@@ -136,19 +139,5 @@ class _FavoritesTabState extends State<FavoritesTab> {
     );
   }
 
-  Widget _listedItems(
-      Widget Function(BuildContext _, int i) b, double listHeight, int count) {
-    return SizedBox(
-      height: listHeight,
-      child: ListView.separated(
-        itemCount: count,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: b,
-        separatorBuilder: (_, i) => const SizedBox(
-          width: 10,
-        ),
-      ),
-    );
-  }
+
 }
