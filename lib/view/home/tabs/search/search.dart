@@ -1,4 +1,9 @@
+import 'dart:math';
+
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/home/tabs/search/widgets/history_part.dart';
+import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
+import 'package:aissam_store/view/home/tabs/search/widgets/searching_part.dart';
 import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,24 +11,26 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 class _SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
-  _SearchBarHeaderPersistent(
-      {required this.focusNode,
-      // this.isFloating = false,
-      this.onTap,
-      required this.isFloatingNotifier});
+  _SearchBarHeaderPersistent({
+    required this.focusNode,
+    // this.isFloating = false,
+    this.onTap,
+    required this.isFloatingNotifier,
+    this.controller,
+    this.onCommit,
+  });
 
   // final ScrollController scrollController;
   final FocusNode focusNode;
   // final bool isFloating;
   final Function()? onTap;
   final ValueNotifier<bool> isFloatingNotifier;
+  final TextEditingController? controller;
+  final Function()? onCommit;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    // TODO: implement build
-    // print(
-    //     "$shrinkOffset, value: ${shrinkOffset <= _fixExtent / 2 && shrinkOffset >= 0}");
     return Padding(
       padding: EdgeInsets.only(top: 20, right: 25, left: 25),
       child: GestureDetector(
@@ -33,9 +40,12 @@ class _SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
           builder: (context, v, c) {
             return CustomTextField(
               onTap: onTap,
+              onCommit: onCommit,
+              // onClear: () {},
               focusNode: focusNode,
               enabled: !v,
               isFloating: v,
+              controller: controller,
             );
           },
         ),
@@ -67,10 +77,16 @@ class SearchTab extends StatefulWidget {
   State<SearchTab> createState() => _SearchTabState();
 }
 
-class _SearchTabState extends State<SearchTab> {
-  late final ScrollController _scrollController;
-  late final FocusNode _searchFocusNode;
+class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   final ValueNotifier<bool> _isSearchBarFloatingNotifier = ValueNotifier(false);
+  late final ScrollController _scrollController;
+  late final TextEditingController _searchController;
+  late final FocusNode _searchFocusNode;
+  late final TabController _tabController;
+  late final TabController _searchResultsTabController;
+  late final ValueNotifier _searchResultsTabsAppearanceNotifier;
+  bool _searchResultsTabsAppearanceAn1 = false; // for AnimatedSize widget
+  bool _searchResultsTabsAppearanceAn2 = false; // for AnimatedContainer widget
 
   @override
   void initState() {
@@ -85,6 +101,44 @@ class _SearchTabState extends State<SearchTab> {
           _isSearchBarFloatingNotifier.value = true;
       });
     _searchFocusNode = FocusNode();
+    _tabController = TabController(length: 5, vsync: this)
+      ..addListener(() async {
+        // _searchResultsTabsAppearanceNotifier.value = _tabController.index >= 2;
+        if (_tabController.index >= 2)
+          _showResultsTabs();
+        else
+          _hideResultsTabs();
+      });
+    _searchResultsTabController = TabController(length: 3, vsync: this);
+    _searchController = TextEditingController()
+      ..addListener(() {
+        if (_searchController.text.isEmpty)
+          _changePart(0);
+        else if (_searchController.text.isNotEmpty) _changePart(1);
+        // else if (_showResultTabs)
+      });
+    _searchResultsTabsAppearanceNotifier = ValueNotifier(false);
+  }
+
+  void _showResultsTabs() async {
+    _searchResultsTabsAppearanceAn1 = true;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+    await 200.milliseconds.delay();
+    _searchResultsTabsAppearanceAn2 = true;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+  }
+
+  void _hideResultsTabs() async {
+    _searchResultsTabsAppearanceAn2 = false;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+    await 200.milliseconds.delay();
+    _searchResultsTabsAppearanceAn1 = false;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+  }
+
+  Future<void> _changePart(int partIndex) async {
+    _tabController.animateTo(partIndex, duration: 200.milliseconds);
+    return await 200.milliseconds.delay();
   }
 
   @override
@@ -92,6 +146,7 @@ class _SearchTabState extends State<SearchTab> {
     // TODO: implement dispose
     _scrollController.dispose();
     _searchFocusNode.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -126,10 +181,10 @@ class _SearchTabState extends State<SearchTab> {
 
   @override
   Widget build(BuildContext context) {
-   print("SEARCH BUILD"); 
-    return CustomScrollView(
+    print("SEARCH BUILD");
+    return NestedScrollView(
       controller: _scrollController,
-      slivers: [
+      headerSliverBuilder: (_, __) => [
         SliverPadding(
           // key: _titleHeaderKey,
           padding: EdgeInsets.only(top: 20, right: 25, left: 25),
@@ -156,7 +211,6 @@ class _SearchTabState extends State<SearchTab> {
             ),
           ),
         ),
-
         SliverPersistentHeader(
           pinned: true,
           floating: true,
@@ -165,26 +219,122 @@ class _SearchTabState extends State<SearchTab> {
             focusNode: _searchFocusNode,
             // isFloating: ,
             onTap: _onRequestBarSearch,
-          ),
-        ),
-        // SliverToBoxAdapter(
-        // ),
-
-        SliverPadding(
-          padding: EdgeInsets.only(top: 20),
-          sliver: SliverList.builder(
-            itemCount: Colors.accents.length,
-            itemBuilder: (_, i) {
-              return SizedBox(
-                height: 100,
-                child: ColoredBox(
-                  color: Colors.accents.elementAt(i),
-                ),
-              );
+            controller: _searchController,
+            onCommit: () {
+              _searchFocusNode.unfocus();
+              return _changePart(_searchResultsTabController.index + 2);
             },
           ),
         ),
+        SliverToBoxAdapter(
+          child: ValueListenableBuilder(
+              valueListenable: _searchResultsTabsAppearanceNotifier,
+              builder: (_, __, ___) {
+                return AnimatedSize(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  duration: 200.milliseconds,
+                  child: !_searchResultsTabsAppearanceAn1
+                      ? SizedBox.shrink()
+                      : Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 5),
+                            child: AnimatedOpacity(
+                              duration: 200.milliseconds,
+                              opacity: _searchResultsTabsAppearanceAn2 ? 1 : 0,
+                              child: SizedBox(
+                                height: 25,
+                                child: TabBar(
+                                  splashBorderRadius: BorderRadius.circular(7),
+
+                                  controller: _searchResultsTabController,
+                                  // TabController(
+                                  //   length: 3,
+                                  //   vsync: this,
+                                  //   initialIndex: _tabController.index - 2,
+                                  // ),
+                                  isScrollable: true,
+                                  indicatorSize: TabBarIndicatorSize.label,
+                                  indicator: BoxDecoration(
+                                      color: CstColors.g,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  // indicatorWeight:2,
+                                  indicatorPadding: EdgeInsets.only(top: 22.5),
+                                  labelPadding:
+                                      EdgeInsets.symmetric(horizontal: 5),
+                                  onTap: (i) async {
+                                    print(i);
+                                    await _changePart(i + 2);
+                                    _searchResultsTabController.animateTo(i);
+                                    // setState(() {});
+                                  },
+                                  tabs: [
+                                    _getSearchResultsTypeTab('All', 20, 0),
+                                    _getSearchResultsTypeTab(
+                                        'Bset Selling', 5, 1),
+                                    _getSearchResultsTypeTab(
+                                        'Most liked', 15, 2),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                );
+              }),
+        ),
       ],
+      body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: _tabController,
+        children: [
+          // HISTORY PART
+          HistoryPart(), //0
+          SearchingPart(), //1
+          ResultesPart(testTmage: 'assets/images/image_2.png'), //2
+          ResultesPart(testTmage: 'assets/images/image_3.png'), //3
+          ResultesPart(testTmage: 'assets/images/image_4.png'), //4
+        ],
+      ),
+    );
+  }
+
+  Widget _getSearchResultsTypeTab(String title, int resultsAmount, int index) {
+    return Tab(
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: Get.textTheme.bodyMedium!.copyWith(
+                color: _searchResultsTabController.index == index
+                    ? CstColors.g
+                    : CstColors.b,
+                fontWeight: _searchResultsTabController.index == index
+                    ? FontWeight.w500
+                    : FontWeight.w400
+                // color: MaterialStateColor.resolveWith((states) => )
+                ),
+          ),
+          SizedBox(
+            width: 4,
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
+              color: _searchResultsTabController.index == index
+                  ? CstColors.g
+                  : CstColors.b,
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              child: Text(
+                resultsAmount.toString(),
+                style:
+                    Get.textTheme.displaySmall!.copyWith(color: Colors.white),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

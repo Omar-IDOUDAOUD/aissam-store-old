@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  late final PageController _pageController;
+  // late final PageController _pageController;
   late final TabController _tabController;
   int _activeTabIndex = 0;
 
@@ -22,14 +22,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
 
-    _pageController =
-        PageController(initialPage: _activeTabIndex, keepPage: true);
+    // _pageController =
+    //     PageController(initialPage: _activeTabIndex, keepPage: true);
     _tabController = TabController(length: 3, vsync: this)
       ..addListener(() {
         setState(() {
           _activeTabIndex = _tabController.index;
         });
       });
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    // TODO: implement dispose
+    _tabController.dispose(); 
   }
 
   @override
