@@ -71,7 +71,7 @@ class FavoritesTab extends StatefulWidget {
 
 class _FavoritesTabState extends State<FavoritesTab> {
   late final ScrollController _scrollController;
-  late ValueNotifier<double?> _scrollHeaderNotifier ;  //
+  late ValueNotifier<double?> _scrollHeaderNotifier; //
   static const double _fixHeaderExtent = 70;
 
   @override
@@ -87,14 +87,14 @@ class _FavoritesTabState extends State<FavoritesTab> {
           _scrollHeaderNotifier.value = null;
         }
       });
-      _scrollHeaderNotifier = ValueNotifier(0);
+    _scrollHeaderNotifier = ValueNotifier(0);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     _scrollController.dispose();
-    _scrollHeaderNotifier .dispose(); 
+    _scrollHeaderNotifier.dispose();
     super.dispose();
   }
 
@@ -120,7 +120,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
           sliver: SliverToBoxAdapter(
             child: CustomTextField(
               onClear: () {},
-              onCommit: () {},
+              // onCommit: () {},
               focusNode: FocusNode(),
             ),
           ),
@@ -138,6 +138,4 @@ class _FavoritesTabState extends State<FavoritesTab> {
       ],
     );
   }
-
-
 }

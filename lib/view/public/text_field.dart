@@ -39,7 +39,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   void _showSubmitButton(String v) {
     if (_showSubmitSuffix ?? false) return;
     if (v.isNotEmpty && widget.onCommit != null)
-      setState(() { 
+      setState(() {
         _showSubmitSuffix = true;
       });
     else
@@ -49,7 +49,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   void _showClearButton(String v) {
     if (!(_showSubmitSuffix ?? true)) return;
     if (v.isNotEmpty && widget.onClear != null)
-      setState(() { 
+      setState(() {
         _showSubmitSuffix = false;
       });
     else
@@ -76,6 +76,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         controller: widget.controller,
         onTap: widget.onTap,
         onSubmitted: (v) {
+          print("submitt");
           if (widget.onCommit != null) widget.onCommit!();
           _showClearButton(v);
         },
@@ -87,7 +88,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           fontWeight: FontWeight.w400,
           height: 1.6,
         ),
-        onChanged: (v) { 
+        onChanged: (v) {
           if (v.isEmpty)
             _hidePrefixButton();
           else
@@ -126,7 +127,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ? GestureDetector(
                   onTap: () {
                     _showSubmitSuffix! ? widget.onCommit!() : widget.onClear!();
-                    _hidePrefixButton();
+                    if (_showSubmitSuffix!)
+                      _showClearButton(widget.controller!.text);
+                    else
+                      _hidePrefixButton();
                   },
                   child: SvgPicture.asset(
                     _showSubmitSuffix!

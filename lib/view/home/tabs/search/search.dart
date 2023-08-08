@@ -1,74 +1,15 @@
-import 'dart:math';
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/history_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
+import 'package:aissam_store/view/home/tabs/search/widgets/search_bar_persistent.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/searching_part.dart';
 import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-
-class _SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
-  _SearchBarHeaderPersistent({
-    required this.focusNode,
-    // this.isFloating = false,
-    this.onTap,
-    required this.isFloatingNotifier,
-    this.controller,
-    this.onCommit,
-  });
-
-  // final ScrollController scrollController;
-  final FocusNode focusNode;
-  // final bool isFloating;
-  final Function()? onTap;
-  final ValueNotifier<bool> isFloatingNotifier;
-  final TextEditingController? controller;
-  final Function()? onCommit;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Padding(
-      padding: EdgeInsets.only(top: 20, right: 25, left: 25),
-      child: GestureDetector(
-        onTap: onTap,
-        child: ValueListenableBuilder<bool>(
-          valueListenable: isFloatingNotifier,
-          builder: (context, v, c) {
-            return CustomTextField(
-              onTap: onTap,
-              onCommit: onCommit,
-              // onClear: () {},
-              focusNode: focusNode,
-              enabled: !v,
-              isFloating: v,
-              controller: controller,
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  static const double _fixExtent = 78;
-
-  @override
-  // TODO: implement maxExtent
-  double get maxExtent => _fixExtent;
-
-  @override
-  // TODO: implement minExtent
-  double get minExtent => _fixExtent;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    // TODO: implement shouldRebuild
-    return false;
-  }
-}
 
 class SearchTab extends StatefulWidget {
   const SearchTab({super.key});
@@ -88,17 +29,16 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   bool _searchResultsTabsAppearanceAn1 = false; // for AnimatedSize widget
   bool _searchResultsTabsAppearanceAn2 = false; // for AnimatedContainer widget
 
-  
   @override
   void dispose() {
     // TODO: implement dispose
-    _isSearchBarFloatingNotifier.dispose(); 
+    _isSearchBarFloatingNotifier.dispose();
     _scrollController.dispose();
     _searchFocusNode.dispose();
     _searchController.dispose();
-    _tabController.dispose(); 
-    _searchResultsTabController.dispose(); 
-    _searchResultsTabsAppearanceNotifier.dispose(); 
+    _tabController.dispose();
+    _searchResultsTabController.dispose();
+    _searchResultsTabsAppearanceNotifier.dispose();
     super.dispose();
   }
 
@@ -108,7 +48,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     super.initState();
     _isSearchBarFloatingNotifier = ValueNotifier(false);
     _scrollController = ScrollController()
-      ..addListener(() { 
+      ..addListener(() {
         if (_getScrollOffset <= _getTitleHeaderHeight() + 20)
           _isSearchBarFloatingNotifier.value = false;
         else
@@ -134,15 +74,31 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     _searchResultsTabsAppearanceNotifier = ValueNotifier(false);
   }
 
+  void _showSearchResultTitle() {
+    _titleHeaderHeight = null;
+    setState(() {}); // to change header state;
+    _scrollController.animateTo(0,
+        duration: 200.milliseconds, curve: Curves.linearToEaseOut);
+  }
+
+  void _hideSearchResultTitle() {
+    _titleHeaderHeight = null;
+    setState(() {}); // to change header state;
+  }
+
   void _showResultsTabs() async {
+    // _titleHeaderHeight =
+    //     null; // to reload the nex title header heighr for the next search bar focus;
     _searchResultsTabsAppearanceAn1 = true;
     _searchResultsTabsAppearanceNotifier.notifyListeners();
     await 200.milliseconds.delay();
     _searchResultsTabsAppearanceAn2 = true;
     _searchResultsTabsAppearanceNotifier.notifyListeners();
+    // _showSearchResultTitle();
   }
 
   void _hideResultsTabs() async {
+    _hideSearchResultTitle();
     _searchResultsTabsAppearanceAn2 = false;
     _searchResultsTabsAppearanceNotifier.notifyListeners();
     await 200.milliseconds.delay();
@@ -155,7 +111,6 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     return await 200.milliseconds.delay();
   }
 
-
   double? _titleHeaderHeight;
 
   double _getTitleHeaderHeight() {
@@ -164,13 +119,11 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
         _titleHeaderKey.currentContext?.findRenderObject() as RenderBox;
 
     final Size size = renderBox.size;
-    // print('title height: $size');
     _titleHeaderHeight = size.height + 20;
     return _titleHeaderHeight!;
   }
 
   void _onRequestBarSearch() {
-    // print("/////////////////////////");
     _scrollController
         .animateTo(_getTitleHeaderHeight(),
             duration: 600.milliseconds, curve: Curves.linearToEaseOut)
@@ -186,49 +139,63 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   final _titleHeaderKey = GlobalKey();
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return NestedScrollView(
       physics: BouncingScrollPhysics(),
       controller: _scrollController,
       headerSliverBuilder: (_, __) => [
         SliverPadding(
-          // key: _titleHeaderKey,
           padding: EdgeInsets.only(top: 20, right: 25, left: 25),
           sliver: SliverToBoxAdapter(
-            child: Column(
-              key: _titleHeaderKey,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Search',
-                  style: Get.textTheme.headlineLarge!.copyWith(
-                    fontWeight: FontWeight.w600,
+            child: AnimatedSize(
+              duration: 200.milliseconds,
+              child: Column(
+                key: _titleHeaderKey,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _tabController.index >= 2 ? 'Search Results' : 'Search',
+                    style: Get.textTheme.headlineLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                Text(
-                  "Let's find something",
-                  style: Get.textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.w500,
-                    height: 1.2,
-                    color: CstColors.a,
+                  if (_tabController.index >= 2) SizedBox(height: 5),
+                  Text(
+                    _tabController.index >= 2
+                        ? 'White Style Abayas'
+                        : "Let's find something",
+                    style: Get.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      height: 1.2,
+                      color: CstColors.a,
+                    ),
                   ),
-                ),
-              ],
+                  if (_tabController.index >= 2)
+                    Text(
+                      '20 result',
+                      style: Get.textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        height: 1.2,
+                        color: CstColors.b,
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
         SliverPersistentHeader(
           pinned: true,
           floating: true,
-          delegate: _SearchBarHeaderPersistent(
+          delegate: SearchBarHeaderPersistent(
             isFloatingNotifier: _isSearchBarFloatingNotifier,
             focusNode: _searchFocusNode,
-            // isFloating: ,
             onTap: _onRequestBarSearch,
             controller: _searchController,
-            onCommit: () {
+            onCommit: () async {
               _searchFocusNode.unfocus();
-              return _changePart(_searchResultsTabController.index + 2);
+              await _changePart(_searchResultsTabController.index + 2);
+              _showSearchResultTitle();
             },
           ),
         ),
@@ -267,7 +234,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                                   indicatorPadding: EdgeInsets.only(top: 22.5),
                                   labelPadding:
                                       EdgeInsets.symmetric(horizontal: 5),
-                                  onTap: (i) async { 
+                                  onTap: (i) async {
                                     await _changePart(i + 2);
                                     _searchResultsTabController.animateTo(i);
                                     // setState(() {});
