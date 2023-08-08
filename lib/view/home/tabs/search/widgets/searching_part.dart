@@ -11,6 +11,7 @@ class SearchingPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      physics: BouncingScrollPhysics(),
       slivers: [
         SliverPadding(
           padding: EdgeInsets.only(right: 25, left: 25, top: 25, bottom: 15),

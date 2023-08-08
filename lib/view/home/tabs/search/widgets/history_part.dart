@@ -9,6 +9,7 @@ class HistoryPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      physics: BouncingScrollPhysics(),
       slivers: [
         SliverPadding(
           padding: EdgeInsets.all(25),

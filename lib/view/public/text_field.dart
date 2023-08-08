@@ -76,7 +76,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
         controller: widget.controller,
         onTap: widget.onTap,
         onSubmitted: (v) {
-          print("submitt");
           if (widget.onCommit != null) widget.onCommit!();
           _showClearButton(v);
         },

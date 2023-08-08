@@ -5,10 +5,7 @@ import 'package:aissam_store/view/home/tabs/search/widgets/history_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/search_bar_persistent.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/searching_part.dart';
-import 'package:aissam_store/view/public/text_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 class SearchTab extends StatefulWidget {
@@ -26,8 +23,8 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   late final TabController _tabController;
   late final TabController _searchResultsTabController;
   late final ValueNotifier _searchResultsTabsAppearanceNotifier;
-  bool _searchResultsTabsAppearanceAn1 = false; // for AnimatedSize widget
-  bool _searchResultsTabsAppearanceAn2 = false; // for AnimatedContainer widget
+  bool _searchResultsTabsAppearanceAn1 = false; 
+  bool _searchResultsTabsAppearanceAn2 = false; 
 
   @override
   void dispose() {
@@ -42,6 +39,41 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  bool _showSearchResultsTitle = false;
+
+  void _showResultsTabs() async {
+    _searchResultsTabsAppearanceAn1 = true;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+    await 200.milliseconds.delay();
+    _searchResultsTabsAppearanceAn2 = true;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+  }
+
+  void _hideResultsTabs() async {
+    _searchResultsTabsAppearanceAn2 = false;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+    await 200.milliseconds.delay();
+    _searchResultsTabsAppearanceAn1 = false;
+    _searchResultsTabsAppearanceNotifier.notifyListeners();
+  }
+
+  double? _titleHeaderHeight;
+
+  double _getTitleHeaderHeight() {
+    if (_titleHeaderHeight != null) return _titleHeaderHeight!;
+    final RenderBox renderBox =
+        _titleHeaderKey.currentContext?.findRenderObject() as RenderBox;
+
+    final Size size = renderBox.size;
+    _titleHeaderHeight = size.height + 20;
+    print('RETURN HEIGHT: $_titleHeaderHeight, tab: $_showSearchResultsTitle');
+    return _titleHeaderHeight!;
+  }
+
+  double get _getScrollOffset =>
+      _scrollController.hasClients ? _scrollController.offset : 0;
+
+  final _titleHeaderKey = GlobalKey();
   @override
   void initState() {
     // TODO: implement initState
@@ -57,7 +89,6 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     _searchFocusNode = FocusNode();
     _tabController = TabController(length: 5, vsync: this)
       ..addListener(() async {
-        // _searchResultsTabsAppearanceNotifier.value = _tabController.index >= 2;
         if (_tabController.index >= 2)
           _showResultsTabs();
         else
@@ -66,73 +97,22 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     _searchResultsTabController = TabController(length: 3, vsync: this);
     _searchController = TextEditingController()
       ..addListener(() {
-        if (_searchController.text.isEmpty)
-          _changePart(0);
-        else if (_searchController.text.isNotEmpty) {
-          print('CHANGIN PART TO 1');
-          _hideSearchResultTitle();
-          _changePart(1);
+        if (_searchController.text.isEmpty && _tabController.index != 0) {
+          _showHistory();
+        } else if (_searchController.text.isNotEmpty &&
+            _tabController.index != 1) {
+          _showSuggestions();
         }
-        // else if (_showResultTabs)
       });
     _searchResultsTabsAppearanceNotifier = ValueNotifier(false);
   }
 
-  bool _showSearchResultsTitle = false;
-  void _showSearchResultTitle() {
-    _showSearchResultsTitle = true;
-    _titleHeaderHeight = null;
-    setState(() {}); // to change header state;
-    _scrollController.animateTo(0,
-        duration: 200.milliseconds, curve: Curves.linearToEaseOut);
-  }
-
-  void _hideSearchResultTitle() {
-    _showSearchResultsTitle = false;
-    _titleHeaderHeight = null;
-    setState(() {}); // to change header state;
-  }
-
-  void _showResultsTabs() async {
-    // _titleHeaderHeight =
-    //     null; // to reload the nex title header heighr for the next search bar focus;
-    _searchResultsTabsAppearanceAn1 = true;
-    _searchResultsTabsAppearanceNotifier.notifyListeners();
-    await 200.milliseconds.delay();
-    _searchResultsTabsAppearanceAn2 = true;
-    _searchResultsTabsAppearanceNotifier.notifyListeners();
-    // _showSearchResultTitle();
-  }
-
-  void _hideResultsTabs() async {
-    _searchResultsTabsAppearanceAn2 = false;
-    _searchResultsTabsAppearanceNotifier.notifyListeners();
-    await 200.milliseconds.delay();
-    _searchResultsTabsAppearanceAn1 = false;
-    _searchResultsTabsAppearanceNotifier.notifyListeners();
-  }
-
-  Future<void> _changePart(int partIndex) async {
+  Future<void> _changeSearchResultType(int partIndex) async {
     _tabController.animateTo(partIndex, duration: 200.milliseconds);
     return await 200.milliseconds.delay();
   }
 
-  double? _titleHeaderHeight;
-
-  double _getTitleHeaderHeight() {
-    if (_titleHeaderHeight != null) return _titleHeaderHeight!;
-    final RenderBox renderBox =
-        _titleHeaderKey.currentContext?.findRenderObject() as RenderBox;
-
-    final Size size = renderBox.size;
-    _titleHeaderHeight = size.height + 20;
-    print('heiiiiiiiiiight: $_titleHeaderHeight');
-    return _titleHeaderHeight!;
-  }
-
-  void _onRequestBarSearch() {
-    // _hideSearchResultTitle();
-    if (_showSearchResultsTitle) _titleHeaderHeight = null;
+  void _onSeachingFocus() {
     _scrollController
         .animateTo(_getTitleHeaderHeight(),
             duration: 600.milliseconds, curve: Curves.linearToEaseOut)
@@ -142,10 +122,30 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     });
   }
 
-  double get _getScrollOffset =>
-      _scrollController.hasClients ? _scrollController.offset : 0;
+  void _showHistory() {
+    _updateHeader(false);
+    _tabController.animateTo(0, duration: 200.milliseconds);
+  }
 
-  final _titleHeaderKey = GlobalKey();
+  void _showSuggestions() {
+    _updateHeader(false);
+    _tabController.animateTo(1, duration: 200.milliseconds);
+  }
+
+  void _showResults() {
+    _updateHeader(true);
+    _scrollController.animateTo(_searchResultsTabController.index + 2,
+        duration: 200.milliseconds, curve: Curves.linearToEaseOut);
+    _tabController.animateTo(2, duration: 200.milliseconds);
+  }
+
+  void _updateHeader(showResultHeader) {
+    if (_showSearchResultsTitle == showResultHeader) return;
+    setState(() {
+      _showSearchResultsTitle = showResultHeader;
+      _titleHeaderHeight = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,12 +199,15 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
           delegate: SearchBarHeaderPersistent(
             isFloatingNotifier: _isSearchBarFloatingNotifier,
             focusNode: _searchFocusNode,
-            onTap: _onRequestBarSearch,
+            onTap: () async {
+              if (_tabController.index >= 2) _showSuggestions();
+              await 200.milliseconds.delay();
+              _onSeachingFocus();
+            },
             controller: _searchController,
             onCommit: () async {
               _searchFocusNode.unfocus();
-              await _changePart(_searchResultsTabController.index + 2);
-              _showSearchResultTitle();
+              _showResults();
             },
           ),
         ),
@@ -227,26 +230,19 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                                 height: 25,
                                 child: TabBar(
                                   splashBorderRadius: BorderRadius.circular(7),
-
                                   controller: _searchResultsTabController,
-                                  // TabController(
-                                  //   length: 3,
-                                  //   vsync: this,
-                                  //   initialIndex: _tabController.index - 2,
-                                  // ),
                                   isScrollable: true,
                                   indicatorSize: TabBarIndicatorSize.label,
                                   indicator: BoxDecoration(
                                       color: CstColors.g,
                                       borderRadius: BorderRadius.circular(5)),
-                                  // indicatorWeight:2,
                                   indicatorPadding: EdgeInsets.only(top: 22.5),
                                   labelPadding:
                                       EdgeInsets.symmetric(horizontal: 5),
                                   onTap: (i) async {
-                                    await _changePart(i + 2);
-                                    _searchResultsTabController.animateTo(i);
-                                    // setState(() {});
+                                    await _changeSearchResultType(i + 2);
+                                    _searchResultsTabsAppearanceNotifier
+                                        .notifyListeners();
                                   },
                                   tabs: [
                                     _getSearchResultsTypeTab('All', 20, 0),
