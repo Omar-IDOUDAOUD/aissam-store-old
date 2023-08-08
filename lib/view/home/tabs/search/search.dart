@@ -68,13 +68,19 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
       ..addListener(() {
         if (_searchController.text.isEmpty)
           _changePart(0);
-        else if (_searchController.text.isNotEmpty) _changePart(1);
+        else if (_searchController.text.isNotEmpty) {
+          print('CHANGIN PART TO 1');
+          _hideSearchResultTitle();
+          _changePart(1);
+        }
         // else if (_showResultTabs)
       });
     _searchResultsTabsAppearanceNotifier = ValueNotifier(false);
   }
 
+  bool _showSearchResultsTitle = false;
   void _showSearchResultTitle() {
+    _showSearchResultsTitle = true;
     _titleHeaderHeight = null;
     setState(() {}); // to change header state;
     _scrollController.animateTo(0,
@@ -82,6 +88,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   }
 
   void _hideSearchResultTitle() {
+    _showSearchResultsTitle = false;
     _titleHeaderHeight = null;
     setState(() {}); // to change header state;
   }
@@ -98,7 +105,6 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   }
 
   void _hideResultsTabs() async {
-    _hideSearchResultTitle();
     _searchResultsTabsAppearanceAn2 = false;
     _searchResultsTabsAppearanceNotifier.notifyListeners();
     await 200.milliseconds.delay();
@@ -120,10 +126,13 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
 
     final Size size = renderBox.size;
     _titleHeaderHeight = size.height + 20;
+    print('heiiiiiiiiiight: $_titleHeaderHeight');
     return _titleHeaderHeight!;
   }
 
   void _onRequestBarSearch() {
+    // _hideSearchResultTitle();
+    if (_showSearchResultsTitle) _titleHeaderHeight = null;
     _scrollController
         .animateTo(_getTitleHeaderHeight(),
             duration: 600.milliseconds, curve: Curves.linearToEaseOut)
@@ -154,14 +163,14 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _tabController.index >= 2 ? 'Search Results' : 'Search',
+                    _showSearchResultsTitle ? 'Search Results' : 'Search',
                     style: Get.textTheme.headlineLarge!.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  if (_tabController.index >= 2) SizedBox(height: 5),
+                  if (_showSearchResultsTitle) SizedBox(height: 5),
                   Text(
-                    _tabController.index >= 2
+                    _showSearchResultsTitle
                         ? 'White Style Abayas'
                         : "Let's find something",
                     style: Get.textTheme.bodyMedium!.copyWith(
@@ -170,7 +179,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                       color: CstColors.a,
                     ),
                   ),
-                  if (_tabController.index >= 2)
+                  if (_showSearchResultsTitle)
                     Text(
                       '20 result',
                       style: Get.textTheme.bodyMedium!.copyWith(
