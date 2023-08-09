@@ -6,6 +6,7 @@ import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/search_bar_persistent.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/searching_part.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class SearchTab extends StatefulWidget {
@@ -23,6 +24,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   late final TabController _tabController;
   late final TabController _searchResultsTabController;
   late final ValueNotifier _searchResultsTabsAppearanceNotifier;
+  late final ValueNotifier<bool> _backToTopFabNotifier;
   bool _searchResultsTabsAppearanceAn1 = false;
   bool _searchResultsTabsAppearanceAn2 = false;
   bool _showSearchResultsTitle = false;
@@ -37,9 +39,9 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     _tabController.dispose();
     _searchResultsTabController.dispose();
     _searchResultsTabsAppearanceNotifier.dispose();
+    _backToTopFabNotifier.dispose();
     super.dispose();
   }
-
 
   void _showResultsTabs() async {
     _searchResultsTabsAppearanceAn1 = true;
@@ -56,7 +58,6 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     _searchResultsTabsAppearanceAn1 = false;
     _searchResultsTabsAppearanceNotifier.notifyListeners();
   }
-
 
   double _getTitleHeaderHeight() {
     if (_titleHeaderHeight != null) return _titleHeaderHeight!;
@@ -76,12 +77,16 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _isSearchBarFloatingNotifier = ValueNotifier(false);
+    _backToTopFabNotifier = ValueNotifier(false);
     _scrollController = ScrollController()
       ..addListener(() {
-        if (_getScrollOffset <= _getTitleHeaderHeight() + 20)
+        if (_getScrollOffset <= _getTitleHeaderHeight() + 20) {
           _isSearchBarFloatingNotifier.value = false;
-        else
+          _hideBackToTopFAB();
+        } else {
           _isSearchBarFloatingNotifier.value = true;
+          _showBackToTopFAB();
+        }
       });
     _searchFocusNode = FocusNode();
     _tabController = TabController(length: 5, vsync: this)
@@ -102,6 +107,16 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
         }
       });
     _searchResultsTabsAppearanceNotifier = ValueNotifier(false);
+  }
+
+  void _showBackToTopFAB() {
+    _backToTopFabNotifier.value = true;
+    print(true);
+  }
+
+  void _hideBackToTopFAB() {
+    _backToTopFabNotifier.value = false;
+    print(false);
   }
 
   Future<void> _changeSearchResultType(int partIndex) async {
@@ -133,7 +148,8 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     _updateHeader(true);
     _scrollController.animateTo(0,
         duration: 200.milliseconds, curve: Curves.linearToEaseOut);
-    _tabController.animateTo(_searchResultsTabController.index + 2, duration: 200.milliseconds);
+    _tabController.animateTo(_searchResultsTabController.index + 2,
+        duration: 200.milliseconds);
   }
 
   void _updateHeader(showResultHeader) {
@@ -257,16 +273,52 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
               }),
         ),
       ],
-      body: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: _tabController,
+      body: Stack(
         children: [
-          // HISTORY PART
-          HistoryPart(), //0
-          SearchingPart(), //1
-          ResultesPart(testTmage: 'assets/images/image_2.png'), //2
-          ResultesPart(testTmage: 'assets/images/image_3.png'), //3
-          ResultesPart(testTmage: 'assets/images/image_4.png'), //4
+          TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            controller: _tabController,
+            children: [
+              // HISTORY PART
+              HistoryPart(), //0
+              SearchingPart(), //1
+              ResultesPart(testTmage: 'assets/images/image_2.png'),
+              ResultesPart(
+                testTmage: 'assets/images/image_3.png',
+              ), //3
+              ResultesPart(
+                testTmage: 'assets/images/image_4.png',
+              ), //4
+            ],
+          ),
+          ValueListenableBuilder<bool>(
+            valueListenable: _backToTopFabNotifier,
+            builder: (context, v, c) {
+              return AnimatedPositioned(
+                duration: 600.milliseconds,
+                curve: Curves.linearToEaseOut,
+                bottom: 100,
+                right: v ? 25 : -50,
+                height: 50,
+                width: 50,
+                child: FloatingActionButton.extended(
+                  label: Icon(
+                    Icons.keyboard_double_arrow_up_rounded,
+                    color: CstColors.c,
+                  ),
+                  tooltip: "Back to top",
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.grey[300],
+                  onPressed: () {
+                    _scrollController.animateTo(0,
+                        duration: 1.seconds, curve: Curves.linearToEaseOut);
+                  },
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
