@@ -1,4 +1,5 @@
 import 'package:aissam_store/view/home/nav_bar/nav_bar.dart';
+import 'package:aissam_store/view/home/tabs/add_to_cart/add_to_cart.dart';
 import 'package:aissam_store/view/home/tabs/favorites/favorites.dart';
 import 'package:aissam_store/view/home/tabs/main/main.dart';
 import 'package:aissam_store/view/home/tabs/search/search.dart';
@@ -24,7 +25,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     // _pageController =
     //     PageController(initialPage: _activeTabIndex, keepPage: true);
-    _tabController = TabController(length: 3, vsync: this)
+    _tabController = TabController(length: 4, vsync: this)
       ..addListener(() {
         setState(() {
           _activeTabIndex = _tabController.index;
@@ -32,12 +33,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       });
   }
 
-
   @override
   void dispose() {
     super.dispose();
     // TODO: implement dispose
-    _tabController.dispose(); 
+    _tabController.dispose();
   }
 
   @override
@@ -51,6 +51,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               MainTab(),
               FavoritesTab(),
               SearchTab(),
+              AddToCartTab(),
             ],
           ),
           // Positioned.fill(

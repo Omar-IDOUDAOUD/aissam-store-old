@@ -19,6 +19,7 @@ class AissamStore extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        // useMaterial3: true,
         textTheme: TextTheme(
           headlineLarge: TextStyle(
             //h1

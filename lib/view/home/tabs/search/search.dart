@@ -260,13 +260,12 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: _tabController,
-        children: [
-          // HISTORY PART
-          HistoryPart(), //0
-          SearchingPart(), //1
-          ResultesPart(testTmage: 'assets/images/image_2.png'), //2
-          ResultesPart(testTmage: 'assets/images/image_3.png'), //3
-          ResultesPart(testTmage: 'assets/images/image_4.png'), //4
+        children: const [
+          HistoryPart(), 
+          SearchingPart(),
+          ResultesPart(testTmage: 'assets/images/image_2.png'), 
+          ResultesPart(testTmage: 'assets/images/image_3.png'), 
+          ResultesPart(testTmage: 'assets/images/image_4.png'), 
         ],
       ),
     );
