@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, curly_braces_in_flow_control_structures
 
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/history_part.dart';
@@ -23,12 +23,13 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   late final TabController _tabController;
   late final TabController _searchResultsTabController;
   late final ValueNotifier _searchResultsTabsAppearanceNotifier;
-  bool _searchResultsTabsAppearanceAn1 = false; 
-  bool _searchResultsTabsAppearanceAn2 = false; 
+  bool _searchResultsTabsAppearanceAn1 = false;
+  bool _searchResultsTabsAppearanceAn2 = false;
+  bool _showSearchResultsTitle = false;
+  double? _titleHeaderHeight;
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _isSearchBarFloatingNotifier.dispose();
     _scrollController.dispose();
     _searchFocusNode.dispose();
@@ -39,7 +40,6 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  bool _showSearchResultsTitle = false;
 
   void _showResultsTabs() async {
     _searchResultsTabsAppearanceAn1 = true;
@@ -57,7 +57,6 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     _searchResultsTabsAppearanceNotifier.notifyListeners();
   }
 
-  double? _titleHeaderHeight;
 
   double _getTitleHeaderHeight() {
     if (_titleHeaderHeight != null) return _titleHeaderHeight!;
@@ -66,7 +65,6 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
 
     final Size size = renderBox.size;
     _titleHeaderHeight = size.height + 20;
-    print('RETURN HEIGHT: $_titleHeaderHeight, tab: $_showSearchResultsTitle');
     return _titleHeaderHeight!;
   }
 
@@ -76,7 +74,6 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   final _titleHeaderKey = GlobalKey();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isSearchBarFloatingNotifier = ValueNotifier(false);
     _scrollController = ScrollController()
@@ -134,9 +131,9 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
 
   void _showResults() {
     _updateHeader(true);
-    _scrollController.animateTo(_searchResultsTabController.index + 2,
+    _scrollController.animateTo(0,
         duration: 200.milliseconds, curve: Curves.linearToEaseOut);
-    _tabController.animateTo(2, duration: 200.milliseconds);
+    _tabController.animateTo(_searchResultsTabController.index + 2, duration: 200.milliseconds);
   }
 
   void _updateHeader(showResultHeader) {
@@ -201,7 +198,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
             focusNode: _searchFocusNode,
             onTap: () async {
               if (_tabController.index >= 2) _showSuggestions();
-              await 200.milliseconds.delay();
+              await 100.milliseconds.delay();
               _onSeachingFocus();
             },
             controller: _searchController,

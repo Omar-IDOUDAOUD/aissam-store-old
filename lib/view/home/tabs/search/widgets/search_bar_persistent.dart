@@ -1,8 +1,6 @@
 import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/material.dart';
 
-
-
 class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
   SearchBarHeaderPersistent({
     required this.focusNode,
@@ -36,6 +34,7 @@ class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
               onCommit: onCommit,
               onClear: () {
                 controller.clear();
+                focusNode.unfocus();
               },
               focusNode: focusNode,
               enabled: !v,
