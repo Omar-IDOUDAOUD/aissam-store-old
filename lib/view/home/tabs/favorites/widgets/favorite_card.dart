@@ -17,16 +17,16 @@ class _FavoriteCardState extends State<FavoriteCard> {
       height: 95,
       child: Row(
         children: [
-          SizedBox(
-            width: 60,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                'assets/images/image_1 1x.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          // SizedBox(
+          //   width: 60,
+          //   child: ClipRRect(
+          //     borderRadius: BorderRadius.circular(10),
+          //     child: Image.asset(
+          //       'assets/images/image_1 1x.png',
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          // ),
           SizedBox(
             width: 7,
           ),
