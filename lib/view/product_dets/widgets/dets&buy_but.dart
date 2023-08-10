@@ -1,9 +1,9 @@
 // ignore: file_names
 
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/view/product_dets/add_to_cart/add_to_card_bottom_sheet.dart';
-import 'package:aissam_store/view/product_dets/add_to_cart/add_to_cart_button.dart';
-import 'package:aissam_store/view/product_dets/add_to_cart/proceed_to_checkout_button.dart';
+import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_card_bottom_sheet.dart';
+import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_cart_button.dart';
+import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/proceed_to_checkout_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -181,26 +181,46 @@ class _BuyButtonState extends State<_BuyButton>
   late final OverlayEntry _proceedToCartButtonOverLayEntry;
   late final AnimationController _addToCartButtonOverLayAnCtrl;
   late final Animation<Offset> _addToCartButtonOverLayAn;
+  late final PageController _addToCartPageController;
   final Duration _animationDur = 600.milliseconds;
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    // TODO: implement dispose
+    if (_isAddToCartInitialed) {
+      _addToCartPageController.dispose();
+      _addToCartButtonOverLayAnCtrl.dispose();
+    }
+    super.dispose();
+  }
+
+  bool _isAddToCartInitialed = false;
+
+  void _initializeAddToCart() {
+    if (_isAddToCartInitialed) return;
+    _isAddToCartInitialed = true;
+    _addToCartPageController = PageController();
     _addToCartButtonOverLayAnCtrl =
         AnimationController(vsync: this, duration: _animationDur);
-    // ..addListener(() {
-    //   _addToCartButtonOverLayState.setState(() {});
-    // });
     _addToCartButtonOverLayAn =
         Tween<Offset>(begin: Offset(0, 100), end: Offset.zero).animate(
-            CurvedAnimation(
-                parent: _addToCartButtonOverLayAnCtrl,
-                curve: Curves.linearToEaseOut));
+      CurvedAnimation(
+        parent: _addToCartButtonOverLayAnCtrl,
+        curve: Curves.linearToEaseOut,
+      ),
+    );
 
     _addToCartButtonOverLayState = Overlay.of(context);
     _addToCartButtonOverLayEntry = OverlayEntry(
       builder: (_) {
         return AddToCartButton(
+          onTap: () {
+            _addToCartPageController.animateToPage(1,
+                duration: _animationDur, curve: Curves.linearToEaseOut);
+            _addToCartButtonOverLayState.setState(() {
+              _isProceedToCartState = true;
+            });
+          },
           animation: _addToCartButtonOverLayAn,
           animationDur: _animationDur,
           isProceedToCartState: _isProceedToCartState,
@@ -220,21 +240,36 @@ class _BuyButtonState extends State<_BuyButton>
 
   bool _isProceedToCartState = false;
 
-  void _closeButton() { 
+  void _closeAddToCartButton() {
     _addToCartButtonOverLayAnCtrl.reverse().then((value) {
       _addToCartButtonOverLayEntry.remove();
       _proceedToCartButtonOverLayEntry.remove();
-      _isProceedToCartState = false;
-      // _addToCartButtonOverLayState.dispose();
     });
   }
 
-  void _openButton() {
+  void _openAddToCartButton() {
+    _initializeAddToCart();
+    showModalBottomSheet(
+      constraints: BoxConstraints(maxHeight: Get.height * 0.9),
+      context: context,
+      enableDrag: true,
+      isScrollControlled: true,
+      builder: (_) {
+        return AddToCartBottomSheet(
+          title: 'ADD TO CART',
+          pageController: _addToCartPageController,
+          onDispose: _closeAddToCartButton,
+          animationDur: _animationDur,
+        );
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      ),
+    );
     200.milliseconds.delay().then((value) {
+      _isProceedToCartState = false;
       _addToCartButtonOverLayState.rearrange(
           [_addToCartButtonOverLayEntry, _proceedToCartButtonOverLayEntry]);
-      // _addToCartButtonOverLayState.insert(_addToCartButtonOverLayEntry);
-      // _addToCartButtonOverLayState.insert(_proceedToCartButtonOverLayEntry);
       _addToCartButtonOverLayAnCtrl.forward();
     });
   }
@@ -243,32 +278,7 @@ class _BuyButtonState extends State<_BuyButton>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        showModalBottomSheet(
-          constraints: BoxConstraints(maxHeight: Get.height * 0.9),
-          context: context,
-          enableDrag: true,
-          isScrollControlled: true,
-          builder: (_) {
-            return AddToCartBottomSheet(
-              onDispose: _closeButton,
-              animationDur: _animationDur,
-              onNext: () {
-                _addToCartButtonOverLayState.setState(() {
-                  _isProceedToCartState = true;
-                });
-              },
-            );
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-          ),
-        );
-        _openButton();
-
-        // Get.bottomSheet(
-        //   AddToCardBottomSheet(),
-        //   backgroundColor: Colors.white ,
-        // );
+        _openAddToCartButton();
       },
       child: Container(
         width: 80,

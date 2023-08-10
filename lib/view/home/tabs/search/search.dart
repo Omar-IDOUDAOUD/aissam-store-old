@@ -6,7 +6,6 @@ import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/search_bar_persistent.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/searching_part.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class SearchTab extends StatefulWidget {
@@ -304,13 +303,13 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                 child: FloatingActionButton.extended(
                   label: Icon(
                     Icons.keyboard_double_arrow_up_rounded,
-                    color: CstColors.c,
+                    color: Colors.white,
                   ),
                   tooltip: "Back to top",
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  backgroundColor: Colors.grey[300],
+                  backgroundColor: CstColors.a,
                   onPressed: () {
                     _scrollController.animateTo(0,
                         duration: 1.seconds, curve: Curves.linearToEaseOut);
