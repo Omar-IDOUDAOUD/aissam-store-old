@@ -108,6 +108,7 @@ class _CartItemState extends State<CartItem> {
                               child: Button(
                                 onTap: () {
                                   _hide();
+                                  Get.closeCurrentSnackbar();
                                   _showRestoreItemSnackBar();
                                 },
                                 color: Colors.pink[600]!,
@@ -143,38 +144,41 @@ class _CartItemState extends State<CartItem> {
         dismissDirection: DismissDirection.down,
         duration: 5.seconds,
         backgroundColor: CstColors.a,
-        animationDuration: 600.milliseconds,
+        animationDuration: 450.milliseconds,
         isDismissible: true,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
         messageText: SizedBox(
           height: 50,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Product deleted",
-                    style: Get.textTheme.bodyLarge!.copyWith(
-                      color: Colors.white,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Product deleted",
+                      style: Get.textTheme.bodyLarge!.copyWith(
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  Text(
-                    "Premier Jesrsy Hijab - Rose Quartz",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Get.textTheme.bodySmall!.copyWith(
-                      color: Colors.white.withOpacity(.5),
-                      fontWeight: FontWeight.w400,
+                    Text(
+                      "Premier Jesrsy Hijab - Rose Quartz",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Get.textTheme.bodySmall!.copyWith(
+                        color: Colors.white.withOpacity(.5),
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               SizedBox(width: 10),
               MaterialButton(
                 height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: 25),
                 onPressed: () {
                   _show();
                   Get.closeCurrentSnackbar();
@@ -187,7 +191,7 @@ class _CartItemState extends State<CartItem> {
                   children: [
                     Icon(
                       CupertinoIcons.restart,
-                      size: 20,
+                      size: 18,
                       color: CstColors.a,
                     ),
                     SizedBox(width: 5),

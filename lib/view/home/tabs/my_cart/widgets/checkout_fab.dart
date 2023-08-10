@@ -1,4 +1,5 @@
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/public/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -14,13 +15,12 @@ class CheckoutFAB extends StatefulWidget {
 }
 
 class _CheckoutFABState extends State<CheckoutFAB> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       animationDuration: 500.milliseconds,
-      padding: EdgeInsets.symmetric(horizontal: widget.isExpand ? 30 : 25),
+      padding: EdgeInsets.symmetric(horizontal: widget.isExpand ? 25 : 15),
       height: 50,
       minWidth: 50,
       color: CstColors.a,

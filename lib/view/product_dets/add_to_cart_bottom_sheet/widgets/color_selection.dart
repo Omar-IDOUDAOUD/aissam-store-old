@@ -1,11 +1,7 @@
-
-
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
-
 
 class ColorSelection extends StatefulWidget {
   const ColorSelection({super.key});
@@ -89,16 +85,14 @@ class __ColorSelectionState extends State<ColorSelection> {
               backgroundColor: color,
               child: AnimatedScale(
                 scale: selectedColor == index ? 1 : 0,
-                duration: 100.milliseconds,
-                curve: Curves.bounceIn,
+                duration: 200.milliseconds,
+                curve: Curves.linearToEaseOut,
                 child: SvgPicture.asset(
                   'assets/icons/ic_fluent_checkmark_24_filled.svg',
                   color: Colors.white,
                 ),
               ),
             ),
-            // SizedBox(height: 5),
-
             Expanded(
               child: Center(
                 child: Text(

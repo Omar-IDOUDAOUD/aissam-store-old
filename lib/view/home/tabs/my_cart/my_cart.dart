@@ -199,6 +199,8 @@ class _MyCartTabState extends State<MyCartTab> {
   }
 
   _expandCheckoutBottomSheet() {
+    _scrollController.animateTo(_scrollController.offset,
+        curve: Curves.linear, duration: Duration.zero);
     setState(() {
       _expandCheckoutButton = true;
     });
