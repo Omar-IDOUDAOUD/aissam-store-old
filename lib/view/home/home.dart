@@ -1,5 +1,5 @@
 import 'package:aissam_store/view/home/nav_bar/nav_bar.dart';
-import 'package:aissam_store/view/home/tabs/add_to_cart/add_to_cart.dart';
+import 'package:aissam_store/view/home/tabs/my_cart/my_cart.dart';
 import 'package:aissam_store/view/home/tabs/favorites/favorites.dart';
 import 'package:aissam_store/view/home/tabs/main/main.dart';
 import 'package:aissam_store/view/home/tabs/search/search.dart';

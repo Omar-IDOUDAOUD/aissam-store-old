@@ -5,15 +5,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class AddToCartButton extends StatefulWidget {
-  const AddToCartButton(
-      {super.key,
-      required this.isProceedToCartState,
-      required this.animation,
-      this.animationDur});
+  const AddToCartButton({
+    super.key,
+    required this.isProceedToCartState,
+    required this.animation,
+    this.animationDur,
+    this.onTap, 
+  });
 
   final bool isProceedToCartState;
   final Animation<Offset> animation;
   final Duration? animationDur;
+  final Function()? onTap;
 
   @override
   State<AddToCartButton> createState() => _AddToCartButtonState();
@@ -36,7 +39,7 @@ class _AddToCartButtonState extends State<AddToCartButton> {
           child: Material(
             type: MaterialType.transparency,
             child: Button(
-              onPressed: () {},
+              onPressed: widget.onTap,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

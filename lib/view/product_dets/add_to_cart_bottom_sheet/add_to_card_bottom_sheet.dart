@@ -1,20 +1,24 @@
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/view/product_dets/add_to_cart/widgets/color_selection.dart';
-import 'package:aissam_store/view/product_dets/add_to_cart/widgets/quantity_selection.dart';
-import 'package:aissam_store/view/product_dets/add_to_cart/widgets/size_selection.dart';
+import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/widgets/color_selection.dart';
+import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/widgets/quantity_selection.dart';
+import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/widgets/size_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class AddToCartBottomSheet extends StatefulWidget {
-  const AddToCartBottomSheet(
-      {super.key,
-      required this.onDispose,
-      required this.onNext,
-      this.animationDur});
-  final Function onDispose;
-  final Function onNext;
+  const AddToCartBottomSheet({
+    super.key,
+    this.onDispose,
+    this.animationDur,
+    required this.pageController,
+    required this.title, 
+  });
+  final Function()? onDispose;
+  // final Function()? onSave;
   final Duration? animationDur;
+  final PageController pageController;
+  final String title; 
 
   @override
   State<AddToCartBottomSheet> createState() => _AddToCartBottomSheetState();
@@ -24,30 +28,18 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
   @override
   void dispose() {
     // TODO: implement dispose
-    widget.onDispose();
-    _pageController.dispose();
+    if (widget.onDispose != null) widget.onDispose!();
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _pageController = PageController();
-    2.seconds.delay().then((value) {
-      if (!this.mounted) return;
-      setState(() {
-        page = 1;
-      });
-      widget.onNext();
-      _pageController.animateToPage(1,
-          duration: widget.animationDur ?? 400.milliseconds,
-          curve: Curves.linearToEaseOut);
+    // TODO: implement initState
+    widget.pageController.addListener(() {
+      if (this.mounted) setState(() {});
     });
   }
-
-  int page = 0;
-  late final PageController _pageController;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +51,7 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
         ),
         Center(
           child: Text(
-            'ADD TO CART',
+           widget.title,
             style: Get.textTheme.headlineSmall!
                 .copyWith(color: Colors.black, fontWeight: FontWeight.w700),
           ),
@@ -71,9 +63,13 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
           duration: widget.animationDur ?? 400.milliseconds,
           curve: Curves.linearToEaseOut,
           child: SizedBox(
-            height: page == 0 ? Get.height * 0.8 : Get.height * 0.4,
+            height: widget.pageController.hasClients
+                ? widget.pageController.page == 0
+                    ? Get.height * 0.8
+                    : Get.height * 0.4
+                : Get.height * 0.8,
             child: PageView(
-              controller: _pageController,
+              controller: widget.pageController,
               physics: NeverScrollableScrollPhysics(),
               children: [
                 _FirstPart(),
@@ -135,10 +131,6 @@ class _FirstPart extends StatelessWidget {
           ),
           SizedBox(height: 5),
           QuantitySelection(),
-          // Spacer(),
-          // SizedBox(
-          //   height: Get.height * 0.3,
-          // )
         ],
       ),
     );
@@ -170,4 +162,3 @@ class _SecondPart extends StatelessWidget {
     );
   }
 }
-

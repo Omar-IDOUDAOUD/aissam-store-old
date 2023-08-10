@@ -1,11 +1,9 @@
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/view/home/tabs/add_to_cart/widgets/cart_item.dart';
-import 'package:aissam_store/view/home/tabs/favorites/widgets/favorite_card.dart';
+import 'package:aissam_store/view/home/tabs/my_cart/widgets/cart_item.dart';
+import 'package:aissam_store/view/home/tabs/my_cart/widgets/checkout_fab.dart';
 import 'package:aissam_store/view/home/tabs/widgets/header_scroll_up_blur.dart';
 import 'package:aissam_store/view/public/text_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
@@ -92,7 +90,7 @@ class _AddToCartTabState extends State<AddToCartTab> {
     // TODO: implement initState
     _scrollController = ScrollController(initialScrollOffset: 0)
       ..addListener(() {
-        if (v) _collapseCheckoutBottomSheet();
+        if (_expandCheckoutButton) _collapseCheckoutBottomSheet();
         if (_scrollController.offset <= _fixHeaderExtent &&
             _scrollController.offset >= 0) {
           _scrollHeaderNotifier.value = _scrollController.offset;
@@ -147,7 +145,7 @@ class _AddToCartTabState extends State<AddToCartTab> {
           ],
         ),
         AnimatedPositioned(
-          bottom: v ? 0 : -230,
+          bottom: _expandCheckoutButton ? 0 : -230,
           height: 230,
           width: Get.size.width,
           duration: _anDur,
@@ -185,50 +183,13 @@ class _AddToCartTabState extends State<AddToCartTab> {
         AnimatedPositioned(
           duration: _anDur,
           curve: _anCurve,
-          bottom: v ? 140 : 100,
-          height: 60,
+          bottom: _expandCheckoutButton ? 140 : 100,
+          height: _expandCheckoutButton ? 60 : 50,
           right: 25,
-          width: v ? Get.size.width - (25 * 2) : 60,
-          child: MaterialButton(
-            animationDuration: _anDur,
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            height: 60,
-            minWidth: 60,
-            color: CstColors.a,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Positioned(
-                  right: 0,
-                  child: SvgPicture.asset(
-                    'assets/icons/arrow_right.svg',
-                    color: Colors.white,
-                    width: 35,
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  child: AnimatedOpacity(
-                    duration: _anDur,
-                    curve: _anCurve,
-                    opacity: v ? 1 : 0,
-                    child: Text(
-                      'CHECKOUT',
-                      style: Get.textTheme.bodyLarge!.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            onPressed: () {
-              if (!v) _expandCheckoutBottomSheet();
-            },
+          width: _expandCheckoutButton ? Get.size.width - (25 * 2) : 50,
+          child: CheckoutFAB(
+            isExpand: _expandCheckoutButton,
+            onExpand: _expandCheckoutBottomSheet,
           ),
         ),
       ],
@@ -237,18 +198,18 @@ class _AddToCartTabState extends State<AddToCartTab> {
 
   _expandCheckoutBottomSheet() {
     setState(() {
-      v = true;
+      _expandCheckoutButton = true;
     });
   }
 
   _collapseCheckoutBottomSheet() {
     setState(() {
-      v = false;
+      _expandCheckoutButton = false;
     });
   }
 
   final _anDur = 500.milliseconds;
   final _anCurve = Curves.linearToEaseOut;
 
-  bool v = false;
+  bool _expandCheckoutButton = false;
 }

@@ -1,5 +1,5 @@
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/view/product_dets/add_to_cart/add_to_card_bottom_sheet.dart';
+import 'package:aissam_store/view/home/tabs/my_cart/widgets/modify_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -105,10 +105,10 @@ class _CartItemState extends State<CartItem> {
                             Positioned(
                               bottom: 5,
                               right: 0,
-                              child: _Button(
+                              child: Button(
                                 onTap: () {
                                   _hide();
-                                  _showSnackBar();
+                                  _showRestoreItemSnackBar();
                                 },
                                 color: Colors.pink[600]!,
                                 child: Padding(
@@ -124,18 +124,7 @@ class _CartItemState extends State<CartItem> {
                             Positioned(
                               bottom: 5,
                               right: 40,
-                              child: _Button(
-                                color: Colors.blue[800]!,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
-                                  child: Text(
-                                    "Modify",
-                                    style: Get.textTheme.bodyMedium!.copyWith(
-                                      color: Colors.blue[800],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              child: ModifyButton(),
                             ),
                           ],
                         ),
@@ -148,7 +137,7 @@ class _CartItemState extends State<CartItem> {
     );
   }
 
-  void _showSnackBar() {
+  void _showRestoreItemSnackBar() {
     Get.showSnackbar(
       GetSnackBar(
         dismissDirection: DismissDirection.down,
@@ -159,36 +148,53 @@ class _CartItemState extends State<CartItem> {
         messageText: SizedBox(
           height: 50,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "Product deleted",
-                style: Get.textTheme.bodyLarge!.copyWith(
-                  color: Colors.white,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Product deleted",
+                    style: Get.textTheme.bodyLarge!.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    "Premier Jesrsy Hijab - Rose Quartz",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Get.textTheme.bodySmall!.copyWith(
+                      color: Colors.white.withOpacity(.5),
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
               ),
+              SizedBox(width: 10),
               MaterialButton(
                 height: 50,
+                padding: EdgeInsets.symmetric(horizontal: 30),
                 onPressed: () {
                   _show();
                   Get.closeCurrentSnackbar();
                 },
-                elevation: 10,
+                elevation: 0,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(7)),
-                color: Colors.white.withOpacity(.2),
+                    borderRadius: BorderRadius.circular(25)),
+                color: Colors.white,
                 child: Row(
                   children: [
                     Icon(
                       CupertinoIcons.restart,
                       size: 20,
-                      color: Colors.white,
+                      color: CstColors.a,
                     ),
                     SizedBox(width: 5),
                     Text(
                       "Restor",
                       style: Get.textTheme.bodyLarge!.copyWith(
-                        color: Colors.white,
+                        color: CstColors.a,
                       ),
                     ),
                   ],
@@ -208,8 +214,8 @@ class _CartItemState extends State<CartItem> {
       );
 }
 
-class _Button extends StatefulWidget {
-  const _Button({
+class Button extends StatefulWidget {
+  const Button({
     super.key,
     required this.child,
     required this.color,
@@ -220,10 +226,10 @@ class _Button extends StatefulWidget {
   final Function()? onTap;
 
   @override
-  State<_Button> createState() => _ButtonState();
+  State<Button> createState() => _ButtonState();
 }
 
-class _ButtonState extends State<_Button> {
+class _ButtonState extends State<Button> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
