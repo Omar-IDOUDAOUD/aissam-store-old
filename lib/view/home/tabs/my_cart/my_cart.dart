@@ -101,7 +101,8 @@ class _AddToCartTabState extends State<AddToCartTab> {
   }
 
   @override
-  void dispose() { 
+  void dispose() {
+    // TODO: implement dispose
     _scrollController.dispose();
     _scrollHeaderNotifier.dispose();
     super.dispose();
