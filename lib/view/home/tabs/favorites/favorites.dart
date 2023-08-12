@@ -119,6 +119,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
           padding: EdgeInsets.symmetric(horizontal: 25),
           sliver: SliverToBoxAdapter(
             child: CustomTextField(
+              prefixIconPath: 'assets/icons/search_small.svg',
               onClear: () {},
               // onCommit: () {},
               focusNode: FocusNode(),

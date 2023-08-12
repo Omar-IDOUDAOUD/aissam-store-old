@@ -25,7 +25,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
       valueListenable: notifier,
       builder: (context, v, c) {
         return HeaderWithScrollUpBlur(
-          padding: EdgeInsets.symmetric(horizontal: 25),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           elevation: ((v ?? fixedExtent - shrinkOffset) / fixedExtent),
           child: Row(
             children: [
@@ -41,7 +41,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                   borderRadius: BorderRadius.circular(7),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Text(
                     '3 Products',
                     style: Get.textTheme.bodyMedium!.copyWith(
@@ -86,8 +86,7 @@ class _AddToCartTabState extends State<AddToCartTab> {
 
   @override
   void initState() {
-    super.initState();
-    // TODO: implement initState
+    super.initState(); 
     _scrollController = ScrollController(initialScrollOffset: 0)
       ..addListener(() {
         if (_expandCheckoutButton) _collapseCheckoutBottomSheet();
@@ -102,8 +101,7 @@ class _AddToCartTabState extends State<AddToCartTab> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
+  void dispose() { 
     _scrollController.dispose();
     _scrollHeaderNotifier.dispose();
     super.dispose();
@@ -114,7 +112,7 @@ class _AddToCartTabState extends State<AddToCartTab> {
     return Stack(
       children: [
         CustomScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           controller: _scrollController,
           slivers: [
             SliverPersistentHeader(
@@ -127,19 +125,20 @@ class _AddToCartTabState extends State<AddToCartTab> {
               ),
             ),
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               sliver: SliverToBoxAdapter(
                 child: CustomTextField(
+                  prefixIconPath: 'assets/icons/search_small.svg',
                   onClear: () {},
                   focusNode: FocusNode(),
                 ),
               ),
             ),
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
               sliver: SliverList.builder(
                 itemCount: 20,
-                itemBuilder: (_, i) => CartItem(),
+                itemBuilder: (_, i) => const CartItem(),
               ),
             ),
           ],
@@ -152,11 +151,11 @@ class _AddToCartTabState extends State<AddToCartTab> {
           curve: _anCurve,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(35)),
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  offset: Offset(0, -5),
+                  offset: const Offset(0, -5),
                   color: Colors.black.withOpacity(.2),
                   blurRadius: 50,
                 )
@@ -165,7 +164,7 @@ class _AddToCartTabState extends State<AddToCartTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 105,
                 ),
                 Text(

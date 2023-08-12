@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class CheckoutFAB extends StatefulWidget {
-  CheckoutFAB({super.key, required this.isExpand, required this.onExpand});
+  const CheckoutFAB({super.key, required this.isExpand, required this.onExpand});
 
   final bool isExpand;
   final Function() onExpand;
@@ -60,6 +60,8 @@ class _CheckoutFABState extends State<CheckoutFAB> {
           widget.onExpand();
           return;
         }
+
+        Get.toNamed('/checkout'); 
        
       },
     );

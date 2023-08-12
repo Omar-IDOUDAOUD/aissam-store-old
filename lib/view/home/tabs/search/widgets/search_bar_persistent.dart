@@ -30,6 +30,7 @@ class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
           valueListenable: isFloatingNotifier,
           builder: (context, v, c) {
             return CustomTextField(
+              prefixIconPath: 'assets/icons/search_small.svg',
               onTap: onTap,
               onCommit: onCommit,
               onClear: () {

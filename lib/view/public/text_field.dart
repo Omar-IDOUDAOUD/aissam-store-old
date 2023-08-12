@@ -10,11 +10,13 @@ class CustomTextField extends StatefulWidget {
     super.key,
     this.isFloating = false,
     this.enabled = true,
-    required this.focusNode,
+    this.focusNode,
     this.onTap,
     this.controller,
     this.onCommit,
     this.onClear,
+    this.prefixIconPath,
+    this.borderRadius = 12,
   }) {
     controller ??= TextEditingController();
     focusNode ??= FocusNode();
@@ -24,6 +26,8 @@ class CustomTextField extends StatefulWidget {
   FocusNode? focusNode;
   final Function()? onTap;
   TextEditingController? controller;
+  final String? prefixIconPath;
+  final double borderRadius;
 
   /// called when submit the field text using suffix button
   final Function()? onCommit;
@@ -68,11 +72,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return AnimatedPhysicalModel(
       duration: 200.milliseconds,
-      color: Color.fromARGB(255, 231, 231, 231),
+      color: Colors.grey.withOpacity(.1),
       elevation: widget.isFloating ? 20 : 0,
       shadowColor: Colors.black54.withOpacity(.2),
       // shape: BoxShape.circle,
-      borderRadius: BorderRadius.circular(12.5),
+      borderRadius: BorderRadius.circular(widget.borderRadius),
       shape: BoxShape.rectangle,
       child: TextField(
         controller: widget.controller,
@@ -102,20 +106,23 @@ class _CustomTextFieldState extends State<CustomTextField> {
             height: 1.6,
           ),
           contentPadding: EdgeInsets.all(17),
-          hintText: 'White Style Abayas',
+          // hintText: 'White Style Abayas',
           filled: false,
-          prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 5),
-            child: SvgPicture.asset(
-              'assets/icons/search_small.svg',
-              height: 25,
-              width: 25,
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.center,
-              color:
-                  widget.focusNode!.hasPrimaryFocus ? CstColors.c : CstColors.b,
-            ),
-          ),
+          prefixIcon: widget.prefixIconPath != null
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: SvgPicture.asset(
+                    widget.prefixIconPath!,
+                    height: 25,
+                    width: 25,
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.center,
+                    color: widget.focusNode!.hasPrimaryFocus
+                        ? CstColors.c
+                        : CstColors.b,
+                  ),
+                )
+              : null,
           prefixIconConstraints: BoxConstraints(
             // maxHeight: 50,
             minWidth: 40,
@@ -146,13 +153,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 )
               : null,
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
             borderSide:
                 BorderSide(color: CstColors.b.withOpacity(.5), width: 4),
           ),
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
           ),
         ),
       ),
