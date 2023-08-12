@@ -72,7 +72,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return AnimatedPhysicalModel(
       duration: 200.milliseconds,
-      color: Colors.grey.withOpacity(.1),
+      color: Color.fromARGB(255, 231, 231, 231),
       elevation: widget.isFloating ? 20 : 0,
       shadowColor: Colors.black54.withOpacity(.2),
       // shape: BoxShape.circle,
