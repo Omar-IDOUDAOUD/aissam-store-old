@@ -3,6 +3,7 @@ import 'package:aissam_store/view/home/tabs/my_cart/my_cart.dart';
 import 'package:aissam_store/view/home/tabs/favorites/favorites.dart';
 import 'package:aissam_store/view/home/tabs/main/main.dart';
 import 'package:aissam_store/view/home/tabs/search/search.dart';
+import 'package:aissam_store/view/home/tabs/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +26,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     // _pageController =
     //     PageController(initialPage: _activeTabIndex, keepPage: true);
-    _tabController = TabController(length: 4, vsync: this)
+    _tabController = TabController(length: 5, vsync: this)
       ..addListener(() {
         setState(() {
           _activeTabIndex = _tabController.index;
@@ -51,7 +52,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               MainTab(),
               FavoritesTab(),
               SearchTab(),
-              AddToCartTab(),
+              MyCartTab(),
+              SettingsTab(),
             ],
           ),
           // Positioned.fill(

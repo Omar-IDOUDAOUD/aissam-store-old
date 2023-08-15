@@ -1,9 +1,13 @@
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/view/checkout/add_checkout_address.dart';
+import 'package:aissam_store/view/add_checkout_address/add_checkout_address.dart';
 import 'package:aissam_store/view/checkout/chackout.dart';
 import 'package:aissam_store/view/fullscreen_image/fullscreen_image.dart';
 import 'package:aissam_store/view/home/home.dart';
 import 'package:aissam_store/view/product_dets/product_details.dart';
+import 'package:aissam_store/view/settings/account_info.dart';
+import 'package:aissam_store/view/settings/addresses.dart';
+import 'package:aissam_store/view/settings/appearence.dart';
+import 'package:aissam_store/view/settings/notifications.dart';
 import 'package:aissam_store/view/testing/test.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -109,15 +113,23 @@ class AissamStore extends StatelessWidget {
           // maintainState:
         ),
         GetPage(
-          name: '/fullscreen_image',
-          page: () => FullScreenImage(),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-          opaque: false,
-        ),
+            name: '/fullscreen_image',
+            page: () => FullScreenImage(),
+            transition: Transition.fadeIn,
+            showCupertinoParallax: false,
+            opaque: false),
         GetPage(name: '/testing', page: () => TestPage()),
         GetPage(name: '/checkout', page: () => CheckoutPage()),
-        GetPage(name: '/add_checkout_address', page: () => AddCheckoutAddress()),
+        GetPage(
+            name: '/add_checkout_address', page: () => AddCheckoutAddress()),
+        GetPage(
+            name: '/settings/account_info', page: () => SettingsAccountInfo()),
+        GetPage(name: '/settings/appearence', page: () => SettingsAppearence()),
+        GetPage(
+            name: '/settings/notifications',
+            page: () => SettingsNotifications()),
+        GetPage(
+            name: '/settings/user_addresses', page: () => SettingsAddresses()),
       ],
       initialRoute: '/',
     );

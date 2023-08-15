@@ -9,13 +9,13 @@ class Button extends StatefulWidget {
     required this.child,
     this.isHeightMinimize = false,
     this.isOutline = false,
-    this.padding = const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+    this.padding,
   });
   final Function()? onPressed;
   final Widget child;
   final bool isHeightMinimize;
   final bool isOutline;
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
 
   @override
   State<Button> createState() => _ButtonState();
@@ -28,22 +28,24 @@ class _ButtonState extends State<Button> {
       onTap: widget.onPressed,
       child: Container(
         height: widget.isHeightMinimize ? 60 : 75,
-        padding: widget.padding,
+        padding: widget.padding ??
+            EdgeInsets.symmetric(
+                horizontal: widget.isHeightMinimize ? 15 : 25, vertical: 10),
         decoration: BoxDecoration(
             border: widget.isOutline
                 ? Border.all(color: CstColors.a, width: 2)
                 : null,
             color: widget.isOutline ? Colors.transparent : CstColors.a,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: !widget.isOutline
-                ? [
-                    BoxShadow(
-                      color: CstColors.a.withOpacity(.5),
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
-                    )
-                  ]
-                : null),
+            borderRadius:
+                BorderRadius.circular(widget.isHeightMinimize ? 12 : 15),
+            boxShadow: [
+              if (!widget.isOutline)
+                BoxShadow(
+                  color: CstColors.a.withOpacity(.5),
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                )
+            ]),
         child: widget.child,
       ),
     );

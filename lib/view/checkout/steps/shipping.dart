@@ -46,17 +46,17 @@ class _ShippingState extends State<Shipping> {
             ],
           ),
           const SizedBox(height: 10),
-          const _AddressCard(isSelected: true),
+          const AddressCard(isSelected: true),
           const SizedBox(height: 10),
-          const _AddressCard(),
+          const AddressCard(),
         ],
       ),
     );
   }
 }
 
-class _AddressCard extends StatelessWidget {
-  const _AddressCard({super.key, this.isSelected = false});
+class AddressCard extends StatelessWidget {
+  const AddressCard({super.key, this.isSelected = false});
   final bool isSelected;
 
   @override

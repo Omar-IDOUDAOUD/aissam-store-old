@@ -41,7 +41,8 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                   borderRadius: BorderRadius.circular(7),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Text(
                     '3 Products',
                     style: Get.textTheme.bodyMedium!.copyWith(
@@ -72,21 +73,21 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class AddToCartTab extends StatefulWidget {
-  AddToCartTab({Key? key}) : super(key: key);
+class MyCartTab extends StatefulWidget {
+  MyCartTab({Key? key}) : super(key: key);
 
   @override
-  State<AddToCartTab> createState() => _AddToCartTabState();
+  State<MyCartTab> createState() => _MyCartTabState();
 }
 
-class _AddToCartTabState extends State<AddToCartTab> {
+class _MyCartTabState extends State<MyCartTab> {
   late final ScrollController _scrollController;
   late ValueNotifier<double?> _scrollHeaderNotifier; //
   static const double _fixHeaderExtent = 70;
 
   @override
   void initState() {
-    super.initState(); 
+    super.initState();
     _scrollController = ScrollController(initialScrollOffset: 0)
       ..addListener(() {
         if (_expandCheckoutButton) _collapseCheckoutBottomSheet();
@@ -152,7 +153,8 @@ class _AddToCartTabState extends State<AddToCartTab> {
           curve: _anCurve,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(35)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(35)),
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
