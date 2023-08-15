@@ -159,6 +159,10 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     });
   }
 
+  void _openSearchFilterDialog(){
+    //
+  }
+
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
