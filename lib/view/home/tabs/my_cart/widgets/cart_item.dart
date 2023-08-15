@@ -155,7 +155,7 @@ class _CartItemState extends State<CartItem> {
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
                       "Product deleted",
@@ -178,7 +178,7 @@ class _CartItemState extends State<CartItem> {
               SizedBox(width: 10),
               MaterialButton(
                 height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 25),
+                padding: EdgeInsets.symmetric(horizontal: 22),
                 onPressed: () {
                   _show();
                   Get.closeCurrentSnackbar();
