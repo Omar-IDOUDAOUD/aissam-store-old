@@ -41,6 +41,7 @@ class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
               enabled: !v,
               isFloating: v,
               controller: controller,
+              hint: 'Search',
             );
           },
         ),

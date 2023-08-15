@@ -110,12 +110,10 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
 
   void _showBackToTopFAB() {
     _backToTopFabNotifier.value = true;
-    print(true);
   }
 
   void _hideBackToTopFAB() {
     _backToTopFabNotifier.value = false;
-    print(false);
   }
 
   Future<void> _changeSearchResultType(int partIndex) async {
@@ -178,11 +176,22 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                 key: _titleHeaderKey,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    _showSearchResultsTitle ? 'Search Results' : 'Search',
-                    style: Get.textTheme.headlineLarge!.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _showSearchResultsTitle ? 'Search Results' : 'Search',
+                        style: Get.textTheme.headlineLarge!.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      if (_showSearchResultsTitle)
+                        Icon(
+                          Icons.filter_list_rounded,
+                          color: CstColors.a,
+                          size: 30,
+                        )
+                    ],
                   ),
                   if (_showSearchResultsTitle) SizedBox(height: 5),
                   Text(
@@ -199,9 +208,9 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                     Text(
                       '20 result',
                       style: Get.textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.w600,
+                        // fontWeight: FontWeight.w600,
                         height: 1.2,
-                        color: CstColors.b,
+                        color: CstColors.a,
                       ),
                     ),
                 ],

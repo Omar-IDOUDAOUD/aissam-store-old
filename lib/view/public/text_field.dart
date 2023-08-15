@@ -17,6 +17,7 @@ class CustomTextField extends StatefulWidget {
     this.onClear,
     this.prefixIconPath,
     this.borderRadius = 12,
+    this.hint,
   }) {
     controller ??= TextEditingController();
     focusNode ??= FocusNode();
@@ -28,6 +29,7 @@ class CustomTextField extends StatefulWidget {
   TextEditingController? controller;
   final String? prefixIconPath;
   final double borderRadius;
+  final String? hint;
 
   /// called when submit the field text using suffix button
   final Function()? onCommit;
@@ -106,7 +108,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             height: 1.6,
           ),
           contentPadding: EdgeInsets.all(17),
-          // hintText: 'White Style Abayas',
+          hintText: widget.hint,
           filled: false,
           prefixIcon: widget.prefixIconPath != null
               ? Padding(
@@ -124,11 +126,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 )
               : null,
           prefixIconConstraints: BoxConstraints(
-            // maxHeight: 50,
             minWidth: 40,
           ),
           suffixIconConstraints: BoxConstraints(
-            // maxHeight: 50,
             minWidth: 50,
           ),
           suffixIcon: _showSubmitSuffix != null
@@ -143,7 +143,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   child: SvgPicture.asset(
                     _showSubmitSuffix!
                         ? 'assets/icons/arrow_right_shorter.svg'
-                        : 'assets/icons/close.svg',
+                        : 'assets/icons/close_no_padding.svg.svg',
                     height: 13,
                     // width: 25,
                     fit: BoxFit.scaleDown,
