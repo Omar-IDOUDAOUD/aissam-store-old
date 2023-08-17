@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/public/button.dart';
 import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,7 +25,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
       child: Stack(
         children: [
           Positioned(
-            top: 20 + 7 * extandProgress,
+            top: 27 - 7 * extandProgress,
             left: 20,
             child: GestureDetector(
               onTap: Get.back,
@@ -37,45 +38,41 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
             ),
           ),
           Positioned(
-            top: 29 + 7 * extandProgress,
+            top: 36 - 7 * extandProgress,
             left: 28,
             width: 35 * extandProgress,
             height: 2,
             child: DecoratedBox(
-                decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: CstColors.a,
-            )),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: CstColors.a,
+              ),
+            ),
           ),
           Positioned(
             right: 25,
-            bottom: 15 + 5 * extandProgress,
+            bottom: 20 + 5 * extandProgress,
             child: SizedBox.square(
-              dimension: 30 + 30 * extandProgress,
+              dimension: 40 + 20 * extandProgress,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.red,
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.bottomRight,
-                child: AnimatedOpacity(
-                  // alignment: Alignment.center,
-                  duration: 100.milliseconds,
-                  opacity: extandProgress >= 0.8 ? 1 : 0,
-                  child: SizedBox.square(
-                    dimension: 23,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: toolBarColor, width: 1.5),
-                        color: CstColors.a,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: SvgPicture.asset(
-                          'assets/icons/ic_fluent_edit_24_filled.svg',
-                          color: Colors.white,
-                        ),
+                child: SizedBox.square(
+                  dimension: 17 + 6 * extandProgress,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: toolBarColor, width: 2),
+                      color: CstColors.a,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(4 + 2 * extandProgress),
+                      child: SvgPicture.asset(
+                        'assets/icons/ic_fluent_edit_24_filled.svg',
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -93,17 +90,12 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
               child: Transform.scale(
                 alignment: Alignment.centerLeft,
                 scale: 0.7 + 0.3 * extandProgress,
-                child: AnimatedDefaultTextStyle(
-                  duration: 200.milliseconds,
+                child: Text(
+                  'Account Information',
                   style: Get.textTheme.headlineLarge!.copyWith(
                     color: CstColors.a,
                     height: 1.1,
-                    fontWeight: extandProgress <= 0.5
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  ),
-                  child: const Text(
-                    'Account Information',
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
               ),
@@ -120,7 +112,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   // TODO: implement minExtent
-  double get minExtent => 60;
+  double get minExtent => 80;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
@@ -244,6 +236,34 @@ class _SettingsAccountInfoState extends State<SettingsAccountInfo> {
                       ],
                     ),
                   ),
+                  Spacer(), 
+                   Button(
+                    isHeightMinimize: true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 22,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Save',
+                            textAlign: TextAlign.center,
+                            style: Get.textTheme.bodyLarge!.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                        SvgPicture.asset(
+                          'assets/icons/ic_fluent_checkmark_24_filled.svg',
+                          color: Colors.white,
+                          width: 22,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 5),
                 ],
               ),
             ),

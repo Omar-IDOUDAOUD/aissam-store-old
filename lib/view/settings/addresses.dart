@@ -76,19 +76,14 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AnimatedDefaultTextStyle(
-                      duration: 200.milliseconds,
-                      style: Get.textTheme.headlineLarge!.copyWith(
-                        color: CstColors.a,
-                        height: 1.1,
-                        fontWeight: extandProgress <= 0.5
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
-                      child: const Text(
-                        'Addresses',
-                      ),
-                    ),
+                     Text(
+                  'Addresses',
+                  style: Get.textTheme.headlineLarge!.copyWith(
+                    color: CstColors.a,
+                    height: 1.1,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
                     Text(
                       '2 added',
                       style: Get.textTheme.bodyMedium!.copyWith(
