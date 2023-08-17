@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, curly_braces_in_flow_control_structures
 
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/home/tabs/search/filter_dialog.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/history_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/search_bar_persistent.dart';
@@ -157,8 +158,12 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     });
   }
 
-  void _openSearchFilterDialog(){
-    //
+  void _openSearchFilterDialog() {
+    Get.dialog(
+      SearchFilterDialog(),
+      barrierColor: Colors.black.withOpacity(.3),
+      barrierDismissible: true,
+    );
   }
 
   @override
@@ -186,10 +191,13 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                         ),
                       ),
                       if (_showSearchResultsTitle)
-                        Icon(
-                          Icons.filter_list_rounded,
-                          color: CstColors.a,
-                          size: 30,
+                        GestureDetector(
+                          onTap: _openSearchFilterDialog,
+                          child: Icon(
+                            Icons.filter_list_rounded,
+                            color: CstColors.a,
+                            size: 30,
+                          ),
                         )
                     ],
                   ),

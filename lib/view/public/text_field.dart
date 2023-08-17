@@ -29,7 +29,7 @@ class CustomTextField extends StatefulWidget {
   TextEditingController? controller;
   final String? prefixIconPath;
   final double borderRadius;
-  final String? hint;
+  final String? hint; 
 
   /// called when submit the field text using suffix button
   final Function()? onCommit;
