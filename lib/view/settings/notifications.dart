@@ -75,19 +75,14 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AnimatedDefaultTextStyle(
-                      duration: 200.milliseconds,
-                      style: Get.textTheme.headlineLarge!.copyWith(
-                        color: CstColors.a,
-                        height: 1.1,
-                        fontWeight: extandProgress <= 0.5
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
-                      child: const Text(
-                        'Notifications',
-                      ),
-                    ),
+                      Text(
+                  'Notifications',
+                  style: Get.textTheme.headlineLarge!.copyWith(
+                    color: CstColors.a,
+                    height: 1.1,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
                     Text(
                       'Active',
                       style: Get.textTheme.bodyMedium!.copyWith(
@@ -181,20 +176,29 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Save',
-                          style: Get.textTheme.bodyLarge!.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
+                        SizedBox(
+                          width: 22,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Save',
+                            textAlign: TextAlign.center,
+                            style: Get.textTheme.bodyLarge!.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
                         SvgPicture.asset(
                           'assets/icons/ic_fluent_checkmark_24_filled.svg',
                           color: Colors.white,
+                          width: 22,
                         ),
                       ],
                     ),
                   ),
+                  SizedBox(height: 5),
+                 
                 ],
               ),
             ),

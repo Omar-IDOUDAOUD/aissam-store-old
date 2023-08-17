@@ -101,19 +101,15 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AnimatedDefaultTextStyle(
-                      duration: 200.milliseconds,
-                      style: Get.textTheme.headlineLarge!.copyWith(
-                        color: CstColors.a,
-                        height: 1.1,
-                        fontWeight: extandProgress <= 0.5
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
-                      child: const Text(
-                        'Appearence',
-                      ),
-                    ),
+                     Text(
+                  'Appearence',
+                  style: Get.textTheme.headlineLarge!.copyWith(
+                    color: CstColors.a,
+                    height: 1.1,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                      
                     Text(
                       isLightTheme ? 'Light Theme' : 'Dark Theme',
                       style: Get.textTheme.bodyMedium!.copyWith(
@@ -184,25 +180,33 @@ class _SettingsAppearenceState extends State<SettingsAppearence> {
                       ],
                     ),
                     Spacer(),
-                    Button(
-                      isHeightMinimize: true,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
+                     Button(
+                    isHeightMinimize: true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 22,
+                        ),
+                        Expanded(
+                          child: Text(
                             'Save',
+                            textAlign: TextAlign.center,
                             style: Get.textTheme.bodyLarge!.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.normal,
                             ),
                           ),
-                          SvgPicture.asset(
-                            'assets/icons/ic_fluent_checkmark_24_filled.svg',
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
+                        ),
+                        SvgPicture.asset(
+                          'assets/icons/ic_fluent_checkmark_24_filled.svg',
+                          color: Colors.white,
+                          width: 22,
+                        ),
+                      ],
                     ),
+                  ),
+                 
                     SizedBox(height: 5),
                   ],
                 )),
