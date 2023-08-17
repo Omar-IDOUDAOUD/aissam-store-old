@@ -143,10 +143,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   child: SvgPicture.asset(
                     _showSubmitSuffix!
                         ? 'assets/icons/arrow_right_shorter.svg'
-                        : 'assets/icons/close_no_padding.svg.svg',
+                        : 'assets/icons/close_no_padding.svg',
                     height: 13,
-                    // width: 25,
                     fit: BoxFit.scaleDown,
+                    allowDrawingOutsideViewBox: true,
                     alignment: Alignment.center,
                     color: CstColors.c,
                   ),

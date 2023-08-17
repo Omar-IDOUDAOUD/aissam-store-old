@@ -13,13 +13,49 @@ class Header extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SvgPicture.asset('assets/icons/search_small.svg'),
+          SvgPicture.asset(
+            'assets/icons/search_small.svg',
+            height: 28,
+          ),
           AissamLogo(),
-          SvgPicture.asset('assets/icons/menu_vertical.svg'),
+          // SvgPicture.asset('assets/icons/menu_vertical.svg'),
+          Stack(
+            alignment: Alignment.bottomRight,
+            clipBehavior: Clip.none,
+            children: [
+              SvgPicture.asset(
+                'assets/icons/ic_fluent_alert_24_regular.svg',
+                height: 25,
+              ),
+              Positioned(
+                bottom: 0,
+                right: -3.0 * _notificationsNumber.length,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.lerp(Colors.pink.shade100, Colors.white, 0.4),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 4, left: 4, top: 1),
+                    child: Text(
+                      _notificationsNumber,
+                      style: Get.textTheme.displaySmall!.copyWith(
+                        color: Colors.pinkAccent,
+                        fontWeight: FontWeight.bold,
+                        // height: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
+
+  final _notificationsNumber = '3';
 }
 
 class AissamLogo extends StatelessWidget {
@@ -35,19 +71,22 @@ class AissamLogo extends StatelessWidget {
             style: Get.textTheme.headlineMedium!.copyWith(
               fontWeight: FontWeight.w600,
               height: 1,
+              fontSize: 20, 
             ),
           ),
           TextSpan(
               text: ' STORE\n',
               style: Get.textTheme.headlineMedium!
-                  .copyWith(fontWeight: FontWeight.w300, height: 1)),
+                  .copyWith(fontWeight: FontWeight.w300, height: 1, fontSize: 20, )),
           TextSpan(
             text: "FOR WOMEN'S CLOTHING",
-            style: Get.textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.w400,
-                color: CstColors.a,
-                letterSpacing: 0.5,
-                height: 1.3),
+            style: Get.textTheme.headlineMedium!.copyWith(
+              fontWeight: FontWeight.w400,
+              color: CstColors.a,
+              letterSpacing: 0.5,
+              height: 1.3,
+              fontSize: 11
+            ),
           ),
         ],
       ),
