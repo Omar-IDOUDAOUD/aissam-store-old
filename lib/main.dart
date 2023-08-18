@@ -1,3 +1,4 @@
+import 'package:aissam_store/bindings/authentication_service.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/firebase_options.dart';
 import 'package:aissam_store/view/add_checkout_address/add_checkout_address.dart';
@@ -137,7 +138,11 @@ class AissamStore extends StatelessWidget {
             page: () => SettingsNotifications()),
         GetPage(
             name: '/settings/user_addresses', page: () => SettingsAddresses()),
-        GetPage(name: '/authentication', page: () => AuthenticationPage()),
+        GetPage(
+          name: '/authentication',
+          page: () => AuthenticationPage(),
+          binding: AuthenticationServiceBinding(), 
+        ),
       ],
       initialRoute: '/authentication',
     );
