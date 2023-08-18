@@ -289,9 +289,9 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _singUpMethodSquare(''),
+                    _singUpMethodSquare('assets/icons/facebook-logo.svg'),
                     SizedBox(width: 7),
-                    _singUpMethodSquare(''),
+                    _singUpMethodSquare('assets/icons/twitter-logo.svg'),
                   ],
                 ),
               ],
