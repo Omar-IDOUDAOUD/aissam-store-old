@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1015837713634",
+    "project_id": "aissam-store-firebase",
+    "storage_bucket": "aissam-store-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015837713634:android:046feee071175d989c6abb",
+        "android_client_info": {
+          "package_name": "com.example.aissam_store"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015837713634-q1vgsg1bkmvj5p1vp2n6o7hsjou189vc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApKXWi55GYe1R0wPbfrRbtBO0TqP4i8d8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015837713634-q1vgsg1bkmvj5p1vp2n6o7hsjou189vc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

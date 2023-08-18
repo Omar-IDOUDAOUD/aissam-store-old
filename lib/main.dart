@@ -1,4 +1,5 @@
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/firebase_options.dart';
 import 'package:aissam_store/view/add_checkout_address/add_checkout_address.dart';
 import 'package:aissam_store/view/auth/authentication.dart';
 import 'package:aissam_store/view/checkout/chackout.dart';
@@ -10,11 +11,15 @@ import 'package:aissam_store/view/settings/addresses.dart';
 import 'package:aissam_store/view/settings/appearence.dart';
 import 'package:aissam_store/view/settings/notifications.dart';
 import 'package:aissam_store/view/testing/test.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const AissamStore());
 }
 
@@ -62,7 +67,7 @@ class AissamStore extends StatelessWidget {
           ),
           bodyMedium: TextStyle(
             //h5
-            
+
             color: CstColors.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
@@ -132,8 +137,7 @@ class AissamStore extends StatelessWidget {
             page: () => SettingsNotifications()),
         GetPage(
             name: '/settings/user_addresses', page: () => SettingsAddresses()),
-              GetPage(
-            name: '/authentication', page: () => AuthenticationPage()),
+        GetPage(name: '/authentication', page: () => AuthenticationPage()),
       ],
       initialRoute: '/authentication',
     );

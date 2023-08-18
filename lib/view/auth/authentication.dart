@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/public/button.dart';
 import 'package:aissam_store/view/public/text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -88,8 +90,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
           ),
           SizedBox(height: 20),
           AnimatedSize(
-                             alignment: Alignment.topCenter,
-
+            alignment: Alignment.topCenter,
             duration: 200.milliseconds,
             child: AnimatedSwitcher(
               duration: 200.milliseconds,
@@ -371,7 +372,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
   // Widget _getPhoneNumberTextField() {
   //   return SizedBox(
   //     // height: 70,
-  //     child: 
+  //     child:
   //   );
   // }
 
@@ -445,38 +446,11 @@ class _AthenticationStatePage extends State<AuthenticationPage>
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class _PhoneNumberTextField extends StatefulWidget {
   const _PhoneNumberTextField({super.key});
 
   @override
-  State<_PhoneNumberTextField> createState() =>
-      _PhoneNumberTextFieldState();
+  State<_PhoneNumberTextField> createState() => _PhoneNumberTextFieldState();
 }
 
 class _PhoneNumberTextFieldState extends State<_PhoneNumberTextField> {
@@ -486,90 +460,88 @@ class _PhoneNumberTextFieldState extends State<_PhoneNumberTextField> {
 
   @override
   Widget build(BuildContext context) {
-       
     return TextField(
       key: _key,
-        style: Get.textTheme.bodyLarge!.copyWith(
-          color: CstColors.a,
+      style: Get.textTheme.bodyLarge!.copyWith(
+        color: CstColors.a,
+        fontWeight: FontWeight.w400,
+        height: 1.6,
+      ),
+      decoration: InputDecoration(
+        suffixIcon: GestureDetector(
+          onTap: () {
+            Get.dialog(
+              _ColorDropdownMenu(
+                onAddColor: () {
+                  setState(() {
+                    _selectedColors++;
+                    print('----------------,$_selectedColors ');
+                  });
+                },
+                dropdownButtonKey: _key,
+                colorsNames: [
+                  'red',
+                  'blue',
+                  'red',
+                  'red',
+                  'blue',
+                ],
+                colors: [Colors.red, Colors.blue, Colors.red, Colors.blue],
+              ),
+            );
+          },
+          child: Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: 5),
+                SizedBox(
+                  width: 1,
+                  height: 15,
+                  child: ColoredBox(color: Colors.grey.shade500),
+                ),
+                SizedBox(width: 10),
+                SizedBox(
+                  height: 20,
+                  width: 30,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: ColoredBox(color: Colors.redAccent),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  CupertinoIcons.chevron_down,
+                  size: 15,
+                  color: CstColors.a,
+                ),
+              ],
+            ),
+          ),
+        ),
+        hintStyle: Get.textTheme.bodyLarge!.copyWith(
+          color: CstColors.b,
           fontWeight: FontWeight.w400,
           height: 1.6,
         ),
-        decoration: InputDecoration(
-          suffixIcon: GestureDetector(
-            onTap: (){
- Get.dialog(
-          _ColorDropdownMenu(
-            onAddColor: () {
-              setState(() {
-                _selectedColors++;
-                print('----------------,$_selectedColors ');
-              });
-            },
-            dropdownButtonKey: _key,
-            colorsNames: [
-              'red',
-              'blue',
-              'red',
-              'red',
-              'blue',
-            ],
-            colors: [Colors.red, Colors.blue, Colors.red, Colors.blue],
-          ),
-        );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(right: 15),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(width: 5),
-                  SizedBox(
-                    width: 1,
-                    height: 15,
-                    child: ColoredBox(color: Colors.grey.shade500),
-                  ),
-                  SizedBox(width: 10),
-                  SizedBox(
-                    height: 20,
-                    width: 30,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: ColoredBox(color: Colors.redAccent),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Icon(
-                    CupertinoIcons.chevron_down,
-                    size: 15,
-                    color: CstColors.a,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          hintStyle: Get.textTheme.bodyLarge!.copyWith(
-            color: CstColors.b,
-            fontWeight: FontWeight.w400,
-            height: 1.6,
-          ),
-          hintText: 'Phone Number',
-          contentPadding: EdgeInsets.all(20),
-          filled: true,
-          fillColor: Colors.grey.shade200,
-          focusColor: Colors.grey.shade400,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide:
-                BorderSide(color: CstColors.b.withOpacity(.5), width: 4),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(12),
-          ),
+        hintText: 'Phone Number',
+        contentPadding: EdgeInsets.all(20),
+        filled: true,
+        fillColor: Colors.grey.shade200,
+        focusColor: Colors.grey.shade400,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: CstColors.b.withOpacity(.5), width: 4),
         ),
-      );
+        border: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
   }
 }
 
