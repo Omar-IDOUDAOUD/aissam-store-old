@@ -1,5 +1,6 @@
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/add_checkout_address/add_checkout_address.dart';
+import 'package:aissam_store/view/auth/authentication.dart';
 import 'package:aissam_store/view/checkout/chackout.dart';
 import 'package:aissam_store/view/fullscreen_image/fullscreen_image.dart';
 import 'package:aissam_store/view/home/home.dart';
@@ -61,6 +62,7 @@ class AissamStore extends StatelessWidget {
           ),
           bodyMedium: TextStyle(
             //h5
+            
             color: CstColors.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
@@ -130,8 +132,10 @@ class AissamStore extends StatelessWidget {
             page: () => SettingsNotifications()),
         GetPage(
             name: '/settings/user_addresses', page: () => SettingsAddresses()),
+              GetPage(
+            name: '/authentication', page: () => AuthenticationPage()),
       ],
-      initialRoute: '/',
+      initialRoute: '/authentication',
     );
   }
 }

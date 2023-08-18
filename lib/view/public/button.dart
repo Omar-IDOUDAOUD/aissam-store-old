@@ -17,6 +17,7 @@ class Button extends StatefulWidget {
   final bool isOutline;
   final EdgeInsets? padding;
 
+
   @override
   State<Button> createState() => _ButtonState();
 }
