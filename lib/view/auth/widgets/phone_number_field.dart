@@ -99,7 +99,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
           fontWeight: FontWeight.w400,
           height: 1.6,
         ),
-        hintText: 'Phone Number',
+        hintText: 'Phone Number (Optional)',
         contentPadding: EdgeInsets.all(20),
         filled: true,
         fillColor: widget.errorOccure

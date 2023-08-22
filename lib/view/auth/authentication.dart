@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/models/user.dart';
 import 'package:aissam_store/services/auth/auth_result.dart';
 import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:aissam_store/view/auth/widgets/phone_number_field.dart';
@@ -31,7 +33,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
       _passwordController,
       _phoneNumberController;
 
-  final AuthenticationService _authService = Get.find<AuthenticationService>();
+  final AuthenticationService _authService = AuthenticationService.instance;
   AuthResult _authResult = AuthResult();
   bool _waitingResponsLoading = false;
 
@@ -40,7 +42,6 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     setState(() {
       _waitingResponsLoading = true;
     });
-    // await 2.seconds.delay();
 
     _authResult = await _authService.registerWithEmailAndPassword(
         _emailController.text, _passwordController.text);
@@ -52,6 +53,10 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     setState(() {
       _waitingResponsLoading = false;
     });
+    if (_authResult.success) {
+      await 100.milliseconds.delay();
+      Get.toNamed('/onboarding/user_info_setting');
+    }
   }
 
   Future<void> _onSignInButton() async {
@@ -71,18 +76,46 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     setState(() {
       _waitingResponsLoading = false;
     });
+    if (_authResult.success) {
+      await 100.milliseconds.delay();
+      Get.toNamed('/');
+    }
   }
 
-  _onSignOut() {
-    _authService.signOut();
+  Future<void> _onSignInWithGoogle() async {
+    final UserController _userController = UserController.instance;
+
+    _authResult = AuthResult();
+
+    // await 2.seconds.delay();
+    _authResult = await _authService.signInWithGoogle();
+    print('success: ${_authResult.success}');
+    print('message ${_authResult.message}');
+    print('email error: ${_authResult.emailWrongMsg}');
+    print('pass error: ${_authResult.passwordWrongMsg}');
+    if (_authResult.success) print('user id: ${_authResult.user!.user!.email}');
+    if (await _userController.checkUserExistence()) {
+      setState(() {});
+      await 100.milliseconds.delay();
+      Get.toNamed('/');
+    } else {
+      setState(() {});
+      await 100.milliseconds.delay();
+      Get.toNamed('/onboarding/user_info_setting');
+     
+    }
   }
+
+  // _onSignOut() {
+  //   _authService.signOut();
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
 
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
+    _emailController = TextEditingController(text: 'omar@omar.omar');
+    _passwordController = TextEditingController(text: 'omaromar');
     _phoneNumberController = TextEditingController();
 
     _controller = TabController(length: 2, vsync: this)
@@ -90,7 +123,6 @@ class _AthenticationStatePage extends State<AuthenticationPage>
         _isRegistering = _controller.index == 0;
         if (_isRegistering && _controller.previousIndex == 1 ||
             !_isRegistering && _controller.previousIndex == 0) {
-          print('hhhhhhhh');
           setState(() {});
         }
       });
@@ -248,7 +280,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
           SizedBox(
             height: 20,
           ),
-
+          if (_authResult.success) Text(_authResult.message ?? 'no message'),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
@@ -257,32 +289,30 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                   onPressed: _isRegistering ? _onSignUpButton : _onSignInButton,
                   isHeightMinimize: true,
                   child: Center(
-                    child: _waitingResponsLoading
-                        ? CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          )
-                        : _authResult.success
-                            ? SvgPicture.asset(
-                                'assets/icons/ic_fluent_checkmark_24_filled.svg',
-                                color: Colors.white, 
-                              )
-                                                          :  Text(
-                                'Register',
-                                style: Get.textTheme.bodyMedium!.copyWith(
+                      child: _waitingResponsLoading
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            )
+                          : _authResult.success
+                              ? SvgPicture.asset(
+                                  'assets/icons/ic_fluent_checkmark_24_filled.svg',
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )
-                            
-                  ),
+                                )
+                              : Text(
+                                  'Register',
+                                  style: Get.textTheme.bodyMedium!.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Button(
                   onPressed: () {
-                    _onSignOut();
+                    _onSignInWithGoogle();
                   },
                   isHeightMinimize: true,
                   isOutline: true,
@@ -379,14 +409,22 @@ class _AthenticationStatePage extends State<AuthenticationPage>
   }
 
   Widget _singUpMethodSquare(String companyLogoPath) {
-    return SizedBox.square(
-      dimension: 53,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.blue.shade100.withOpacity(.5),
-          borderRadius: BorderRadius.circular(11),
+    return GestureDetector(
+      // onTap: _onSignOut,
+      child: SizedBox.square(
+        dimension: 53,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.blue.shade100.withOpacity(.5),
+            borderRadius: BorderRadius.circular(11),
+          ),
+          child: SvgPicture.asset(
+            companyLogoPath,
+            height: 25,
+            width: 25,
+            fit: BoxFit.scaleDown,
+          ),
         ),
-        child: SvgPicture.asset(companyLogoPath),
       ),
     );
   }

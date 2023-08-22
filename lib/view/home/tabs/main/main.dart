@@ -60,7 +60,7 @@ class _MainTabState extends State<MainTab> {
             padding: EdgeInsets.only(bottom: 80),
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Header(),
+               Header(),
               _paddedWidget(
                 Text(
                   'Good Morning \nZahra',

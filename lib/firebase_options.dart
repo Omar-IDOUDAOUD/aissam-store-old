@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCja10wZv2s-AmYYNchVMqUSWWpDmM1adE',
-    appId: '1:1015837713634:web:c6e2c4fef91a83b59c6abb',
-    messagingSenderId: '1015837713634',
-    projectId: 'aissam-store-firebase',
-    authDomain: 'aissam-store-firebase.firebaseapp.com',
-    storageBucket: 'aissam-store-firebase.appspot.com',
+    apiKey: 'AIzaSyAkJiRp3JfaioH0EAtPJ7TrsIKaSFrOCJw',
+    appId: '1:725652639544:web:f290d64f0514b3a26bfbcd',
+    messagingSenderId: '725652639544',
+    projectId: 'aissam-store-fb-backend',
+    authDomain: 'aissam-store-fb-backend.firebaseapp.com',
+    storageBucket: 'aissam-store-fb-backend.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyApKXWi55GYe1R0wPbfrRbtBO0TqP4i8d8',
-    appId: '1:1015837713634:android:046feee071175d989c6abb',
-    messagingSenderId: '1015837713634',
-    projectId: 'aissam-store-firebase',
-    storageBucket: 'aissam-store-firebase.appspot.com',
+    apiKey: 'AIzaSyAsLaCt8Btz9a5zNEtiELZFSmKACTAQJOw',
+    appId: '1:725652639544:android:99cdbc1e42f481086bfbcd',
+    messagingSenderId: '725652639544',
+    projectId: 'aissam-store-fb-backend',
+    storageBucket: 'aissam-store-fb-backend.appspot.com',
   );
 }

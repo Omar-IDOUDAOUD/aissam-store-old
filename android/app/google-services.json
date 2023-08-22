@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1015837713634",
-    "project_id": "aissam-store-firebase",
-    "storage_bucket": "aissam-store-firebase.appspot.com"
+    "project_number": "725652639544",
+    "project_id": "aissam-store-fb-backend",
+    "storage_bucket": "aissam-store-fb-backend.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1015837713634:android:046feee071175d989c6abb",
+        "mobilesdk_app_id": "1:725652639544:android:99cdbc1e42f481086bfbcd",
         "android_client_info": {
           "package_name": "com.example.aissam_store"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1015837713634-q1vgsg1bkmvj5p1vp2n6o7hsjou189vc.apps.googleusercontent.com",
+          "client_id": "725652639544-v0tepm4r5aia6ejh7uur22ipca6t7icd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyApKXWi55GYe1R0wPbfrRbtBO0TqP4i8d8"
+          "current_key": "AIzaSyAsLaCt8Btz9a5zNEtiELZFSmKACTAQJOw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1015837713634-q1vgsg1bkmvj5p1vp2n6o7hsjou189vc.apps.googleusercontent.com",
+              "client_id": "725652639544-v0tepm4r5aia6ejh7uur22ipca6t7icd.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

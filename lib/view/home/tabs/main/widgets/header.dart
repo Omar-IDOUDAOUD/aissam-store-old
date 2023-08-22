@@ -1,10 +1,13 @@
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class Header extends StatelessWidget {
-  const Header({Key? key}) : super(key: key);
+    Header({Key? key}) : super(key: key);
+
+  final AuthenticationService _authenticationService = AuthenticationService.instance; 
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,13 @@ class Header extends StatelessWidget {
             'assets/icons/search_small.svg',
             height: 28,
           ),
-          AissamLogo(),
+          GestureDetector(
+            child: AissamLogo(),
+            onTap: () async {
+             await _authenticationService.signOut(); 
+              Get.offAllNamed('/authentication'); 
+            },
+          ),
           // SvgPicture.asset('assets/icons/menu_vertical.svg'),
           Stack(
             alignment: Alignment.bottomRight,
@@ -71,22 +80,24 @@ class AissamLogo extends StatelessWidget {
             style: Get.textTheme.headlineMedium!.copyWith(
               fontWeight: FontWeight.w600,
               height: 1,
-              fontSize: 20, 
+              fontSize: 20,
             ),
           ),
           TextSpan(
               text: ' STORE\n',
-              style: Get.textTheme.headlineMedium!
-                  .copyWith(fontWeight: FontWeight.w300, height: 1, fontSize: 20, )),
+              style: Get.textTheme.headlineMedium!.copyWith(
+                fontWeight: FontWeight.w300,
+                height: 1,
+                fontSize: 20,
+              )),
           TextSpan(
             text: "FOR WOMEN'S CLOTHING",
             style: Get.textTheme.headlineMedium!.copyWith(
-              fontWeight: FontWeight.w400,
-              color: CstColors.a,
-              letterSpacing: 0.5,
-              height: 1.3,
-              fontSize: 11
-            ),
+                fontWeight: FontWeight.w400,
+                color: CstColors.a,
+                letterSpacing: 0.5,
+                height: 1.3,
+                fontSize: 11),
           ),
         ],
       ),
