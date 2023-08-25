@@ -11,18 +11,20 @@ class UserModel {
   String? phoneNumber;
   String? profilePhotoUrl;
 
-  UserModel(
-      {this.userId,
-      this.email,
-      this.firstName,
-      this.lastName,
-      this.phoneNumber,
-      this.profilePhotoUrl}){
-        if (firstName != null && firstName!.isEmpty) firstName = null; 
-        if (lastName != null && lastName!.isEmpty) lastName = null; 
-        if (phoneNumber != null && phoneNumber!.isEmpty) phoneNumber = null; 
-        if (profilePhotoUrl != null && profilePhotoUrl!.isEmpty) profilePhotoUrl = null; 
-      }
+  UserModel({
+    this.userId,
+    this.email,
+    this.firstName,
+    this.lastName,
+    this.phoneNumber,
+    this.profilePhotoUrl,
+  }) {
+    if (firstName != null && firstName!.isEmpty) firstName = null;
+    if (lastName != null && lastName!.isEmpty) lastName = null;
+    if (phoneNumber != null && phoneNumber!.isEmpty) phoneNumber = null;
+    if (profilePhotoUrl != null && profilePhotoUrl!.isEmpty)
+      profilePhotoUrl = null;
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -46,7 +48,7 @@ class UserModel {
     );
   }
 
-  factory UserModel.fromFireStore(
+  factory UserModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {

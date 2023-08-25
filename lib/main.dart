@@ -1,4 +1,5 @@
-import 'package:aissam_store/bindings/authentication_service.dart'; 
+import 'package:aissam_store/bindings/authentication_service.dart';
+import 'package:aissam_store/bindings/home_controllers.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/firebase_options.dart';
 import 'package:aissam_store/middlewares/auth.dart';
@@ -98,6 +99,7 @@ class AissamStore extends StatelessWidget {
           name: '/',
           page: () => Home(),
           transition: Transition.cupertino,
+          binding: HomeControllersBindings(),
         ),
         GetPage(
           name: '/product_details',
@@ -110,7 +112,11 @@ class AissamStore extends StatelessWidget {
             transition: Transition.fadeIn,
             showCupertinoParallax: false,
             opaque: false),
-        GetPage(name: '/testing', page: () => TestPage()),
+        // GetPage(
+        //   name: '/testing',
+        //   page: () => TestPage(),
+        //   binding: HomeControllersBindings()
+        // ),
         GetPage(name: '/checkout', page: () => CheckoutPage()),
         GetPage(
             name: '/add_checkout_address', page: () => AddCheckoutAddress()),
@@ -126,7 +132,7 @@ class AissamStore extends StatelessWidget {
           name: '/authentication',
           page: () => AuthenticationPage(),
           middlewares: [
-            AuthenticationMiddleware(),// to route '/' if checked middleware
+            AuthenticationMiddleware(), // to route '/' if checked middlewar
           ],
         ),
         GetPage(

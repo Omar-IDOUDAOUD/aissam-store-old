@@ -56,20 +56,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               SettingsTab(),
             ],
           ),
-          // Positioned.fill(
-          //   child: PageView(
-          //     controller: _pageController,
-          //     onPageChanged: (index) {
-          //       _activeTabIndex = index;
-          //       setState(() {});
-          //     },
-          //     children: [
-          //       MainTab(),
-          //       FavoritesTab(),
-          //       SearchTab(),
-          //     ],
-          //   ),
-          // ),
           Positioned(
             bottom: 0,
             right: 0,

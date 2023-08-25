@@ -1,3 +1,4 @@
+import 'package:aissam_store/models/product.dart';
 import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -21,10 +22,7 @@ class ResultesPart extends StatelessWidget {
               mainAxisSpacing: 10,
             ),
             itemBuilder: (_, i) => ProductCard(
-              title: 'Just A Test Product Title',
-              imagePath: testTmage,
-              price: 15,
-              colorsNumber: 3,
+            data: Product.testModel(),
             ),
           ),
         )

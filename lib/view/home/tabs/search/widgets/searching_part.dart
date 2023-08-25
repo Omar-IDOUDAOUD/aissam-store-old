@@ -57,11 +57,16 @@ class SearchingPart extends StatelessWidget {
               separatorBuilder: (_, i) => SizedBox(
                 width: 10,
               ),
-              itemBuilder: (_, i) => CategorieItem(
-                imagePath: 'assets/images/categories_abayas.png',
-                imageColor: CstColors.f,
-                title: 'Abayas',
-              ),
+              itemBuilder: (_, i) => SizedBox(
+                height: 85,
+                width: 60,
+                child: ColoredBox(color: Colors.red),
+              )
+              // CategorieItem(
+              //   imagePath: 'assets/images/categories_abayas.png',
+              //   imageColor: CstColors.f,
+              //   title: 'Abayas',
+              // ),
             ),
           ),
         ),

@@ -49,7 +49,10 @@ class AuthenticationService extends GetxService {
     // );
     return AuthResult.success(user: userCredential);
   }
-
+  // void signOut() {
+    
+  //   _firebaseAuth.signOut();
+  // }
 
   // Future<AuthResult> registerAnonymously() async {
   //   AuthResult? result;
@@ -64,10 +67,7 @@ class AuthenticationService extends GetxService {
   // }
 
 
-  // void signOut() {
-    
-  //   _firebaseAuth.signOut();
-  // }
+
 
   // Timer? _emailVerificationTimer;
 

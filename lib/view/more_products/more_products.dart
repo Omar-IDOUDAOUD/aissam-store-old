@@ -1,5 +1,11 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
+import 'dart:math';
+
+import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
+import 'package:aissam_store/view/home/tabs/widgets/loading_product_card.dart';
 import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,33 +28,47 @@ class MoreProductsTab extends StatefulWidget {
 }
 
 class _MoreProductsTabState extends State<MoreProductsTab> {
-  late final ScrollController _controller;
-
   bool _minimizeTitle = false;
+
+  final ProductsController _productsController = ProductsController.instance;
+
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     // TODO: implement initState
-    _controller = ScrollController()
+    _scrollController = ScrollController()
       ..addListener(() {
-        if (_controller.offset > 100 && !_minimizeTitle)
+        if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent) {
+          _productsController.loadPagination(widget.collection);
+        }
+        if (_scrollController.offset > 100 && !_minimizeTitle)
           setState(() {
             _minimizeTitle = true;
           });
-        else if (_controller.offset < 100 && _minimizeTitle)
+        else if (_scrollController.offset < 100 && _minimizeTitle)
           setState(() {
             _minimizeTitle = false;
           });
       });
+
+    final pd =
+        _productsController.paginationDataOfCollection(widget.collection);
+    if (pd.lastLoadedDoc == null)
+      _productsController.loadPagination(widget.collection);
+    _listUpdateTag = pd.widgetToUpdateTag;
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
+
+  late final String _listUpdateTag;
 
   final _anDur = 300.milliseconds;
   final _anCur = Curves.linearToEaseOut;
@@ -60,26 +80,44 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
       child: Stack(
         children: [
           Positioned.fill(
-            child: GridView.builder(
-              controller: _controller,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 145, horizontal: 20),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                childAspectRatio: 0.54,
-              ),
-              itemCount: 8,
-              itemBuilder: (_, i) {
-                return ProductCard(
-                  title: 'Just A Test Product Title',
-                  imagePath: 'assets/images/image_2.png',
-                  price: 15,
-                  colorsNumber: 3,
-                );
-              },
-            ),
-          ),
+              child: GetBuilder<ProductsController>(
+                  id: _listUpdateTag,
+                  init: _productsController,
+                  builder: (controller) {
+                    final paginationData = controller
+                        .paginationDataOfCollection(widget.collection);
+                    if (paginationData.hasError)
+                      return const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.error),
+                            Text('An error occurred!'),
+                          ],
+                        ),
+                      );
+                    return GridView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 145, horizontal: 20),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 0.54,
+                      ),
+                      itemCount: paginationData.loadedData.length +
+                          (paginationData.isLoading ? 3 : 0),
+                      itemBuilder: (_, i) {
+                        if (i >= paginationData.loadedData.length)
+                          return const LoadingProductCard();
+                        return ProductCard(
+                          data: paginationData.loadedData.elementAt(i),
+                        );
+                      },
+                    );
+                    /////
+                  })),
           AnimatedPositioned(
             height: _minimizeTitle ? 110 : 150,
             width: Get.size.width,
@@ -168,6 +206,10 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
         return 'Best selling';
       case ProductsCollections.ForYou:
         return 'For you';
+      case ProductsCollections.All:
+        return 'All';
+      default:
+        return 'Other';
     }
   }
 }

@@ -17,7 +17,7 @@ class UserController extends GetxController {
 
   final CollectionReference<UserModel> _firestoreUsers =
       FirebaseFirestore.instance.collection('Users').withConverter(
-            fromFirestore: UserModel.fromFireStore,
+            fromFirestore: UserModel.fromFirestore,
             toFirestore: (UserModel model, _) => model.toMap(),
           );
 
@@ -32,18 +32,15 @@ class UserController extends GetxController {
   }
 
   Future<bool> saveUser(UserModel user) async {
-    await _firestoreUsers
-        .doc(user .userId)
-        .set(user)
-        .catchError((e) {
-      print('------------------------**faild'); 
+    await _firestoreUsers.doc(user.userId).set(user).catchError((e) {
+      print('------------------------**faild');
       print('an error occcurred while add doc, $e');
-      return false; 
+      return false;
     }).then((value) {
-      print('------------------------**seccess'); 
+      print('------------------------**seccess');
       _user = null;
     });
-    return true; 
+    return true;
   }
 
   Future<bool> checkUserExistence() async {

@@ -1,12 +1,11 @@
-import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
+import 'package:aissam_store/view/home/tabs/main/widgets/list_title.dart';
+import 'package:aissam_store/view/home/tabs/main/widgets/products_by_categories.dart';
+import 'package:aissam_store/view/home/tabs/main/widgets/products_list.dart';
 import 'package:aissam_store/view/more_products/more_products.dart';
 import 'package:aissam_store/view/home/tabs/main/widgets/header.dart';
-import 'package:aissam_store/view/home/tabs/widgets/categorie_item.dart';
-import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class MainTab extends StatefulWidget {
@@ -17,34 +16,42 @@ class MainTab extends StatefulWidget {
 }
 
 class _MainTabState extends State<MainTab> {
-  final List<Map> _items = [
-    {
-      'img': 'assets/images/image_1 1x.png',
-      'title': 'Premier Jersey Hijabs - Rose',
-      'price': 158.00,
-      'is_hot': true,
-      'colors_number': 23,
-    },
-    {
-      'img': 'assets/images/image_2.png',
-      'title': 'Modest Dress Pomegranate',
-      'price': 205.00,
-      'is_hot': false,
-      'colors_number': 4,
-    },
-    {
-      'img': 'assets/images/image_3.png',
-      'title': 'Recycle .... Chifone',
-      'price': 205.00,
-      'is_hot': false,
-      'colors_number': 11,
-    },
-  ];
+  final ProductsController _productsController = ProductsController.instance;
 
-  bool _showMorePoducts = false;
+  late final ScrollController _newestProductsController;
 
   @override
-  Widget build(BuildContext context) { 
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _newestProductsController = ScrollController()
+      ..addListener(() async {
+        if (_newestProductsController.offset >=
+            _newestProductsController.position.maxScrollExtent - 200)
+          setState(() {});
+      });
+
+    // final Function() c = () async {
+    //   for (var i = 0; i < 30; i++) {
+    //     await _productsController.addTestProduct();
+    //     await 1.seconds.delay();
+    //   }
+    // };
+    // c();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _newestProductsController.dispose();
+    super.dispose();
+  }
+
+  bool _showMorePoducts = false;
+  List<int> _selectedCategories = [];
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -54,13 +61,13 @@ class _MainTabState extends State<MainTab> {
           left: _showMorePoducts ? -Get.size.width / 2 : 0,
           top: 0,
           bottom: 0,
-          // right: 0,
           width: Get.size.width,
           child: ListView(
-            padding: EdgeInsets.only(bottom: 80),
+            padding: const EdgeInsets.only(bottom: 80),
             // crossAxisAlignment: CrossAxisAlignment.start,
+
             children: [
-               Header(),
+              Header(),
               _paddedWidget(
                 Text(
                   'Good Morning \nZahra',
@@ -70,44 +77,43 @@ class _MainTabState extends State<MainTab> {
               const SizedBox(
                 height: 10,
               ),
-              _listTitle('Collections'),
-              const SizedBox(height: 10),
-              _listedItems(
-                (_, i) => CategorieItem(
-                  imagePath: 'assets/images/categories_abayas.png',
-                  imageColor: CstColors.f,
-                  title: 'Abayas',
-                ),
-                85,
-                4,
+              ProductsCollectionTitle(
+                title: 'Collections',
+                // onSeeAllTap: () {
+                //   setState(() {
+                //     _clearMoreProducts = false;
+                //     _showMorePoducts = true;
+                //   });
+                // },
               ),
-              SizedBox(height: 10),
-              _listTitle('Newest'),
               const SizedBox(height: 10),
-              _listedItems(
-                (_, i) => ProductCard(
-                  colorsNumber: _items[i]['colors_number'],
-                  imagePath: _items[i]['img'],
-                  price: _items[i]['price'],
-                  title: _items[i]['title'],
-                  isHot: _items[i]['is_hot'],
-                ),
-                261,
-                3,
-              ),
-              _listTitle('Best Sellers'),
+              ProductsByCategoriesList(
+                  // selectedCategories: _selectedCategories,
+                  ),
+              // CategoryProductsList(categories: _selectedCategories),
               const SizedBox(height: 10),
-              _listedItems(
-                (_, i) => ProductCard(
-                  colorsNumber: _items[i]['colors_number'],
-                  imagePath: _items[i]['img'],
-                  price: _items[i]['price'],
-                  title: _items[i]['title'],
-                  isHot: _items[i]['is_hot'],
-                ),
-                270,
-                3,
+              ProductsCollectionTitle(
+                title: 'Newest',
+                onSeeAllTap: () {
+                  setState(() {
+                    _clearMoreProducts = false;
+                    _showMorePoducts = true;
+                  });
+                },
               ),
+              const SizedBox(height: 10),
+              const ProductsList(collection: ProductsCollections.Newest),
+              ProductsCollectionTitle(
+                title: 'Best Selling',
+                onSeeAllTap: () {
+                  setState(() {
+                    _clearMoreProducts = false;
+                    _showMorePoducts = true;
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
+              const ProductsList(collection: ProductsCollections.BestSelling),
             ],
           ),
         ),
@@ -119,7 +125,7 @@ class _MainTabState extends State<MainTab> {
           duration: 500.milliseconds,
           curve: Curves.linearToEaseOut,
           child: _clearMoreProducts
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : PhysicalModel(
                   color: Colors.transparent,
                   elevation: 100,
@@ -152,57 +158,58 @@ class _MainTabState extends State<MainTab> {
       child: child,
     );
   }
-
-  Widget _listTitle(String title) {
-    return _paddedWidget(
-      Row(
-        children: [
-          Text(
-            title,
-            style: Get.textTheme.headlineMedium,
-          ),
-          const Spacer(),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _clearMoreProducts = false;
-                _showMorePoducts = true;
-              });
-            },
-            child: Row(
-              children: [
-                Text(
-                  'See all',
-                  style: Get.textTheme.bodySmall,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                SvgPicture.asset(
-                  "assets/icons/next.svg",
-                  height: 22,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _listedItems(
-      Widget Function(BuildContext _, int i) b, double listHeight, int count) {
-    return SizedBox(
-      height: listHeight,
-      child: ListView.separated(
-        itemCount: count,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: b,
-        separatorBuilder: (_, i) => SizedBox(
-          width: 10,
-        ),
-      ),
-    );
-  }
 }
+
+// class CategoryProductsList extends StatefulWidget {
+//   const CategoryProductsList({super.key, required this.categories});
+//   final List<int> categories;
+
+//   @override
+//   State<CategoryProductsList> createState() => CategoryProductsStateList();
+// }
+
+// class CategoryProductsStateList extends State<CategoryProductsList> {
+//   bool _showOpacity = false;
+//   bool _showSize = false;
+
+//   final Duration _anDur = 1.seconds;
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//     print('init statttttttttttttttttttttttttttttttte');
+//   }
+
+//   // @override
+//   // void didUpdateWidget(covariant CategoryProductsList oldWidget) {
+//   //   // TODO: implement didUpdateWidget
+//   //   super.didUpdateWidget(oldWidget);
+//   //   if (oldWidget.categories.length != widget.categories.length) {
+//   //     if (widget.categories.isEmpty) {
+//   //       print('------------------------empty');
+//   //       _showOpacity = false;
+//   //       _anDur.delay().then((value) {
+//   //         if (this.mounted)
+//   //           setState(() {
+//   //             _showSize = false;
+//   //           });
+//   //       });
+//   //     } else {
+//   //       print('------------------------not empty');
+//   //       _showSize = true;
+//   //       _anDur.delay().then((value) {
+//   //         if (this.mounted)
+//   //           setState(() {
+//   //             _showOpacity = true;
+//   //           });
+//   //       });
+//   //     }
+//   //   }
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     print('rebuild the faken widgtet');
+//     return 
+//   }
+// }

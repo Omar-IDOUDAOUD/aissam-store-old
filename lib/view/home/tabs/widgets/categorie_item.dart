@@ -1,21 +1,18 @@
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategorieItem extends StatefulWidget {
   CategorieItem({
     Key? key,
-    required this.imagePath,
-    required this.imageColor,
-    required this.title,
-    this.checkable = false,
+    required this.data,
+    // this.checkable = false,
     this.onCheck,
     this.checked = false,
   }) : super(key: key);
-  final String imagePath;
-  final Color imageColor;
-  final String title;
-  final bool checkable;
+  final Category data;
+  // final bool checkable;
   final bool checked;
   final Function(bool state)? onCheck;
 
@@ -34,20 +31,21 @@ class _CategorieItemState extends State<CategorieItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _checked = !_checked;
-        });
-      },
-      child: SizedBox(
-        height: 83,
+    return SizedBox(
+      height: 83,
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _checked = !_checked;
+          });
+          if (widget.onCheck != null) widget.onCheck!(_checked);
+        },
         child: Column(
           children: [
             CircleAvatar(
               radius: 32,
-              backgroundColor: widget.imageColor,
-              backgroundImage: AssetImage(widget.imagePath),
+              backgroundColor: widget.data.color,
+              backgroundImage: NetworkImage(widget.data.imageUrl),
               child: SizedBox.expand(
                 child: Stack(
                   // fit: StackFit.expand,
@@ -59,8 +57,9 @@ class _CategorieItemState extends State<CategorieItem> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                            color: _checked ? CstColors.g : Colors.transparent,
-                            width: _checked ? 2.5 : 0),
+                          color: _checked ? CstColors.g : Colors.transparent,
+                          width: _checked ? 2.5 : 0,
+                        ),
                       ),
                     ),
                     CircleAvatar(
@@ -83,8 +82,8 @@ class _CategorieItemState extends State<CategorieItem> {
             ),
             SizedBox(height: 2),
             Text(
-              widget.title,
-              style: Get.textTheme.displayLarge !.copyWith(
+              widget.data.name,
+              style: Get.textTheme.displayLarge!.copyWith(
                 color: _checked ? CstColors.g : CstColors.b,
               ),
             )
