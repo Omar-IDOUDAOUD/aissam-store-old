@@ -44,7 +44,7 @@ class _MainTabState extends State<MainTab> {
   bool _showMorePoducts = false;
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -60,7 +60,7 @@ class _MainTabState extends State<MainTab> {
             padding: EdgeInsets.only(bottom: 80),
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Header(),
+              Header(),
               _paddedWidget(
                 Text(
                   'Good Morning \nZahra',

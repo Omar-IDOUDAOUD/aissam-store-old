@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:aissam_store/models/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
@@ -11,18 +12,20 @@ class UserModel {
   String? phoneNumber;
   String? profilePhotoUrl;
 
-  UserModel(
-      {this.userId,
-      this.email,
-      this.firstName,
-      this.lastName,
-      this.phoneNumber,
-      this.profilePhotoUrl}){
-        if (firstName != null && firstName!.isEmpty) firstName = null; 
-        if (lastName != null && lastName!.isEmpty) lastName = null; 
-        if (phoneNumber != null && phoneNumber!.isEmpty) phoneNumber = null; 
-        if (profilePhotoUrl != null && profilePhotoUrl!.isEmpty) profilePhotoUrl = null; 
-      }
+  UserModel({
+    this.userId,
+    this.email,
+    this.firstName,
+    this.lastName,
+    this.phoneNumber,
+    this.profilePhotoUrl,
+  }) {
+    if (firstName != null && firstName!.isEmpty) firstName = null;
+    if (lastName != null && lastName!.isEmpty) lastName = null;
+    if (phoneNumber != null && phoneNumber!.isEmpty) phoneNumber = null;
+    if (profilePhotoUrl != null && profilePhotoUrl!.isEmpty)
+      profilePhotoUrl = null;
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

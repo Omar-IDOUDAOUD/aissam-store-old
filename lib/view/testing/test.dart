@@ -1,3 +1,5 @@
+import 'package:aissam_store/controller/user.dart';
+import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -11,91 +13,37 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
+  final UserController _userController = UserController.instance;
+  final AuthenticationService _authService = AuthenticationService.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // print(_userController.getUserFromAuth().userId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          // SliverToBoxAdapter(
-          //   child: SizedBox(
-          //     height: 50,
-          //     width: 100,
-          //     child: ColoredBox(
-          //       color: Colors.red,
-          //     ),
-          //   ),
-          // ),
-          const SliverAppBar(
-            expandedHeight: 100,
-            backgroundColor: Colors.purple,
-            elevation: 10,
-            pinned: false,
-            floating: true,
-            centerTitle: true,
-            title: Text('data'),
-            collapsedHeight: 60,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: ColoredBox(
-                color: Colors.blue,
-                child: Text("A Flexible title"),
-              ),
+      appBar: AppBar(title: Text('App Bar')),
+      body: Center(
+        child: Column(
+          children: [
+            MaterialButton(
+              onPressed: () {},
+              child: Text('get data'),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 50,
-              width: 100,
-              child: ColoredBox(
-                color: Colors.black,
-              ),
-            ),
-          ),
-          SliverPersistentHeader(
-            delegate: ph(),
-            pinned: true,
-            floating: true,
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, i) {
-                return SizedBox(
-                  height: 100,
-                  width: Get.size.width,
-                  child: ColoredBox(
-                    color: Colors.accents.elementAt(i),
-                  ),
-                );
+            MaterialButton(
+              onPressed: () async {
+                await _authService.signOut();
+                Get.offAllNamed('/authentication');
               },
-              childCount: Colors.accents.length,
+              child: Text('log out'),
             ),
-          ), 
-        ],
+          ],
+        ),
       ),
     );
   }
-}
-
-class ph extends SliverPersistentHeaderDelegate {
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) { 
-    return SizedBox.expand(
-      child: ColoredBox(color: Colors.grey),
-    );
-  }
-
-  @override
-  // TODO: implement maxExtent
-  double get maxExtent => 120;
-
-  @override
-  // TODO: implement minExtent
-  double get minExtent => 50;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    // TODO: implement shouldRebuild
-    throw UnimplementedError();
-  }
-}
+}//3IJcVXxTtYixGG6ABoKw  3PbcwdXLqDUvrjyw2o5e  4ZvfZlE3sr9VKpSf2suq  6FBs1BJVe6qHF3i916ZI

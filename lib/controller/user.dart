@@ -1,56 +1,63 @@
 import 'package:aissam_store/models/user.dart';
+import 'package:aissam_store/models/user_data.dart';
+import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
-  static UserController get instance => Get.find();
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  late String userId;
-  UserModel? _user;
-
   @override
-  void onInit() async {
+  void onInit() {
+    // TODO: implement onInit
     super.onInit();
-    userId = _firebaseAuth.currentUser!.uid;
   }
 
+  static UserController get instance => Get.find();
+  final AuthenticationService _authenticationService =
+      AuthenticationService.instance;
   final CollectionReference<UserModel> _firestoreUsers =
       FirebaseFirestore.instance.collection('Users').withConverter(
             fromFirestore: UserModel.fromFireStore,
             toFirestore: (UserModel model, _) => model.toMap(),
           );
+  final CollectionReference<UserData> _firestoreUsersData =
+      FirebaseFirestore.instance.collection('UsersData').withConverter(
+            fromFirestore: UserData.fromFireStore,
+            toFirestore: (UserData model, _) => model.toMap(),
+          );
+  String? get userId => _authenticationService.getUser!.uid;
+  UserModel? _user;
+  UserData? _userData;
 
-  UserModel getAuthUser() {
-    final user = UserModel(
-      userId: userId,
-      email: _firebaseAuth.currentUser!.email,
-      firstName: _firebaseAuth.currentUser!.displayName,
-      profilePhotoUrl: _firebaseAuth.currentUser!.photoURL,
-    );
-    return user;
+  Future<void> saveUser(UserModel user, List<String> categories) async {
+    try {
+      await _firestoreUsers.doc(userId).set(user, SetOptions(merge: true));
+      await _firestoreUsersData.doc(userId).set(
+          UserData(id: userId!, categories: categories),
+          SetOptions(merge: true));
+    } catch (e) {
+      throw Exception("can't save user and user data!, error: $e");
+    }
+    _user = null;
+    _userData = null;
   }
 
-  Future<bool> saveUser(UserModel user) async {
-    await _firestoreUsers
-        .doc(user .userId)
-        .set(user)
-        .catchError((e) {
-      print('------------------------**faild'); 
-      print('an error occcurred while add doc, $e');
-      return false; 
-    }).then((value) {
-      print('------------------------**seccess'); 
-      _user = null;
-    });
-    return true; 
+  Future<UserModel> getUser() async {
+    if (_user != null) return _user!;
+    final userDoc = await _firestoreUsers.doc(userId).get();
+    _user = userDoc.data();
+    return _user!;
   }
 
-  Future<bool> checkUserExistence() async {
-    final docUser = await _firestoreUsers
-        .doc(_firebaseAuth.currentUser!.uid)
-        .get()
-        .catchError((e) {
+  Future<UserModel> getUserData() async {
+    if (_user != null) return _user!;
+    final userDoc = await _firestoreUsers.doc(userId).get();
+    _user = userDoc.data();
+    return _user!;
+  }
+
+  Future<bool> checkUserExistence(uid) async {
+    final docUser = await _firestoreUsers.doc(uid).get().catchError((e) {
       print('error: $e');
     });
     _user = docUser.exists ? docUser.data() : _user;

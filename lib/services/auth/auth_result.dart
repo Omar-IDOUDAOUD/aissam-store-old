@@ -12,6 +12,8 @@ class AuthResult {
   bool emailWrong = false, userNameWrong = false, passwordWrong = false;
   String? emailWrongMsg, userNameWrongMsg, passwordWrongMsg;
 
+  bool needsFillUserInfoAfterAuth = false;
+
   set setEmailWrongMsg(String? v) {
     emailWrongMsg = v;
     emailWrong = v != null;
