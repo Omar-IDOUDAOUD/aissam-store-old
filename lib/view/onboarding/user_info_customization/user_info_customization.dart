@@ -2,22 +2,20 @@
 
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/models/user.dart';
-import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:aissam_store/view/public/text_field.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OnBoardingUserInfoSetting extends StatefulWidget {
-  const OnBoardingUserInfoSetting({super.key});
+class OnBoardingUserInfoCustomizationPage extends StatefulWidget {
+  const OnBoardingUserInfoCustomizationPage({super.key});
 
   @override
-  State<OnBoardingUserInfoSetting> createState() =>
-      _OnBoardingUserInfoSettingState();
+  State<OnBoardingUserInfoCustomizationPage> createState() =>
+      _OnBoardingUserInfoCustomizationPageState();
 }
 
-class _OnBoardingUserInfoSettingState extends State<OnBoardingUserInfoSetting> {
+class _OnBoardingUserInfoCustomizationPageState
+    extends State<OnBoardingUserInfoCustomizationPage> {
   final UserController _userController = UserController.instance;
   // final AuthenticationService _authenticationService =
   //     AuthenticationService.instance;

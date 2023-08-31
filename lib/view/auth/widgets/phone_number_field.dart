@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:aissam_store/core/constants/colors.dart';
@@ -8,11 +7,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class PhoneNumberField extends StatefulWidget {
-  PhoneNumberField({super.key, required this.controller, this.errorOccure = false});
+  PhoneNumberField(
+      {super.key, required this.controller, this.errorOccure = false});
 
   final TextEditingController controller;
   bool errorOccure;
-
 
   @override
   State<PhoneNumberField> createState() => _PhoneNumberFieldState();
@@ -26,7 +25,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: widget.controller, 
+      controller: widget.controller,
       key: _key,
       onChanged: (v) {
         print(v);
@@ -35,7 +34,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         });
       },
       style: Get.textTheme.bodyLarge!.copyWith(
-        color:widget.errorOccure  ? Colors.red : CstColors.a,
+        color: widget.errorOccure ? Colors.red : CstColors.a,
         fontWeight: FontWeight.w400,
         height: 1.6,
       ),

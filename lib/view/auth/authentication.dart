@@ -39,7 +39,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
 
   void _goNextPage() {
     Get.toNamed(_authResult.needsFillUserInfoAfterAuth
-        ? 'onboarding/user_info_setting'
+        ? 'onboarding/user_info_customization'
         : '/');
   }
 
