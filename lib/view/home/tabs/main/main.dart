@@ -21,8 +21,6 @@ class _MainTabState extends State<MainTab> {
   late final ScrollController _newestProductsController;
 
   @override
-<<<<<<< HEAD
-=======
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -53,7 +51,6 @@ class _MainTabState extends State<MainTab> {
   List<int> _selectedCategories = [];
 
   @override
->>>>>>> feature/controller/products
   Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,

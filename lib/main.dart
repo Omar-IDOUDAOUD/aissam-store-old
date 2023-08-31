@@ -1,8 +1,5 @@
 import 'package:aissam_store/bindings/authentication_service.dart';
-<<<<<<< HEAD
-=======
 import 'package:aissam_store/bindings/home_controllers.dart';
->>>>>>> feature/controller/products
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/firebase_options.dart';
 import 'package:aissam_store/middlewares/auth.dart';
@@ -137,11 +134,7 @@ class AissamStore extends StatelessWidget {
           name: '/authentication',
           page: () => AuthenticationPage(),
           middlewares: [
-<<<<<<< HEAD
             AuthenticationMiddleware(), // to route '/' if checked middleware
-=======
-            AuthenticationMiddleware(), // to route '/' if checked middlewar
->>>>>>> feature/controller/products
           ],
         ),
         GetPage(
