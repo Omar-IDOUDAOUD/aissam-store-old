@@ -1,18 +1,11 @@
-import 'dart:math';
 
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/models/user.dart';
 import 'package:aissam_store/services/auth/auth_result.dart';
 import 'package:aissam_store/services/auth/authentication.dart';
-import 'package:aissam_store/view/auth/widgets/phone_number_field.dart';
 import 'package:aissam_store/view/auth/widgets/sign_in_tab_fields.dart';
 import 'package:aissam_store/view/auth/widgets/sign_up_tab_field.dart';
 import 'package:aissam_store/view/public/button.dart';
-import 'package:aissam_store/view/public/text_field.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -114,6 +107,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
 
   @override
   void initState() {
+    super.initState();
     // TODO: implement initState
 
     _emailController = TextEditingController(text: 'omar@omar.omar');
@@ -321,8 +315,9 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        width: 30,
+                      SizedBox.square(
+                        dimension: 20,
+                        child: SvgPicture.asset('assets/icons/google-logo.svg'),
                       ),
                       Text(
                         'Sign Up With Google',

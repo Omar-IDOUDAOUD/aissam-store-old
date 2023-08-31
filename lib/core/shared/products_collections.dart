@@ -1,9 +1,1 @@
-
-
-
-
-enum ProductsCollections {
-  Newest, 
-  BestSelling, 
-  ForYou, 
-}
+enum ProductsCollections { Newest, BestSelling, ForYou, All, ByCategory }

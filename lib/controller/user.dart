@@ -17,7 +17,7 @@ class UserController extends GetxController {
       AuthenticationService.instance;
   final CollectionReference<UserModel> _firestoreUsers =
       FirebaseFirestore.instance.collection('Users').withConverter(
-            fromFirestore: UserModel.fromFireStore,
+            fromFirestore: UserModel.fromFirestore,
             toFirestore: (UserModel model, _) => model.toMap(),
           );
   final CollectionReference<UserData> _firestoreUsersData =
@@ -42,11 +42,24 @@ class UserController extends GetxController {
     _userData = null;
   }
 
+<<<<<<< HEAD
   Future<UserModel> getUser() async {
     if (_user != null) return _user!;
     final userDoc = await _firestoreUsers.doc(userId).get();
     _user = userDoc.data();
     return _user!;
+=======
+  Future<bool> saveUser(UserModel user) async {
+    await _firestoreUsers.doc(user.userId).set(user).catchError((e) {
+      print('------------------------**faild');
+      print('an error occcurred while add doc, $e');
+      return false;
+    }).then((value) {
+      print('------------------------**seccess');
+      _user = null;
+    });
+    return true;
+>>>>>>> feature/controller/products
   }
 
   Future<UserModel> getUserData() async {

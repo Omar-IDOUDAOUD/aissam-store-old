@@ -49,7 +49,7 @@ class UserModel {
     );
   }
 
-  factory UserModel.fromFireStore(
+  factory UserModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {

@@ -56,6 +56,9 @@ class SignInTabFields extends StatelessWidget {
         ),
         child: SvgPicture.asset(
           'assets/icons/fingerprint-icon.svg',
+          width: 20,
+          height: 20,
+          fit: BoxFit.scaleDown,
         ),
       ),
     );

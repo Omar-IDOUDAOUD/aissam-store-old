@@ -60,8 +60,11 @@ class SignUpTabFields extends StatelessWidget {
           color: Colors.grey.shade200,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: SvgPicture.asset(
+               child: SvgPicture.asset(
           'assets/icons/fingerprint-icon.svg',
+          width: 20,
+          height: 20,
+          fit: BoxFit.scaleDown,
         ),
       ),
     );

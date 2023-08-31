@@ -132,11 +132,18 @@ class AuthenticationService extends GetxService {
     }
     return AuthResult.success(user: userCredential);
   }
+<<<<<<< HEAD
 
   Future<void> signOut() async {
     print('Signed Out');
     await _firebaseAuth.signOut();
   }
+=======
+  // void signOut() {
+    
+  //   _firebaseAuth.signOut();
+  // }
+>>>>>>> feature/controller/products
 
   // Future<AuthResult> registerAnonymously() async {
   //   AuthResult? result;
@@ -150,10 +157,15 @@ class AuthenticationService extends GetxService {
   //   return result;
   // }
 
+<<<<<<< HEAD
   // void signOut() {
 
   //   _firebaseAuth.signOut();
   // }
+=======
+
+
+>>>>>>> feature/controller/products
 
   // Timer? _emailVerificationTimer;
 

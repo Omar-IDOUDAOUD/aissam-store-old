@@ -1,4 +1,5 @@
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -6,30 +7,19 @@ import 'package:get/get.dart';
 class ProductCard extends StatelessWidget {
   ProductCard({
     Key? key,
-    required this.title,
-    required this.imagePath,
-    required this.price,
-    required this.colorsNumber,
-    this.isHot = false,
-    this.favorited = false,
+    required this.data,
   }) : super(key: key);
-  final String title;
-  final String imagePath;
-  final double price;
-  final int colorsNumber;
-  final bool isHot;
-  final bool favorited;
 
-  final double _w = 120;
+  final Product data;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed('/product_details');
-      },
-      child: SizedBox(
-        width: _w,
+    return SizedBox(
+      width: 120,
+      child: GestureDetector(
+        onTap: () {
+          Get.toNamed('/product_details');
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,8 +30,8 @@ class ProductCard extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      imagePath,
+                    Image.network(
+                      data.cardPicture!,
                       fit: BoxFit.cover,
                       alignment: Alignment.topCenter,
                     ),
@@ -58,31 +48,31 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (isHot)
-                      Positioned(
-                        bottom: 10,
-                        left: 10,
-                        child: Container(
-                          height: 17,
-                          decoration: BoxDecoration(
-                              color: CstColors.d,
-                              borderRadius: BorderRadius.circular(8)),
-                          padding: EdgeInsets.only(left: 3, right: 5),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/flam.svg',
-                                  height: 14),
-                              Text(
-                                'HOT',
-                                style: Get.textTheme.displayLarge!.copyWith(
-                                  color: CstColors.e,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    // if (isHot)
+                    //   Positioned(
+                    //     bottom: 10,
+                    //     left: 10,
+                    //     child: Container(
+                    //       height: 17,
+                    //       decoration: BoxDecoration(
+                    //           color: CstColors.d,
+                    //           borderRadius: BorderRadius.circular(8)),
+                    //       padding: EdgeInsets.only(left: 3, right: 5),
+                    //       child: Row(
+                    //         children: [
+                    //           SvgPicture.asset('assets/icons/flam.svg',
+                    //               height: 14),
+                    //           Text(
+                    //             'HOT',
+                    //             style: Get.textTheme.displayLarge!.copyWith(
+                    //               color: CstColors.e,
+                    //               fontWeight: FontWeight.normal,
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
                   ],
                 ),
               ),
@@ -94,7 +84,7 @@ class ProductCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${price.toStringAsFixed(2)} MAD',
+                  '${data.price} MAD',
                   style: Get.textTheme.bodyMedium!.copyWith(
                     color: CstColors.a,
                     fontWeight: FontWeight.bold,
@@ -110,7 +100,7 @@ class ProductCard extends StatelessWidget {
               height: 4,
             ),
             Text(
-              title,
+              data.title!,
               textAlign: TextAlign.start,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -129,7 +119,7 @@ class ProductCard extends StatelessWidget {
                   width: 3,
                 ),
                 Text(
-                  '$colorsNumber color',
+                  '${data.colors!.length} color',
                   style: Get.textTheme.displayLarge!.copyWith(
                     color: CstColors.c,
                     // fontWeight: FontWeight.bold,
