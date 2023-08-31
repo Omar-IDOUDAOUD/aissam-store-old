@@ -8,6 +8,8 @@ import 'package:aissam_store/view/auth/authentication.dart';
 import 'package:aissam_store/view/checkout/chackout.dart';
 import 'package:aissam_store/view/fullscreen_image/fullscreen_image.dart';
 import 'package:aissam_store/view/home/home.dart';
+import 'package:aissam_store/view/onboarding/greeting/greeting.dart';
+import 'package:aissam_store/view/onboarding/greeting/widgets/lang_drop_down_menu.dart';
 import 'package:aissam_store/view/onboarding/user_info_setting.dart';
 import 'package:aissam_store/view/product_dets/product_details.dart';
 import 'package:aissam_store/view/settings/account_info.dart';
@@ -133,8 +135,19 @@ class AissamStore extends StatelessWidget {
           name: '/onboarding/user_info_setting',
           page: () => OnBoardingUserInfoSetting(),
         ),
+        GetPage(
+          name: '/onboarding/greeting',
+          page: () => OnBoardingGreetingPage(),
+          showCupertinoParallax: true,
+          preventDuplicates: false,
+        ),
+        // GetPage(
+        //   name: '/onboarding/greeting/lang_select_dropdown_menu',
+        //   page: () => LangDropdownMenu(),
+        //   showCupertinoParallax: false,
+        // )
       ],
-      initialRoute: '/authentication',
+      initialRoute: '/onboarding/greeting',
       initialBinding: AuthenticationServiceBinding(),
     );
   }

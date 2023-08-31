@@ -2,10 +2,7 @@
 
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/models/user.dart';
-import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:aissam_store/view/public/text_field.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
