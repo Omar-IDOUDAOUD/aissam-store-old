@@ -2,10 +2,10 @@
 
 import 'dart:async';
 
+import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/models/user.dart';
 import 'package:aissam_store/services/auth/auth_failed_errors.dart';
 import 'package:aissam_store/services/auth/auth_result.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,45 +14,129 @@ class AuthenticationService extends GetxService {
   static AuthenticationService get instance => Get.find();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    _firebaseAuth.authStateChanges().listen((User? user) {
+      print(
+          'USER STATE CHANGE=======================USER:$user====================');
+      _user = user;
+    });
+  }
 
-  User? user;
-  UserModel? _userModel;
-  UserModel? get userModel => _userModel;
+  User? _user;
 
   bool get userLoggenIn => _firebaseAuth.currentUser != null;
 
+  User? get getUser => _user;
 
-  User get getUser=> _firebaseAuth.currentUser!; 
+  Future<AuthResult> _saveUserAfterAuthenticate(
+      UserCredential userCredential) async {
+    final UserController userController = UserController.instance;
+    AuthResult authResult = AuthResult.success(user: userCredential);
+    if (await userController.checkUserExistence(userCredential.user!.uid))
 
+      ///check user if exists in case user sign in with google
+      return authResult;
 
-  Future<AuthResult> registerWithEmailAndPassword(
-      String email, String password) async {
-    if (email.isEmpty)
-      return AuthResult(emailWrongMsg: AuthErrors.EMAIL_EMPTY_MSG);
-    if (password.isEmpty)
-      return AuthResult(passwordWrongMsg: AuthErrors.PASSWORD_EMPTY_MSG);
+    // final user = userCredential.user!;
+    final newUser = UserModel(
+      userId: _user!.uid,
+      email: _user!.email,
+      firstName: _user!.displayName != null
+          ? _user!.displayName!.split(' ').first
+          : null,
+      lastName: _user!.displayName != null
+          ? _user!.displayName!.split(' ').last
+          : null,
+      phoneNumber: _user!.phoneNumber,
+      profilePhotoUrl: _user!.photoURL,
+    );
+    await userController.saveUser(newUser, List.empty()).catchError((e) {
+      authResult = AuthResult(message: e);
+    });
+    authResult.needsFillUserInfoAfterAuth = true;
+    return authResult;
+  }
+
+  Future<AuthResult> registerWithEmailAndPassword(String email, String password,
+      [String? phone]) async {
+    final emptinessValidator = _validateFieldsEmptiness(email, password, phone);
+    if (emptinessValidator != null) return emptinessValidator;
     UserCredential? userCredential;
+
     try {
-      this.user = (userCredential = await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(email: email, password: password))
-          .user;
+      userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       return AuthResult.fromErrorCode(
           code: e.code,
           type: AuthenticationModes.CreateAccountWithEmailAndPassword);
     }
-    // saveUserProfile(
-    //   UserModel(
-    //     userId: userCredential.user!.uid,
-    //     email: userCredential.user!.email!,
-    //   ),
-    // );
+    final authResult = await _saveUserAfterAuthenticate(userCredential);
+    return authResult;
+  }
+
+  Future<AuthResult> signInWithGoogle() async {
+    UserCredential? userCredential;
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
+
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        return AuthResult(
+          success: false,
+          message: AuthErrors.ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS,
+        );
+      }
+      return AuthResult(success: false, message: e.toString());
+    }
+
+    final authResult = await _saveUserAfterAuthenticate(userCredential);
+    return authResult;
+  }
+
+  /////LOG-IN
+
+  AuthResult? _validateFieldsEmptiness(String email, String password,
+      [String? phone]) {
+    if (email.isEmpty)
+      return AuthResult(emailWrongMsg: AuthErrors.EMAIL_EMPTY_MSG);
+    if (password.isEmpty)
+      return AuthResult(passwordWrongMsg: AuthErrors.PASSWORD_EMPTY_MSG);
+    if (phone != null && !phone.isPhoneNumber)
+      return AuthResult(passwordWrongMsg: AuthErrors.PHONE_INCORRECT);
+    return null;
+  }
+
+  Future<AuthResult> signInWithEmailAndPassword(
+      String email, String password) async {
+    UserCredential? userCredential;
+    final emptinessValidator = _validateFieldsEmptiness(email, password);
+    if (emptinessValidator != null) return emptinessValidator;
+    try {
+      userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      return AuthResult.fromErrorCode(
+          code: e.code, type: AuthenticationModes.SignInWithEmailAndPassword);
+    }
     return AuthResult.success(user: userCredential);
   }
-  // void signOut() {
-    
-  //   _firebaseAuth.signOut();
-  // }
+
+  Future<void> signOut() async {
+    print('Signed Out');
+    await _firebaseAuth.signOut();
+  }
 
   // Future<AuthResult> registerAnonymously() async {
   //   AuthResult? result;
@@ -66,8 +150,10 @@ class AuthenticationService extends GetxService {
   //   return result;
   // }
 
+  // void signOut() {
 
-
+  //   _firebaseAuth.signOut();
+  // }
 
   // Timer? _emailVerificationTimer;
 
@@ -95,64 +181,4 @@ class AuthenticationService extends GetxService {
   //     _emailVerificationTimer = null;
   //   }
   // }
-
-  Future<AuthResult> signInWithGoogle() async {
-    UserCredential? user;
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser!.authentication;
-
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      this.user = (user =
-              await FirebaseAuth.instance.signInWithCredential(credential))
-          .user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'account-exists-with-different-credential') {
-        return AuthResult(
-          success: false,
-          message: AuthErrors.ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS,
-        );
-      }
-      return AuthResult(success: false, message: e.toString());
-    }
-    return AuthResult(
-        success: true, message: 'signed in with google', user: user);
-  }
-
-  /////LOG-IN
-
-  Future<AuthResult> signInWithEmailAndPassword(
-      String email, String password) async {
-    if (email.isEmpty)
-      return AuthResult(emailWrongMsg: AuthErrors.EMAIL_EMPTY_MSG);
-    if (password.isEmpty)
-      return AuthResult(passwordWrongMsg: AuthErrors.PASSWORD_EMPTY_MSG);
-
-    UserCredential? user;
-
-    try {
-      this.user = (user = await FirebaseAuth.instance
-              .signInWithEmailAndPassword(email: email, password: password))
-          .user;
-    } on FirebaseAuthException catch (e) {
-      return AuthResult.fromErrorCode(
-          code: e.code, type: AuthenticationModes.SignInWithEmailAndPassword);
-    }
-    return AuthResult.success(user: user);
-  }
-
-
-
-
-  Future<void> signOut() async {
-    
-    print('Signed Out'); 
-   await  _firebaseAuth.signOut(); 
-  }
-
-
 }

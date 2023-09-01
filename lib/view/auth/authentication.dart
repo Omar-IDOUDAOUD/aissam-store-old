@@ -30,28 +30,13 @@ class _AthenticationStatePage extends State<AuthenticationPage>
   AuthResult _authResult = AuthResult();
   bool _waitingResponsLoading = false;
 
-  Future<void> _onSignUpButton() async {
-    _authResult = AuthResult();
-    setState(() {
-      _waitingResponsLoading = true;
-    });
-
-    _authResult = await _authService.registerWithEmailAndPassword(
-        _emailController.text, _passwordController.text);
-    print('success: ${_authResult.success}');
-    print('message ${_authResult.message}');
-    print('email error: ${_authResult.emailWrongMsg}');
-    print('pass error: ${_authResult.passwordWrongMsg}');
-    if (_authResult.success) print('user id: ${_authResult.user!.user!.uid}');
-    setState(() {
-      _waitingResponsLoading = false;
-    });
-    if (_authResult.success) {
-      await 100.milliseconds.delay();
-      Get.toNamed('/onboarding/user_info_setting');
-    }
+  void _goNextPage() {
+    Get.toNamed(_authResult.needsFillUserInfoAfterAuth
+        ? 'onboarding/user_info_setting'
+        : '/');
   }
 
+  ///SIGN IN
   Future<void> _onSignInButton() async {
     _authResult = AuthResult();
 
@@ -65,43 +50,60 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     print('message ${_authResult.message}');
     print('email error: ${_authResult.emailWrongMsg}');
     print('pass error: ${_authResult.passwordWrongMsg}');
-    if (_authResult.success) print('user id: ${_authResult.user!.user!.uid}');
     setState(() {
       _waitingResponsLoading = false;
     });
     if (_authResult.success) {
+      print('user id: ${_authResult.user!.user!.uid}');
       await 100.milliseconds.delay();
-      Get.toNamed('/');
+      _goNextPage();
     }
   }
 
-  Future<void> _onSignInWithGoogle() async {
-    final UserController _userController = UserController.instance;
-
+  ///SIGN UP
+  Future<void> _onSignUpButton() async {
     _authResult = AuthResult();
+    setState(() {
+      _waitingResponsLoading = true;
+    });
 
+    _authResult = await _authService.registerWithEmailAndPassword(
+        _emailController.text, _passwordController.text);
+    print('success: ${_authResult.success}');
+    print('message ${_authResult.message}');
+    print('email error: ${_authResult.emailWrongMsg}');
+    print('pass error: ${_authResult.passwordWrongMsg}');
+    setState(() {
+      _waitingResponsLoading = false;
+    });
+    if (_authResult.success) {
+      print('user id: ${_authResult.user!.user!.uid}');
+      await 100.milliseconds.delay();
+      _goNextPage();
+    }
+  }
+
+  ///SIGN IN GOOGLE
+  Future<void> _onSignInWithGoogle() async {
+    _authResult = AuthResult();
     // await 2.seconds.delay();
+    setState(() {
+      _waitingResponsLoading = true;
+    });
     _authResult = await _authService.signInWithGoogle();
     print('success: ${_authResult.success}');
     print('message ${_authResult.message}');
     print('email error: ${_authResult.emailWrongMsg}');
     print('pass error: ${_authResult.passwordWrongMsg}');
-    if (_authResult.success) print('user id: ${_authResult.user!.user!.email}');
-    if (await _userController.checkUserExistence()) {
-      setState(() {});
+    setState(() {
+      _waitingResponsLoading = false;
+    });
+    if (_authResult.success) {
+      print('user id: ${_authResult.user!.user!.uid}');
       await 100.milliseconds.delay();
-      Get.toNamed('/');
-    } else {
-      setState(() {});
-      await 100.milliseconds.delay();
-      Get.toNamed('/onboarding/user_info_setting');
-     
+      _goNextPage();
     }
   }
-
-  // _onSignOut() {
-  //   _authService.signOut();
-  // }
 
   @override
   void initState() {
