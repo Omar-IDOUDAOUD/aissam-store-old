@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:aissam_store/controller/cloud_storage.dart';
+import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
 import 'package:aissam_store/core/utils/hex_color.dart';
 import 'package:aissam_store/models/category.dart';
@@ -35,7 +36,9 @@ class ProductCollectionPaginationData {
 
 class ProductsController extends GetxController {
   static ProductsController get instance => Get.find();
-  FirebaseFirestore _fbfirestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _fbfirestore = FirebaseFirestore.instance;
+  final UserController _userController = UserController.instance;
+
   late CollectionReference<Product> _cloudProducts;
 
   @override
@@ -97,6 +100,13 @@ class ProductsController extends GetxController {
           arrayContainsAny:
               _selectedProductsCategories.map<String>((e) => e.name));
     }
+
+    if (c.collection == ProductsCollections.ForYou) {
+      final userData = await _userController.getUserData();
+      final userCats = userData.categories;
+      query = query.where('categories', arrayContainsAny: userCats);
+    }
+
     query = query.limit(10);
 
     result = await query.get().then((value) {
