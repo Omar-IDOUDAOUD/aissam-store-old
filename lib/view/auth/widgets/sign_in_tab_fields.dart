@@ -23,16 +23,17 @@ class SignInTabFields extends StatelessWidget {
         children: [
           EmailField(
             controller: emailC,
-            errorOccure: authResult != null ? authResult!.emailWrong : false,
+            errorMessage: authResult != null ? authResult!.emailWrongMsg : null,
           ),
           SizedBox(height: 10),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: PasswordField(
                   controller: passwordC,
-                  errorOccure:
-                      authResult != null ? authResult!.passwordWrong : false,
+                  errorMessage:
+                      authResult != null ? authResult!.passwordWrongMsg : null,
                 ),
               ),
               SizedBox(

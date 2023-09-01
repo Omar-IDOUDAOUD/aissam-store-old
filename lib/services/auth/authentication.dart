@@ -98,6 +98,8 @@ class AuthenticationService extends GetxService {
           message: AuthErrors.ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS,
         );
       }
+      return AuthResult(success: false, message: e.message);
+    } catch (e) {
       return AuthResult(success: false, message: e.toString());
     }
 
@@ -150,30 +152,30 @@ class AuthenticationService extends GetxService {
   //   return result;
   // }
 
-  // Timer? _emailVerificationTimer;
+  Timer? _emailVerificationTimer;
 
-  // Future<bool> startEmailVerification() async {
-  //   var resulte = false;
-  //   var completer =
-  //       Completer<bool>(); // Create a Completer to handle the async result
-  //   FirebaseAuth.instance.currentUser!.sendEmailVerification();
-  //   _emailVerificationTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
-  //     print('checking email verified!');
-  //     FirebaseAuth.instance.currentUser!.reload();
-  //     if (FirebaseAuth.instance.currentUser!.emailVerified) {
-  //       print('checking success');
-  //       resulte = true;
-  //       completer.complete(resulte);
-  //       cancelEmailVerification();
-  //     }
-  //   });
-  //   return completer.future;
-  // }
+  Future<bool> startEmailVerification() async {
+    var resulte = false;
+    var completer =
+        Completer<bool>(); // Create a Completer to handle the async result
+    FirebaseAuth.instance.currentUser!.sendEmailVerification();
+    _emailVerificationTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
+      print('checking email verified!');
+      FirebaseAuth.instance.currentUser!.reload();
+      if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        print('checking success');
+        resulte = true;
+        completer.complete(resulte);
+        cancelEmailVerification();
+      }
+    });
+    return completer.future;
+  }
 
-  // void cancelEmailVerification() {
-  //   if (_emailVerificationTimer != null) {
-  //     _emailVerificationTimer!.cancel();
-  //     _emailVerificationTimer = null;
-  //   }
-  // }
+  void cancelEmailVerification() {
+    if (_emailVerificationTimer != null) {
+      _emailVerificationTimer!.cancel();
+      _emailVerificationTimer = null;
+    }
+  }
 }

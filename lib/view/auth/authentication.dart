@@ -1,4 +1,3 @@
-
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/services/auth/auth_result.dart';
@@ -28,12 +27,18 @@ class _AthenticationStatePage extends State<AuthenticationPage>
 
   final AuthenticationService _authService = AuthenticationService.instance;
   AuthResult _authResult = AuthResult();
-  bool _waitingResponsLoading = false;
+  bool _emailSignInLoading = false;
+  bool _googleSignInLoading = false;
+  bool _canRequestSignInButton = true;
 
-  void _goNextPage() {
-    Get.toNamed(_authResult.needsFillUserInfoAfterAuth
-        ? 'onboarding/user_info_customization'
-        : '/');
+  Future<void> _goNextPage([bool needEmailVerification = false]) async {
+    await 1.seconds.delay();
+
+    Get.offNamed(needEmailVerification
+        ? '/authentication/email_verification'
+        : _authResult.needsFillUserInfoAfterAuth
+            ? 'onboarding/user_info_customization'
+            : '/');
   }
 
   ///SIGN IN
@@ -41,9 +46,9 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     _authResult = AuthResult();
 
     setState(() {
-      _waitingResponsLoading = true;
+      _emailSignInLoading = true;
+      _canRequestSignInButton = false;
     });
-    // await 2.seconds.delay();
     _authResult = await _authService.signInWithEmailAndPassword(
         _emailController.text, _passwordController.text);
     print('success: ${_authResult.success}');
@@ -51,11 +56,11 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     print('email error: ${_authResult.emailWrongMsg}');
     print('pass error: ${_authResult.passwordWrongMsg}');
     setState(() {
-      _waitingResponsLoading = false;
+      _emailSignInLoading = false;
+      _canRequestSignInButton = true;
     });
     if (_authResult.success) {
       print('user id: ${_authResult.user!.user!.uid}');
-      await 100.milliseconds.delay();
       _goNextPage();
     }
   }
@@ -64,9 +69,10 @@ class _AthenticationStatePage extends State<AuthenticationPage>
   Future<void> _onSignUpButton() async {
     _authResult = AuthResult();
     setState(() {
-      _waitingResponsLoading = true;
+      _emailSignInLoading = true;
+      _canRequestSignInButton = false;
     });
-
+    // await 4.seconds.delay();
     _authResult = await _authService.registerWithEmailAndPassword(
         _emailController.text, _passwordController.text);
     print('success: ${_authResult.success}');
@@ -74,12 +80,12 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     print('email error: ${_authResult.emailWrongMsg}');
     print('pass error: ${_authResult.passwordWrongMsg}');
     setState(() {
-      _waitingResponsLoading = false;
+      _emailSignInLoading = false;
+      _canRequestSignInButton = true;
     });
     if (_authResult.success) {
       print('user id: ${_authResult.user!.user!.uid}');
-      await 100.milliseconds.delay();
-      _goNextPage();
+      _goNextPage(true);
     }
   }
 
@@ -88,7 +94,8 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     _authResult = AuthResult();
     // await 2.seconds.delay();
     setState(() {
-      _waitingResponsLoading = true;
+      _googleSignInLoading = true;
+      _canRequestSignInButton = false;
     });
     _authResult = await _authService.signInWithGoogle();
     print('success: ${_authResult.success}');
@@ -96,11 +103,11 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     print('email error: ${_authResult.emailWrongMsg}');
     print('pass error: ${_authResult.passwordWrongMsg}');
     setState(() {
-      _waitingResponsLoading = false;
+      _googleSignInLoading = false;
+      _canRequestSignInButton = true;
     });
     if (_authResult.success) {
       print('user id: ${_authResult.user!.user!.uid}');
-      await 100.milliseconds.delay();
       _goNextPage();
     }
   }
@@ -114,14 +121,37 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     _passwordController = TextEditingController(text: 'omaromar');
     _phoneNumberController = TextEditingController();
 
-    _controller = TabController(length: 2, vsync: this)
-      ..addListener(() {
-        _isRegistering = _controller.index == 0;
-        if (_isRegistering && _controller.previousIndex == 1 ||
-            !_isRegistering && _controller.previousIndex == 0) {
-          setState(() {});
-        }
+    _controller = TabController(length: 2, vsync: this);
+    // ..addListener(() {
+    //   print(_controller.index);
+
+    //   _isRegistering = _controller.index == 0;
+    //   if (_isRegistering && _controller.previousIndex == 1 ||
+    //       !_isRegistering && _controller.previousIndex == 0) {
+    //     setState(() {});
+    //   }
+    // });
+    _controller.animation!.addListener(_pageDragHandler);
+  }
+
+  void _pageDragHandler() {
+    if (_authResult.emailWrong ||
+        _authResult.userNameWrong ||
+        _authResult.passwordWrong ||
+        _authResult.message != null) {
+      setState(() {
+        _authResult = AuthResult();
       });
+    }
+    if (_isRegistering && _controller.animation!.value > 0.5) {
+      setState(() {
+        _isRegistering = false;
+      });
+    } else if (!_isRegistering && _controller.animation!.value <= 0.5) {
+      setState(() {
+        _isRegistering = true;
+      });
+    }
   }
 
   @override
@@ -130,16 +160,19 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     _emailController.dispose();
     _passwordController.dispose();
     _phoneNumberController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(
+        'rebuild widget******************************************************');
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           Padding(
@@ -161,16 +194,16 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black87.withOpacity(.2),
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                         blurRadius: 15,
                       )
                     ]),
                 tabs: [
-                  Tab(
+                  const Tab(
                     height: 50,
                     text: 'Register',
                   ),
-                  Tab(
+                  const Tab(
                     text: 'Sign in',
                     height: 50,
                   ),
@@ -178,7 +211,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           AnimatedSize(
             alignment: Alignment.topCenter,
             duration: 200.milliseconds,
@@ -218,8 +251,8 @@ class _AthenticationStatePage extends State<AuthenticationPage>
               transitionBuilder: (c, a) {
                 return SlideTransition(
                   position: Tween<Offset>(
-                          begin:
-                              Offset(c.key == ValueKey(true) ? -0.1 : 0.1, 0),
+                          begin: Offset(
+                              c.key == const ValueKey(true) ? -0.1 : 0.1, 0),
                           end: Offset.zero)
                       .animate(a),
                   child: FadeTransition(
@@ -240,99 +273,126 @@ class _AthenticationStatePage extends State<AuthenticationPage>
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
-
-          SizedBox(height: 20),
-          AnimatedSize(
-            alignment: Alignment.topCenter,
-            duration: 200.milliseconds,
-            child: SizedBox(
-              height: _controller.index == 0 ? 200 : 130,
-              child: TabBarView(
-                clipBehavior: Clip.none,
-                controller: _controller,
-                children: [
-                  SingleChildScrollView(
-                    clipBehavior: Clip.none,
-                    physics: NeverScrollableScrollPhysics(),
-                    child: SignUpTabFields(
-                      authResult: _authResult,
-                      emailC: _emailController,
-                      phoneNumberC: _phoneNumberController,
-                      passwordC: _passwordController,
-                    ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: TabBarView(
+              clipBehavior: Clip.none,
+              controller: _controller,
+              children: [
+                SignUpTabFields(
+                  authResult: _authResult,
+                  emailC: _emailController,
+                  phoneNumberC: _phoneNumberController,
+                  passwordC: _passwordController,
+                ),
+                SignInTabFields(
+                  authResult: _authResult,
+                  emailC: _emailController,
+                  passwordC: _passwordController,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: AnimatedOpacity(
+              duration: 300.milliseconds,
+              opacity: _authResult.message != null ? 1 : 0,
+              child: AnimatedScale(
+                duration: 300.milliseconds,
+                scale: _authResult.message != null ? 1 : 0.8,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: _authResult.success
+                        ? Colors.green.withOpacity(.2)
+                        : Colors.red.withOpacity(.2),
                   ),
-                  SignInTabFields(
-                    authResult: _authResult,
-                    emailC: _emailController,
-                    passwordC: _passwordController,
+                  child: Row(
+                    children: [
+                      Icon(
+                        _authResult.success ? Icons.check_rounded : Icons.info,
+                        size: 15,
+                        color: _authResult.success
+                            ? Colors.green
+                            : Colors.redAccent,
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          _authResult.message ?? '',
+                          style: Get.textTheme.bodyMedium!.copyWith(
+                            color: _authResult.success
+                                ? Colors.green
+                                : Colors.redAccent,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
-          if (_authResult.success) Text(_authResult.message ?? 'no message'),
+          SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               children: [
                 Button(
+                  enabled: _canRequestSignInButton &&
+                      !_emailSignInLoading &&
+                      !_authResult.success,
                   onPressed: _isRegistering ? _onSignUpButton : _onSignInButton,
                   isHeightMinimize: true,
-                  child: Center(
-                      child: _waitingResponsLoading
-                          ? CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            )
-                          : _authResult.success
-                              ? SvgPicture.asset(
-                                  'assets/icons/ic_fluent_checkmark_24_filled.svg',
-                                  color: Colors.white,
-                                )
-                              : Text(
-                                  'Register',
-                                  style: Get.textTheme.bodyMedium!.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                )),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Button(
-                  onPressed: () {
-                    _onSignInWithGoogle();
-                  },
-                  isHeightMinimize: true,
-                  isOutline: true,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox.square(
-                        dimension: 20,
-                        child: SvgPicture.asset('assets/icons/google-logo.svg'),
+                        dimension: 30,
                       ),
                       Text(
-                        'Sign Up With Google',
+                        _isRegistering ? 'Register' : 'Log-in',
                         style: Get.textTheme.bodyMedium!.copyWith(
-                          color: CstColors.a,
+                          color: Colors.white,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(
-                        width: 30,
+                      AnimatedSwitcher(
+                        duration: 300.milliseconds,
+                        switchInCurve: Curves.linearToEaseOut,
+                        switchOutCurve: Curves.linearToEaseOut,
+                        child: SizedBox.square(
+                          key: ValueKey(_emailSignInLoading),
+                          dimension: 25,
+                          child: _emailSignInLoading
+                              ? CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                )
+                              : SvgPicture.asset(
+                                  'assets/icons/arrow_right_shorter.svg',
+                                  color: Colors.white,
+                                ),
+                        ),
+                        transitionBuilder: (c, a) {
+                          return ScaleTransition(
+                            scale: a,
+                            child: FadeTransition(
+                              opacity: a,
+                              child: c,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Row(
@@ -343,13 +403,13 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                       width: 40,
                       child: ColoredBox(color: CstColors.c),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 10),
                     Text('Other Sign Up Methods',
-                        style: Get.textTheme.displayLarge!.copyWith(
+                        style: Get.textTheme.bodySmall!.copyWith(
                           fontWeight: FontWeight.w400,
                           color: CstColors.c,
                         )),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 10),
                     SizedBox(
                       height: 1,
                       width: 40,
@@ -357,22 +417,77 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _singUpMethodSquare('assets/icons/facebook-logo.svg'),
-                    SizedBox(width: 7),
-                    _singUpMethodSquare('assets/icons/twitter-logo.svg'),
+                    _singUpMethodSquare(
+                      _googleSignInLoading
+                          ? CircularProgressIndicator(
+                              color: Colors.green.shade700,
+                              strokeWidth: 2,
+                            )
+                          : SvgPicture.asset(
+                              'assets/icons/google-logo.svg',
+                              height: 28,
+                              width: 28,
+                              fit: BoxFit.scaleDown,
+                              color: Colors.green.shade700,
+                            ),
+                      Colors.green,
+                      _canRequestSignInButton ? _onSignInWithGoogle : null,
+                    ),
+                    const SizedBox(width: 7),
+                    _singUpMethodSquare(
+                      SvgPicture.asset(
+                        'assets/icons/facebook-logo.svg',
+                        height: 23,
+                        width: 23,
+                        fit: BoxFit.scaleDown,
+                      ),
+                      Colors.blue,
+                    ),
+                    const SizedBox(width: 7),
+                    SizedBox(
+                      width: 1,
+                      height: 15,
+                      child: ColoredBox(color: CstColors.b),
+                    ),
+                    const SizedBox(width: 7),
+                    _singUpMethodSquare(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/ic_fluent_emoji_24_filled.svg',
+                              height: 28,
+                              width: 28,
+                              fit: BoxFit.scaleDown,
+                              color: Colors.orangeAccent.shade200,
+                            ),
+                            const SizedBox(width: 7),
+                            Text(
+                              'Guest',
+                              textAlign: TextAlign.center,
+                              style: Get.textTheme.bodyMedium!.copyWith(
+                                // height: 1.2,
+                                color: Colors.orangeAccent.shade200,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Colors.orange,
+                    ),
                   ],
                 ),
               ],
             ),
           ),
-          // Spacer(),
-          Spacer(),
           SizedBox(
             height: 40,
             child: Center(
@@ -397,7 +512,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
         ],
@@ -405,23 +520,20 @@ class _AthenticationStatePage extends State<AuthenticationPage>
     );
   }
 
-  Widget _singUpMethodSquare(String companyLogoPath) {
+  Widget _singUpMethodSquare(Widget child, Color color, [Function()? onTap]) {
     return GestureDetector(
-      // onTap: _onSignOut,
-      child: SizedBox.square(
-        dimension: 53,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.blue.shade100.withOpacity(.5),
-            borderRadius: BorderRadius.circular(11),
-          ),
-          child: SvgPicture.asset(
-            companyLogoPath,
-            height: 25,
-            width: 25,
-            fit: BoxFit.scaleDown,
-          ),
+      onTap: onTap,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minHeight: 53,
+          minWidth: 53,
         ),
+        child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: color.withOpacity(.2),
+              borderRadius: BorderRadius.circular(11),
+            ),
+            child: Center(child: child)),
       ),
     );
   }

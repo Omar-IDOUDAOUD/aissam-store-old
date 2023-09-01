@@ -10,13 +10,14 @@ class Button extends StatefulWidget {
     this.isHeightMinimize = false,
     this.isOutline = false,
     this.padding,
+    this.enabled = true,
   });
   final Function()? onPressed;
   final Widget child;
   final bool isHeightMinimize;
   final bool isOutline;
   final EdgeInsets? padding;
-
+  final bool enabled;
 
   @override
   State<Button> createState() => _ButtonState();
@@ -25,29 +26,40 @@ class Button extends StatefulWidget {
 class _ButtonState extends State<Button> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onPressed,
-      child: Container(
-        height: widget.isHeightMinimize ? 60 : 75,
-        padding: widget.padding ??
-            EdgeInsets.symmetric(
-                horizontal: widget.isHeightMinimize ? 15 : 25, vertical: 10),
+    return MaterialButton(
+      height: widget.isHeightMinimize ? 60 : 75,
+      elevation: !widget.isOutline && widget.enabled ? 10 : 0,
+      focusElevation: 0,
+      highlightElevation: 0,
+      padding: EdgeInsets.zero,
+      hoverElevation: 0,
+      color: widget.isOutline ? Colors.transparent : CstColors.a,
+      onPressed: widget.enabled ? widget.onPressed : () {},
+      splashColor: Colors.black.withOpacity(.1),
+      focusColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(widget.isHeightMinimize ? 12 : 15),
+        side: widget.isOutline
+            ? BorderSide(color: CstColors.a, width: 2)
+            : BorderSide.none,
+      ),
+      child: DecoratedBox(
+        position: DecorationPosition.foreground,
         decoration: BoxDecoration(
-            border: widget.isOutline
-                ? Border.all(color: CstColors.a, width: 2)
-                : null,
-            color: widget.isOutline ? Colors.transparent : CstColors.a,
-            borderRadius:
-                BorderRadius.circular(widget.isHeightMinimize ? 12 : 15),
-            boxShadow: [
-              if (!widget.isOutline)
-                BoxShadow(
-                  color: CstColors.a.withOpacity(.5),
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                )
-            ]),
-        child: widget.child,
+          borderRadius:
+              BorderRadius.circular(widget.isHeightMinimize ? 12 : 15),
+          color: !widget.enabled ? Colors.black.withOpacity(.2) : null,
+        ),
+        child: Padding(
+          padding: widget.padding ??
+              EdgeInsets.symmetric(
+                horizontal: widget.isHeightMinimize ? 20 : 30,
+                vertical: 10,
+              ),
+          child: widget.child,
+        ),
       ),
     );
   }

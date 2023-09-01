@@ -25,7 +25,7 @@ class SignUpTabFields extends StatelessWidget {
         children: [
           EmailField(
             controller: emailC,
-            errorOccure: authResult != null ? authResult!.emailWrong : false,
+            errorMessage: authResult != null ? authResult!.emailWrongMsg : null,
           ),
           SizedBox(height: 10),
           PhoneNumberField(
@@ -33,12 +33,13 @@ class SignUpTabFields extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: PasswordField(
                   controller: passwordC,
-                  errorOccure:
-                      authResult != null ? authResult!.passwordWrong : false,
+                  errorMessage:
+                      authResult != null ? authResult!.passwordWrongMsg : null,
                 ),
               ),
               SizedBox(
@@ -60,7 +61,7 @@ class SignUpTabFields extends StatelessWidget {
           color: Colors.grey.shade200,
           borderRadius: BorderRadius.circular(12),
         ),
-               child: SvgPicture.asset(
+        child: SvgPicture.asset(
           'assets/icons/fingerprint-icon.svg',
           width: 20,
           height: 20,

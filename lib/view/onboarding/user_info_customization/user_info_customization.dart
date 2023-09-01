@@ -173,7 +173,7 @@ class _OnBoardingUserInfoCustomizationPageState
   }
 
   void goNextPage() {
-    Get.toNamed('/testing');
+    Get.offAllNamed('/');
   }
 
   bool _isLoading = false;

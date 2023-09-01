@@ -6,6 +6,7 @@ import 'package:aissam_store/middlewares/auth.dart';
 import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:aissam_store/view/add_checkout_address/add_checkout_address.dart';
 import 'package:aissam_store/view/auth/authentication.dart';
+import 'package:aissam_store/view/auth/email_verification.dart';
 import 'package:aissam_store/view/checkout/chackout.dart';
 import 'package:aissam_store/view/fullscreen_image/fullscreen_image.dart';
 import 'package:aissam_store/view/home/home.dart';
@@ -133,9 +134,6 @@ class AissamStore extends StatelessWidget {
         GetPage(
           name: '/authentication',
           page: () => AuthenticationPage(),
-          middlewares: [
-            AuthenticationMiddleware(), // to route '/' if checked middleware
-          ],
         ),
         GetPage(
           name: '/onboarding/user_info_customization',
@@ -144,16 +142,22 @@ class AissamStore extends StatelessWidget {
         GetPage(
           name: '/onboarding/greeting',
           page: () => OnBoardingGreetingPage(),
-          showCupertinoParallax: true,
-          preventDuplicates: false,
+          middlewares: [
+            AuthenticationMiddleware(), // to route '/' if checked middleware
+          ],
         ),
+        GetPage(
+          name: '/authentication/email_verification',
+          page: () => EmailVerificationPage(),
+        ),
+        //
         // GetPage(
         //   name: '/onboarding/greeting/lang_select_dropdown_menu',
         //   page: () => LangDropdownMenu(),
         //   showCupertinoParallax: false,
         // )
       ],
-      initialRoute: '/authentication',
+      initialRoute: '/onboarding/greeting',
       initialBinding: AuthenticationServiceBinding(),
     );
   }

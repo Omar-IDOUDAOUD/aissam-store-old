@@ -4,6 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+enum SignInButtonState {
+  noState,
+  loading,
+  success,
+  fail,
+}
+
 class CustomButton extends StatefulWidget {
   final bool primaryButton;
   final Color? labelColor;
@@ -13,8 +20,10 @@ class CustomButton extends StatefulWidget {
   final String label;
   final bool smallWidthButton;
   final Function()? onTap;
+  final SignInButtonState state;
   CustomButton({
     super.key,
+    this.state = SignInButtonState.noState,
     this.primaryButton = false,
     this.labelColor,
     this.iconColor,
@@ -49,48 +58,73 @@ class _CustomButtonState extends State<CustomButton> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Row(
-        // mainAxisAlignment: widget.smallWidthButton
-        //     ? MainAxisAlignment.start
-        //     : MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox.square(
-            dimension: 25,
-            child: SvgPicture.asset(
-              widget.iconPath,
-              color: widget.primaryButton ? Colors.white : widget.iconColor,
-              alignment: Alignment.center,
-              width: 20,
-              height: 20,
-              fit: BoxFit.scaleDown,
+      child: AnimatedSwitcher(
+        duration: 1.seconds,
+        child: widget.state == SignInButtonState.loading
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 3,
+                ),
+              )
+            : widget.state == SignInButtonState.success
+                ? const Center(
+                    child: Icon(Icons.check_outlined, color: Colors.white))
+                : Row(
+                    children: [
+                      SizedBox.square(
+                        dimension: 25,
+                        child: SvgPicture.asset(
+                          widget.iconPath,
+                          color: widget.primaryButton
+                              ? Colors.white
+                              : widget.iconColor,
+                          alignment: Alignment.center,
+                          width: 20,
+                          height: 20,
+                          fit: BoxFit.scaleDown,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          widget.label,
+                          textAlign: TextAlign.center,
+                          style: Get.textTheme.headlineSmall!.copyWith(
+                            height: 1.2,
+                            color: widget.primaryButton
+                                ? Colors.white
+                                : widget.labelColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      if (!widget.smallWidthButton)
+                        SizedBox.square(
+                          dimension: 25,
+                          child: SvgPicture.asset(
+                            widget.primaryButton
+                                ? 'assets/icons/arrow_right_shorter.svg'
+                                : 'assets/icons/ic_fluent_chevron_right_24_filled.svg',
+                            color: widget.primaryButton
+                                ? Colors.white
+                                : widget.labelColor,
+                            width: widget.primaryButton ? 30 : 18,
+                            fit: BoxFit.scaleDown,
+                          ),
+                        ),
+                    ],
+                  ),
+        transitionBuilder: (c, a) {
+          return ScaleTransition(
+            scale: Tween<double>(begin: 0.7, end: 1).animate(a),
+            child: FadeTransition(
+              opacity: a,
+              child: c,
             ),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              widget.label,
-              textAlign: TextAlign.center,
-              style: Get.textTheme.headlineSmall!.copyWith(
-                height: 1.2,
-                color: widget.primaryButton ? Colors.white : widget.labelColor,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          SizedBox(width: 10),
-          if (!widget.smallWidthButton)
-            SizedBox.square(
-              dimension: 25,
-              child: SvgPicture.asset(
-                widget.primaryButton
-                    ? 'assets/icons/arrow_right_shorter.svg'
-                    : 'assets/icons/ic_fluent_chevron_right_24_filled.svg',
-                color: widget.primaryButton ? Colors.white : widget.labelColor,
-                width: widget.primaryButton ? 30 : 18,
-                fit: BoxFit.scaleDown,
-              ),
-            ),
-        ],
+          );
+        },
       ),
     );
   }

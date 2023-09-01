@@ -66,11 +66,7 @@ class AuthResult {
             emailWrongMsg: AuthErrors.EMAIL_ICORRECT_MSG,
           );
         case 'user-not-found':
-          return AuthResult(
-            message: AuthErrors.USER_NOTFOUND,
-            emailWrong: true,
-            passwordWrong: true,
-          );
+          return AuthResult(emailWrongMsg: AuthErrors.USER_NOTFOUND);
         case 'user-disabled':
           return AuthResult(
             message: AuthErrors.USER_DISABLED,
@@ -83,13 +79,14 @@ class AuthResult {
   }
 
   factory AuthResult.success({UserCredential? user}) {
-    return AuthResult(success: true, user: user);
+    return AuthResult(
+        success: true, user: user, message: 'Sign in successful!');
   }
 
   factory AuthResult.anErrorOccure() {
     return AuthResult(
         message:
-            'An error occured!'); //note: add internet connectivity check before every firebase connection;
+            'An error occured! check you connection and try again.'); //note: add internet connectivity check before every firebase connection;
   }
 
   AuthResult({

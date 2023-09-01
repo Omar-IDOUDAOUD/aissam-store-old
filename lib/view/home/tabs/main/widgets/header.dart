@@ -5,9 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class Header extends StatelessWidget {
-    Header({Key? key}) : super(key: key);
+  Header({Key? key}) : super(key: key);
 
-  final AuthenticationService _authenticationService = AuthenticationService.instance; 
+  final AuthenticationService _authenticationService =
+      AuthenticationService.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +24,8 @@ class Header extends StatelessWidget {
           GestureDetector(
             child: AissamLogo(),
             onTap: () async {
-             await _authenticationService.signOut(); 
-              Get.offAllNamed('/authentication'); 
+              await _authenticationService.signOut();
+              Get.offAllNamed('/onboarding/greeting');
             },
           ),
           // SvgPicture.asset('assets/icons/menu_vertical.svg'),
