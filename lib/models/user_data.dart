@@ -50,7 +50,7 @@ class UserData {
   ) {
     final data = snapshot.data()!;
     return UserData(
-      id: data['id'],
+      id: data['user_id'],
       categories: List<String>.from(data['categories'] as List),
       favoritedProducts: List<String>.from(data['favorited_products'] as List),
       searchHistory:

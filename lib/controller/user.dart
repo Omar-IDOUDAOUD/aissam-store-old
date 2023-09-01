@@ -49,11 +49,11 @@ class UserController extends GetxController {
     return _user!;
   }
 
-  Future<UserModel> getUserData() async {
-    if (_user != null) return _user!;
-    final userDoc = await _firestoreUsers.doc(userId).get();
-    _user = userDoc.data();
-    return _user!;
+  Future<UserData> getUserData() async {
+    if (_userData != null) return _userData!;
+    final userDoc = await _firestoreUsersData.doc(userId).get();
+    _userData = userDoc.data();
+    return _userData!;
   }
 
   Future<bool> checkUserExistence(uid) async {

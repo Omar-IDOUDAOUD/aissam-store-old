@@ -1,4 +1,5 @@
 import 'package:aissam_store/controller/product.dart';
+import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
 import 'package:aissam_store/view/home/tabs/main/widgets/list_title.dart';
 import 'package:aissam_store/view/home/tabs/main/widgets/products_by_categories.dart';
@@ -17,19 +18,26 @@ class MainTab extends StatefulWidget {
 
 class _MainTabState extends State<MainTab> {
   final ProductsController _productsController = ProductsController.instance;
+  final UserController _userController = UserController.instance;
 
-  late final ScrollController _newestProductsController;
+  bool _showForYouCollectionPart = false;
+  _checkAndAddForYouCollectionPart() {
+    _userController.getUserData().then((value) {
+      if (value.categories!.isNotEmpty && mounted) {
+        setState(() {
+          _showForYouCollectionPart = true;
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
+
+    _checkAndAddForYouCollectionPart();
+
     super.initState();
-    _newestProductsController = ScrollController()
-      ..addListener(() async {
-        if (_newestProductsController.offset >=
-            _newestProductsController.position.maxScrollExtent - 200)
-          setState(() {});
-      });
 
     // final Function() c = () async {
     //   for (var i = 0; i < 30; i++) {
@@ -42,8 +50,7 @@ class _MainTabState extends State<MainTab> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _newestProductsController.dispose();
+    // TODO: implement dispose ;
     super.dispose();
   }
 
@@ -114,6 +121,31 @@ class _MainTabState extends State<MainTab> {
               ),
               const SizedBox(height: 10),
               const ProductsList(collection: ProductsCollections.BestSelling),
+
+              AnimatedSize(
+                duration: 300.milliseconds,
+                curve: Curves.linearToEaseOut,
+                child: !_showForYouCollectionPart
+                    ? SizedBox.shrink()
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ProductsCollectionTitle(
+                            title: 'For You',
+                            onSeeAllTap: () {
+                              setState(() {
+                                _clearMoreProducts = false;
+                                _showMorePoducts = true;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                          const ProductsList(
+                              collection: ProductsCollections.ForYou),
+                        ],
+                      ),
+              ),
             ],
           ),
         ),
@@ -159,57 +191,3 @@ class _MainTabState extends State<MainTab> {
     );
   }
 }
-
-// class CategoryProductsList extends StatefulWidget {
-//   const CategoryProductsList({super.key, required this.categories});
-//   final List<int> categories;
-
-//   @override
-//   State<CategoryProductsList> createState() => CategoryProductsStateList();
-// }
-
-// class CategoryProductsStateList extends State<CategoryProductsList> {
-//   bool _showOpacity = false;
-//   bool _showSize = false;
-
-//   final Duration _anDur = 1.seconds;
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     print('init statttttttttttttttttttttttttttttttte');
-//   }
-
-//   // @override
-//   // void didUpdateWidget(covariant CategoryProductsList oldWidget) {
-//   //   // TODO: implement didUpdateWidget
-//   //   super.didUpdateWidget(oldWidget);
-//   //   if (oldWidget.categories.length != widget.categories.length) {
-//   //     if (widget.categories.isEmpty) {
-//   //       print('------------------------empty');
-//   //       _showOpacity = false;
-//   //       _anDur.delay().then((value) {
-//   //         if (this.mounted)
-//   //           setState(() {
-//   //             _showSize = false;
-//   //           });
-//   //       });
-//   //     } else {
-//   //       print('------------------------not empty');
-//   //       _showSize = true;
-//   //       _anDur.delay().then((value) {
-//   //         if (this.mounted)
-//   //           setState(() {
-//   //             _showOpacity = true;
-//   //           });
-//   //       });
-//   //     }
-//   //   }
-//   // }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     print('rebuild the faken widgtet');
-//     return 
-//   }
-// }

@@ -143,7 +143,7 @@ class AissamStore extends StatelessWidget {
           name: '/onboarding/greeting',
           page: () => OnBoardingGreetingPage(),
           middlewares: [
-            AuthenticationMiddleware(), // to route '/' if checked middleware
+            AuthenticationMiddleware(), // to route '/' if checked middlewar
           ],
         ),
         GetPage(
