@@ -1,16 +1,15 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ImageView extends StatefulWidget {
-  const ImageView({
-    Key? key,
-    required this.images,
-    required this.pageController,
-    required this.buildImageHeight,
-    this.tag = 'NO-TAG'
-  }) : super(key: key);
+  const ImageView(
+      {Key? key,
+      required this.images,
+      required this.pageController,
+      required this.buildImageHeight,
+      this.tag = 'NO-TAG'})
+      : super(key: key);
   final List<String> images;
   final PageController pageController;
   final Future<double> Function(int i) buildImageHeight;
@@ -51,7 +50,7 @@ class _ImageViewState extends State<ImageView> {
         itemCount: widget.images.length,
         itemBuilder: (_, i) {
           return GestureDetector(
-            onTap: () { 
+            onTap: () {
               widget.pageController.animateToPage(
                 widget.pageController.page!.toInt() + 1,
                 duration: 200.milliseconds,
@@ -60,7 +59,7 @@ class _ImageViewState extends State<ImageView> {
             },
             child: Hero(
               tag: widget.tag,
-              child: Image.asset(
+              child: Image.network(
                 widget.images.elementAt(i),
                 fit: BoxFit.contain,
                 alignment: Alignment.topCenter,

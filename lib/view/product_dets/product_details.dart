@@ -7,6 +7,7 @@ import 'package:aissam_store/view/product_dets/widgets/image_view_nav.dart';
 import 'package:aissam_store/view/product_dets/widgets/images&colors_albume.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({Key? key}) : super(key: key);
@@ -18,11 +19,9 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   late final PageController _imageViewCtrl;
   final List<String> _images = [
-    'assets/images/image_4.png',
-    'assets/images/image_5.png',
-    'assets/images/image_1 3x.png',
-    'assets/images/image_7.png',
-    'assets/images/image_6.png',
+    'https://www.woolha.com/media/2023/04/flutter-get-image-width-and-height-dimensions-1200x627.jpg',
+    'https://www.woolha.com/media/2023/04/flutter-get-image-width-and-height-dimensions-1200x627.jpg',
+    'https://www.woolha.com/media/2023/04/flutter-get-image-width-and-height-dimensions-1200x627.jpg',
   ];
 
   int _activeImgIndex = 0;
@@ -58,14 +57,17 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _imageViewCtrl.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
   final _maxImageViewHeight = Get.size.height * 0.85;
   Future<double> _getImageHeight(int i) async {
-    File image = File(_images.elementAt(i));
-    var decodedImage = await decodeImageFromList(image.readAsBytesSync());
+    final response =
+        await http.get(Uri.parse(_images.elementAt(i))).catchError(print);
+    final bytes = response.bodyBytes;
+    var decodedImage = await decodeImageFromList(bytes);
 
     final w = decodedImage.width.toDouble();
     final h = decodedImage.height.toDouble();
@@ -89,10 +91,11 @@ class _ProductDetailsState extends State<ProductDetails> {
       body: Stack(
         children: [
           ImageView(
-              images: _images,
-              pageController: _imageViewCtrl,
-              buildImageHeight: _getImageHeight,
-              tag: _images.elementAt(_activeImgIndex)),
+            images: _images,
+            pageController: _imageViewCtrl,
+            buildImageHeight: _getImageHeight,
+            tag: _images.elementAt(_activeImgIndex),
+          ),
           Positioned(
             child: SingleChildScrollView(
               controller: _scrollController,

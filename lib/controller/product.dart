@@ -81,8 +81,11 @@ class ProductsController extends GetxController {
     if (!c.canLoadMoreData || c.isLoading) {
       return c.loadedData;
     }
+
+    ///PRODUCTS BY CATEGORIES
     if (collection == ProductsCollections.ByCategory &&
         _selectedProductsCategories.isEmpty) return List.empty();
+    ///
     c.hasError = false;
     c.isLoading = true;
     update([c.widgetToUpdateTag]);
@@ -225,14 +228,4 @@ class ProductsController extends GetxController {
 
     return _categoriesLoadingCompleter!.future;
   }
-
-//   List<String> _selectedProductsCategories = [];
-// set selectedProductsCategories (List<String> newList, String id){
-//   _selectedProductsCategories = newList;
-//   update
-// }
-
-  // void updateSelectedCategories(List<int> newList){
-
-  // }
 }
