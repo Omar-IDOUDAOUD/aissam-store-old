@@ -5,6 +5,7 @@ import 'package:aissam_store/controller/cloud_storage.dart';
 import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
+import 'package:aissam_store/core/utils/error_popup.dart';
 import 'package:aissam_store/core/utils/hex_color.dart';
 import 'package:aissam_store/models/category.dart';
 import 'package:aissam_store/models/product.dart';
@@ -88,59 +89,58 @@ class ProductsController extends GetxController {
   Future<List<Product>> loadPagination(ProductsCollections collection) async {
     final ProductCollectionPaginationData c =
         paginationDataOfCollection(collection);
-    print('class: ${c.loadedData.length}');
-    if (!c.canLoadMoreData || c.isLoading) {
-      return c.loadedData;
-    }
-    if (collection == ProductsCollections.ByCategory &&
-        _selectedProductsCategories.isEmpty) return List.empty();
-
-    ///
-    c.hasError = false;
-    c.isLoading = true;
-    update([c.widgetToUpdateTag]);
-    late final QuerySnapshot<Product> result;
-    final String orderByField =
-        collection == ProductsCollections.BestSelling ? 'sells' : 'timestamp';
-    Query<Product> query =
-        _cloudProducts.orderBy('$orderByField', descending: true);
-
-    if (c.lastLoadedDoc != null)
-      query = query.startAfterDocument(c.lastLoadedDoc!);
-
-    if (c.collection == ProductsCollections.ByCategory) {
-      query = query.where('categories',
-          arrayContainsAny:
-              _selectedProductsCategories.map<String>((e) => e.name));
-    }
-
-    if (c.collection == ProductsCollections.ForYou) {
-      final userData = await _userController.getUserData();
-      final userCats = userData!.categories;
-      query = query.where('categories', arrayContainsAny: userCats);
-    }
-
-    query = query.limit(10);
-
-    result = await query.get().then((value) {
-      return value;
-    }, onError: (e) {
-      print('ctach error: ' + e.toString());
-      c.hasError = true;
+    try {
+      print('class: ${c.loadedData.length}');
+      if (!c.canLoadMoreData || c.isLoading) {
+        return c.loadedData;
+      }
+      if (collection == ProductsCollections.ByCategory &&
+          _selectedProductsCategories.isEmpty) return List.empty();
+      c.hasError = false;
+      c.isLoading = true;
       update([c.widgetToUpdateTag]);
-    });
+      late final QuerySnapshot<Product> result;
+      final String orderByField =
+          collection == ProductsCollections.BestSelling ? 'sells' : 'timestamp';
+      Query<Product> query =
+          _cloudProducts.orderBy('$orderByField', descending: true);
 
-    print('get next pagination. l: ${result.docs.length}');
+      if (c.lastLoadedDoc != null)
+        query = query.startAfterDocument(c.lastLoadedDoc!);
 
-    if (result.docs.isNotEmpty) c.lastLoadedDoc = result.docs.last;
+      if (c.collection == ProductsCollections.ByCategory) {
+        query = query.where('categories',
+            arrayContainsAny:
+                _selectedProductsCategories.map<String>((e) => e.name));
+      }
 
-    final newPaginationClip = result.docs.map((e) => e.data()).toList();
+      if (c.collection == ProductsCollections.ForYou) {
+        final userData = await _userController.getUserData();
+        final userCats = userData.categories;
+        query = query.where('categories', arrayContainsAny: userCats);
+      }
 
-    c.isLoading = false;
-    c.canLoadMoreData = result.docs.isNotEmpty;
-    c.loadedData.addAll(newPaginationClip);
-    update([c.widgetToUpdateTag]);
+      query = query.limit(10);
 
+      result = await query.get().then((value) {
+        return value;
+      }, onError: (e) {
+        print('ctach error: ' + e.toString());
+        c.hasError = true;
+        update([c.widgetToUpdateTag]);
+      });
+
+      print('get next pagination. l: ${result.docs.length}');
+
+      if (result.docs.isNotEmpty) c.lastLoadedDoc = result.docs.last;
+
+      c.isLoading = false;
+      c.canLoadMoreData = result.docs.isNotEmpty;
+      c.loadedData.addAll(result.docs.map((e) => e.data()));
+      update([c.widgetToUpdateTag]);
+    } catch (e) {
+      TestingErrorPopup.show(e.toString());
+    }
     return c.loadedData;
   }
 
