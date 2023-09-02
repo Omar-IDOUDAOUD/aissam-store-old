@@ -35,6 +35,8 @@ class AuthenticationService extends GetxService {
 
   // String get getUserId => _user!.uid;
 
+  // String get getUserId => _user!.uid;
+
   Future<AuthResult> _saveUserAfterAuthenticate(
       UserCredential userCredential) async {
     final UserController userController = UserController.instance;
