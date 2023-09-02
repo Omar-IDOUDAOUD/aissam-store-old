@@ -6,33 +6,42 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-  }
-
   static UserController get instance => Get.find();
+  FirebaseFirestore _fbfirestore = FirebaseFirestore.instance;
   final AuthenticationService _authenticationService =
       AuthenticationService.instance;
-  final CollectionReference<UserModel> _firestoreUsers =
-      FirebaseFirestore.instance.collection('Users').withConverter(
-            fromFirestore: UserModel.fromFirestore,
-            toFirestore: (UserModel model, _) => model.toMap(),
-          );
-  final CollectionReference<UserData> _firestoreUsersData =
-      FirebaseFirestore.instance.collection('UsersData').withConverter(
-            fromFirestore: UserData.fromFireStore,
-            toFirestore: (UserData model, _) => model.toMap(),
-          );
+
+  late final DocumentReference<UserModel> _firestoreUsers;
+  late final DocumentReference<UserData> _firestoreUsersData;
+  @override
+  void onInit() {
+    super.onInit();
+
+    _firestoreUsers = _fbfirestore
+        .collection('Users')
+        .withConverter(
+          fromFirestore: UserModel.fromFirestore,
+          toFirestore: (UserModel model, _) => model.toMap(),
+        )
+        .doc(_authenticationService.getUser!.uid);
+
+    _firestoreUsersData = _fbfirestore
+        .collection('UsersData')
+        .withConverter(
+          fromFirestore: UserData.fromFireStore,
+          toFirestore: (UserData model, _) => model.toMap(),
+        )
+        .doc(_authenticationService.getUser!.uid);
+  }
+
   String? get userId => _authenticationService.getUser!.uid;
   UserModel? _user;
   UserData? _userData;
 
   Future<void> saveUser(UserModel user, List<String> categories) async {
     try {
-      await _firestoreUsers.doc(userId).set(user, SetOptions(merge: true));
-      await _firestoreUsersData.doc(userId).set(
+      await _firestoreUsers.set(user, SetOptions(merge: true));
+      await _firestoreUsersData.set(
           UserData(id: userId!, categories: categories),
           SetOptions(merge: true));
     } catch (e) {
@@ -44,23 +53,23 @@ class UserController extends GetxController {
 
   Future<UserModel> getUser() async {
     if (_user != null) return _user!;
-    final userDoc = await _firestoreUsers.doc(userId).get();
+    final userDoc = await _firestoreUsers.get();
     _user = userDoc.data();
     return _user!;
   }
 
   Future<UserData> getUserData() async {
     if (_userData != null) return _userData!;
-    final userDoc = await _firestoreUsersData.doc(userId).get();
+    final userDoc = await _firestoreUsersData.get();
     _userData = userDoc.data();
     return _userData!;
   }
 
   Future<bool> checkUserExistence(uid) async {
-    final docUser = await _firestoreUsers.doc(uid).get().catchError((e) {
+    final docUser =
+        await _fbfirestore.collection('Users').doc(uid).get().catchError((e) {
       print('error: $e');
     });
-    _user = docUser.exists ? docUser.data() : _user;
     return docUser.exists;
   }
 }
