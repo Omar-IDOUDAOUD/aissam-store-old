@@ -85,6 +85,7 @@ class ProductsController extends GetxController {
     if (collection == ProductsCollections.ByCategory &&
         _selectedProductsCategories.isEmpty) return List.empty();
 
+    ///
     c.hasError = false;
     c.isLoading = true;
     update([c.widgetToUpdateTag]);
