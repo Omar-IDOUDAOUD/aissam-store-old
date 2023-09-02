@@ -1,5 +1,7 @@
+import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/home/tabs/favorites/widgets/favorite_card.dart';
+import 'package:aissam_store/view/home/tabs/favorites/widgets/loading_favorite_card.dart';
 import 'package:aissam_store/view/home/tabs/widgets/header_scroll_up_blur.dart';
 import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/cupertino.dart';
@@ -73,6 +75,11 @@ class _FavoritesTabState extends State<FavoritesTab> {
   late final ScrollController _scrollController;
   late ValueNotifier<double?> _scrollHeaderNotifier; //
   static const double _fixHeaderExtent = 70;
+  final FavoritesController _favoritesController = FavoritesController.instance;
+
+//3IJcVXxTtYixGG6ABoKw
+//3PbcwdXLqDUvrjyw2o5e
+//4ZvfZlE3sr9VKpSf2suq
 
   @override
   void initState() {
@@ -80,6 +87,10 @@ class _FavoritesTabState extends State<FavoritesTab> {
     // TODO: implement initState
     _scrollController = ScrollController(initialScrollOffset: 0)
       ..addListener(() {
+        if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent) {
+          _favoritesController.loadFavsPagination();
+        }
         if (_scrollController.offset <= _fixHeaderExtent &&
             _scrollController.offset >= 0) {
           _scrollHeaderNotifier.value = _scrollController.offset;
@@ -87,6 +98,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
           _scrollHeaderNotifier.value = null;
         }
       });
+    _favoritesController.loadFavsPagination();
     _scrollHeaderNotifier = ValueNotifier(0);
   }
 
@@ -100,43 +112,56 @@ class _FavoritesTabState extends State<FavoritesTab> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      // padding: ,
-
-      physics: BouncingScrollPhysics(),
-      controller: _scrollController,
-      slivers: [
-        SliverPersistentHeader(
-          floating: true,
-          pinned: false,
-          delegate: _HeaderDelegate(
-            scrollController: _scrollController,
-            notifier: _scrollHeaderNotifier,
-            fixedExtent: _fixHeaderExtent,
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 25),
-          sliver: SliverToBoxAdapter(
-            child: CustomTextField(
-              prefixIconPath: 'assets/icons/search_small.svg',
-              onClear: () {},
-              // onCommit: () {},
-              focusNode: FocusNode(),
+    return GetBuilder<FavoritesController>(
+      id: _favoritesController.paginationDataResult.widgetToUpdateTag,
+      init: _favoritesController,
+      builder: (c) {
+        return CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          controller: _scrollController,
+          slivers: [
+            SliverPersistentHeader(
+              floating: true,
+              pinned: false,
+              delegate: _HeaderDelegate(
+                scrollController: _scrollController,
+                notifier: _scrollHeaderNotifier,
+                fixedExtent: _fixHeaderExtent,
+              ),
             ),
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-          sliver: SliverList.separated(
-            itemCount: 20,
-            separatorBuilder: (_, i) => SizedBox(
-              height: 15,
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              sliver: SliverToBoxAdapter(
+                child: CustomTextField(
+                  prefixIconPath: 'assets/icons/search_small.svg',
+                  onClear: () {},
+                  // onCommit: () {},
+                  focusNode: FocusNode(),
+                ),
+              ),
             ),
-            itemBuilder: (_, i) => FavoriteCard(),
-          ),
-        ),
-      ],
+            if (!c.paginationDataResult.isLoading &&
+                c.paginationDataResult.loadedData.isEmpty)
+              SliverToBoxAdapter(child: Text('No Data'))
+            else
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                sliver: SliverList.separated(
+                  itemCount: c.paginationDataResult.loadedData.length +
+                      (c.paginationDataResult.isLoading ? 3 : 0),
+                  separatorBuilder: (_, i) => SizedBox(
+                    height: 15,
+                  ),
+                  itemBuilder: (_, i) {
+                    if (i >= c.paginationDataResult.loadedData.length)
+                      return const LoadingFavoriteCard();
+                    return FavoriteCard();
+                  },
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

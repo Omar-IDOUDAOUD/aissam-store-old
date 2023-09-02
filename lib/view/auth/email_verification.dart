@@ -58,7 +58,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
           if (!emailVerified)
             MaterialButton(
               onPressed: () =>
-                  Get.toNamed('/onboarding/user_info_customization'),
+                  Get.offNamed('/onboarding/user_info_customization'),
               child: Text('skip email verification'),
             ),
           if (emailVerified)

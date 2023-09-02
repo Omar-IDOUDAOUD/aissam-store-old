@@ -106,7 +106,7 @@ class ProductsController extends GetxController {
 
     if (c.collection == ProductsCollections.ForYou) {
       final userData = await _userController.getUserData();
-      final userCats = userData.categories;
+      final userCats = userData!.categories;
       query = query.where('categories', arrayContainsAny: userCats);
     }
 

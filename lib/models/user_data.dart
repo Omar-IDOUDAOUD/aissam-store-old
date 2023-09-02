@@ -8,13 +8,13 @@ import 'package:flutter/foundation.dart';
 import 'package:aissam_store/models/cart_item.dart';
 
 class UserData {
-  final String id;
+  String? id;
   List<String>? categories;
   List<String>? favoritedProducts;
   List<Map<String, dynamic>>? searchHistory;
   List<CartItem>? userCart;
   UserData({
-    required this.id,
+    this.id,
     this.categories,
     this.favoritedProducts,
     this.searchHistory,

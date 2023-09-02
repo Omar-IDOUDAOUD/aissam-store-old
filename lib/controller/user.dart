@@ -72,4 +72,25 @@ class UserController extends GetxController {
     });
     return docUser.exists;
   }
+
+  // Future<bool> addFavoritedProduct(String productId) async {
+  //   bool result = true;
+  //   result = await FirebaseFirestore.instance
+  //       .runTransaction<bool>((transaction) async {
+  //     final List<String> latestFavsIds = await transaction
+  //         .get(_firestoreUsersData.doc(userId))
+  //         .then<List<String>>((value) => value.data()!.favoritedProducts!);
+  //     latestFavsIds.add(productId);
+  //     transaction.set(_firestoreUsersData.doc(userId),
+  //         UserData(favoritedProducts: latestFavsIds), SetOptions(merge: true));
+  //     return true;
+  //   }).then(
+  //     (value) => true,
+  //     onError: (e) {
+  //       result = false;
+  //       print('catch error: $e');
+  //     },
+  //   );
+  //   return result;
+  // }
 }

@@ -1,3 +1,4 @@
+import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
@@ -17,13 +18,13 @@ class MainTab extends StatefulWidget {
 }
 
 class _MainTabState extends State<MainTab> {
-  final ProductsController _productsController = ProductsController.instance;
+  final FavoritesController _favoritesController = FavoritesController.instance;
   final UserController _userController = UserController.instance;
 
   bool _showForYouCollectionPart = false;
   _checkAndAddForYouCollectionPart() {
     _userController.getUserData().then((value) {
-      if (value.categories!.isNotEmpty && mounted) {
+      if (value!.categories!.isNotEmpty && mounted) {
         setState(() {
           _showForYouCollectionPart = true;
         });
@@ -39,13 +40,31 @@ class _MainTabState extends State<MainTab> {
 
     super.initState();
 
-    // final Function() c = () async {
-    //   for (var i = 0; i < 30; i++) {
-    //     await _productsController.addTestProduct();
-    //     await 1.seconds.delay();
-    //   }
-    // };
-    // c();
+    final List<String> ids = [
+      '1pcznXNOkLnso45KBvHg',
+      '3IJcVXxTtYixGG6ABoKw',
+      '3PbcwdXLqDUvrjyw2o5e',
+      '4ZvfZlE3sr9VKpSf2suq',
+      '5vrtKubGmpPMbFDsRyW7',
+      '6FBs1BJVe6qHF3i916ZI',
+      '8CvIxZ8LzQJDaz2FHWkA',
+      '8JlaUSrNoRip4i0M1X4B',
+      '8ezXOoUHGAwsZ7L6FPsZ',
+      '9O0u1CCVAWnjgfLEZ7hI',
+      'AGc1WwsqPg6WoxIVt3Wr',
+      'ATeGMSElenh0ekDF952j',
+      'Avk1MTiEQU1pokJDopF1',
+      'DhMMBDB57a8D6cr7HzjK',
+    ];
+
+    final Future Function() c = () async {
+      for (var element in ids) {
+        await _favoritesController.addFavoritedProduct(element);
+      }
+    };
+    // c().then((v) {
+    //   print('adding favs completed');
+    // });
   }
 
   @override

@@ -66,7 +66,7 @@ class _OnBoardingUserInfoCustomizationPageState
                     ..addListener(() {
                       _buildingUserModel!.phoneNumber = _phoneNumberCtrl.text;
                     });
-                  return value;
+                  return value!;
                 }),
           builder: (context, snapshot) {
             if (snapshot.hasError) return Text('AN ERROR OCCURRED');
