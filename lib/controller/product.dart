@@ -46,8 +46,9 @@ class ProductsController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     _cloudProducts = _fbfirestore.collection('Products').withConverter(
-        fromFirestore: Product.fromFirestore,
-        toFirestore: (Product model, _) => model.toMap());
+          fromFirestore: Product.fromFirestore,
+          toFirestore: (Product model, _) => model.toMap(),
+        );
   }
 
   final List<ProductCollectionPaginationData> _pagingDataByCollection = [
@@ -83,6 +84,7 @@ class ProductsController extends GetxController {
     }
     if (collection == ProductsCollections.ByCategory &&
         _selectedProductsCategories.isEmpty) return List.empty();
+
     c.hasError = false;
     c.isLoading = true;
     update([c.widgetToUpdateTag]);

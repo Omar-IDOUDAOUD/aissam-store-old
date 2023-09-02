@@ -24,21 +24,20 @@ class _ProductsListState extends State<ProductsList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print('INITSTATE');
-    _scrollController = ScrollController()
-      ..addListener(() {
-        if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent) {
-          _productsController.loadPagination(widget.collection);
-        }
-      });
+    _scrollController = ScrollController()..addListener(_dataLoadingHandler);
     final pd =
         _productsController.paginationDataOfCollection(widget.collection);
     if (pd.lastLoadedDoc == null)
       _productsController.loadPagination(widget.collection);
     _listUpdateTag = pd.widgetToUpdateTag;
+  }
+
+  void _dataLoadingHandler() {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent) {
+      _productsController.loadPagination(widget.collection);
+    }
   }
 
   late final String _listUpdateTag;
@@ -58,7 +57,6 @@ class _ProductsListState extends State<ProductsList> {
         id: _listUpdateTag,
         init: _productsController,
         builder: (controller) {
-          print('upfdaaaaaaaaaaaaaaaaaaaaaaaaa');
           final paginationData =
               controller.paginationDataOfCollection(widget.collection);
           if (paginationData.hasError)
