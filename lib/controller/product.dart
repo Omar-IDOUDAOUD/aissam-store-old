@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:aissam_store/controller/cloud_storage.dart';
+import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
 import 'package:aissam_store/core/utils/hex_color.dart';
@@ -38,6 +39,7 @@ class ProductsController extends GetxController {
   static ProductsController get instance => Get.find();
   final FirebaseFirestore _fbfirestore = FirebaseFirestore.instance;
   final UserController _userController = UserController.instance;
+  final FavoritesController _favoritesController = FavoritesController.instance;
 
   late CollectionReference<Product> _cloudProducts;
 
@@ -49,6 +51,14 @@ class ProductsController extends GetxController {
           fromFirestore: Product.fromFirestore,
           toFirestore: (Product model, _) => model.toMap(),
         );
+
+    _userController.firestoreUserData.snapshots().listen((event) {
+      final d = event.data();
+
+      /// handle on product favorated action:
+
+      ///
+    });
   }
 
   final List<ProductCollectionPaginationData> _pagingDataByCollection = [
@@ -124,9 +134,11 @@ class ProductsController extends GetxController {
 
     if (result.docs.isNotEmpty) c.lastLoadedDoc = result.docs.last;
 
+    final newPaginationClip = result.docs.map((e) => e.data()).toList();
+
     c.isLoading = false;
     c.canLoadMoreData = result.docs.isNotEmpty;
-    c.loadedData.addAll(result.docs.map((e) => e.data()));
+    c.loadedData.addAll(newPaginationClip);
     update([c.widgetToUpdateTag]);
 
     return c.loadedData;

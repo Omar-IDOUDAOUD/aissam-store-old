@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/view/public/text_field.dart'; 
+import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
@@ -95,16 +95,15 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
 
                 Row(
                   children: [
-                    Expanded(child: 
-                    
-                    _getButton('Cancel', false),
-                    ), 
-                    const SizedBox(width: 7,), 
-                    Expanded(child: 
-                    _getButton('Submit', true)
-                    ), 
+                    Expanded(
+                      child: _getButton('Cancel', false),
+                    ),
+                    const SizedBox(
+                      width: 7,
+                    ),
+                    Expanded(child: _getButton('Submit', true)),
                   ],
-                ), 
+                ),
 
                 const SizedBox(
                   height: 15,
@@ -119,21 +118,21 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
 
   _getButton(String label, bool recommendedButton) {
     return MaterialButton(
-      onPressed:Get.back,
-      elevation:recommendedButton ? 15: 0,
+      onPressed: Get.back,
+      elevation: recommendedButton ? 15 : 0,
       focusElevation: 0,
       hoverElevation: 0,
       highlightElevation: 0,
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       height: 60,
-      color:recommendedButton ? CstColors.a : Colors.grey.shade300,
+      color: recommendedButton ? CstColors.a : Colors.grey.shade300,
       child: Center(
         child: Text(
           label,
           style: Get.textTheme.bodyLarge!.copyWith(
-            color: recommendedButton ? Colors.white : CstColors.a, 
-            fontWeight: FontWeight.normal, 
+            color: recommendedButton ? Colors.white : CstColors.a,
+            fontWeight: FontWeight.normal,
           ),
         ),
       ),
@@ -258,7 +257,6 @@ class _SelectColorDropdownMenuState extends State<SelectColorDropdownMenu> {
                 //     alignment: Alignment.centerRight,
                 //     children:[
                 //       ...List.generate(_selectedColors, (index) {
-                //         print('faken print');
                 //         return Positioned(
                 //         right: _selectedColors * 5,
                 //         child: CircleAvatar(

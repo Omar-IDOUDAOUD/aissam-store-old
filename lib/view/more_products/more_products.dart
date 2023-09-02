@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
@@ -31,6 +32,7 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
   bool _minimizeTitle = false;
 
   final ProductsController _productsController = ProductsController.instance;
+  FavoritesController _favoritesController = FavoritesController.instance;
 
   late final ScrollController _scrollController;
 
@@ -113,6 +115,16 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
                           return const LoadingProductCard();
                         return ProductCard(
                           data: paginationData.loadedData.elementAt(i),
+                          isFavoritedProductChecker:
+                              _favoritesController.checkProductIsFavorited,
+                          onFavorite: (b) async {
+                            if (b)
+                              await _favoritesController.addFavoritedProduct(
+                                  paginationData.loadedData.elementAt(i).id!);
+                            else
+                              await _favoritesController.removeFavoritedProduct(
+                                  paginationData.loadedData.elementAt(i).id!);
+                          },
                         );
                       },
                     );

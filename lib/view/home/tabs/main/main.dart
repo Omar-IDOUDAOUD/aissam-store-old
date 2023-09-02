@@ -141,7 +141,7 @@ class _MainTabState extends State<MainTab> {
               ),
               const SizedBox(height: 10),
               const ProductsList(collection: ProductsCollections.BestSelling),
-
+              const SizedBox(height: 15),
               AnimatedSize(
                 duration: 300.milliseconds,
                 curve: Curves.linearToEaseOut,

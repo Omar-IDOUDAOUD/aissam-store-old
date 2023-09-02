@@ -103,14 +103,6 @@ class _FavoritesTabState extends State<FavoritesTab> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    _scrollController.dispose();
-    _scrollHeaderNotifier.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GetBuilder<FavoritesController>(
       id: _favoritesController.paginationDataResult.widgetToUpdateTag,
@@ -155,7 +147,23 @@ class _FavoritesTabState extends State<FavoritesTab> {
                   itemBuilder: (_, i) {
                     if (i >= c.paginationDataResult.loadedData.length)
                       return const LoadingFavoriteCard();
-                    return FavoriteCard();
+                    return Builder(
+                      builder: (context) {
+                        final itemData =
+                            c.paginationDataResult.loadedData.elementAt(i);
+                        return FavoriteCard(
+                          data: itemData,
+                          onFavoriteChange: (b) async {
+                            if (b)
+                              await _favoritesController
+                                  .addFavoritedProduct(itemData.id!);
+                            else
+                              await _favoritesController
+                                  .removeFavoritedProduct(itemData.id!);
+                          },
+                        );
+                      },
+                    );
                   },
                 ),
               ),
@@ -163,5 +171,13 @@ class _FavoritesTabState extends State<FavoritesTab> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _scrollController.dispose();
+    _scrollHeaderNotifier.dispose();
+    super.dispose();
   }
 }

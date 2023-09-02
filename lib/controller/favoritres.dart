@@ -4,6 +4,30 @@ import 'package:aissam_store/models/product.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+///UNCOMPLETED WORK
+class FavoritedProduct {
+  final DateTime? favoritedAt;
+  final String? productId;
+  Product? product;
+
+  FavoritedProduct({this.favoritedAt, this.productId, this.product});
+
+  factory FavoritedProduct.fromMap(Map<String, dynamic> data) {
+    return FavoritedProduct(
+      productId: data['product_id'],
+      favoritedAt: (data['created_at'] as Timestamp).toDate(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'product_id': productId,
+      'created_at': Timestamp.fromDate(favoritedAt!),
+    };
+  }
+}
+
+////
 class FavoritesController extends GetxController {
   static FavoritesController get instance => Get.find();
 
@@ -66,12 +90,25 @@ class FavoritesController extends GetxController {
   }
 
   Future<void> addFavoritedProduct(String id) async {
-    await _fbfirestore
-        .collection('UsersData')
-        .doc(_userController.userId)
-        .update({
+    await _userController.firestoreUserData.update({
       'favorited_products': FieldValue.arrayUnion([id])
+    }).then((value) {
+      _fpdr.reset();
     });
-    print('add faken fav id: $id, ');
+  }
+
+  Future<void> removeFavoritedProduct(String id) async {
+    await _userController.firestoreUserData.update({
+      'favorited_products': FieldValue.arrayRemove([id])
+    }).then((value) {
+      _fpdr.loadedData.removeWhere((element) => element.id == id);
+    });
+  }
+
+  Future<bool> checkProductIsFavorited(String productId) async {
+    final List<String> userFavsPrdsIds = await _userController
+        .getUserData()
+        .then((value) => value.favoritedProducts!);
+    return userFavsPrdsIds.contains(productId);
   }
 }
