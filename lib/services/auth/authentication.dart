@@ -29,7 +29,9 @@ class AuthenticationService extends GetxService {
 
   bool get userLoggenIn => _firebaseAuth.currentUser != null;
 
-  User? get getUser => _user;
+  User? get getUser => _firebaseAuth.currentUser;
+
+  // String get getUserId => _user!.uid;
 
   // String get getUserId => _user!.uid;
 
