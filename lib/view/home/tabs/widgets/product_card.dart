@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/models/product.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,9 @@ class ProductCard extends StatefulWidget {
     this.width = 0,
     this.showShadow = false,
     this.onFavorite,
-    this.isFavorited = false,
+    this.isFavoritedProductChecker,
+
+    // this.isFavorited = false,
   }) : super(key: key);
 
   final Product data;
@@ -21,14 +24,56 @@ class ProductCard extends StatefulWidget {
   // default width to 155
   final double width;
   final bool showShadow;
-  final Function(bool b)? onFavorite;
-  bool isFavorited;
+  final Future Function(bool b)? onFavorite;
+  final Future<bool> Function(String productId)? isFavoritedProductChecker;
+  // final Future Function(bool b)? onFavorite;
+  // bool isFavorited;
 
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
 
 class _ProductCardState extends State<ProductCard> {
+  bool _isFavorited = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (widget.isFavoritedProductChecker != null) {
+      widget.isFavoritedProductChecker!(widget.data.id!).then((value) {
+        if (mounted)
+          setState(() {
+            _isFavorited = value;
+          });
+      });
+    }
+  }
+
+  void _favoriteProduct() {
+    setState(() {
+      _isFavorited = true;
+    });
+    if (widget.onFavorite == null) return;
+    widget.onFavorite!(_isFavorited).then((value) => null, onError: (e) {
+      if (mounted)
+        setState(() {
+          _isFavorited = false;
+        });
+    });
+  }
+
+  void _unFavoriteProduct() {
+    setState(() {
+      _isFavorited = false;
+    });
+    if (widget.onFavorite == null) return;
+    widget.onFavorite!(_isFavorited).then((value) => null, onError: (e) {
+      if (mounted)
+        setState(() {
+          _isFavorited = true;
+        });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -132,11 +177,10 @@ class _ProductCardState extends State<ProductCard> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  widget.isFavorited = !widget.isFavorited;
-                                });
-                                if (widget.onFavorite != null)
-                                  widget.onFavorite!(widget.isFavorited);
+                                if (!_isFavorited)
+                                  _favoriteProduct();
+                                else
+                                  _unFavoriteProduct();
                               },
                               child: Container(
                                 height: 60,
@@ -148,7 +192,7 @@ class _ProductCardState extends State<ProductCard> {
                                       topLeft: Radius.circular(15)),
                                 ),
                                 child: SvgPicture.asset(
-                                  widget.isFavorited
+                                  _isFavorited
                                       ? 'assets/icons/ic_fluent_heart_24_filled.svg'
                                       : 'assets/icons/favorite.svg',
                                   color: Colors.white,

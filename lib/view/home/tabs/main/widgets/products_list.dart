@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
 import 'package:aissam_store/models/category.dart';
@@ -21,6 +22,7 @@ class _ProductsListState extends State<ProductsList> {
   final ProductsController _productsController = ProductsController.instance;
 
   late final ScrollController _scrollController;
+  FavoritesController _favoritesController = FavoritesController.instance;
 
   @override
   void initState() {
@@ -80,9 +82,19 @@ class _ProductsListState extends State<ProductsList> {
               if (i >= paginationData.loadedData.length)
                 return const LoadingProductCard();
               return ProductCard(
+                isFavoritedProductChecker:
+                    _favoritesController.checkProductIsFavorited,
                 data: paginationData.loadedData.elementAt(i),
                 width: Get.size.width * 0.3,
                 showShadow: i == 0,
+                onFavorite: (b) async {
+                  if (b)
+                    await _favoritesController.addFavoritedProduct(
+                        paginationData.loadedData.elementAt(i).id!);
+                  else
+                    await _favoritesController.removeFavoritedProduct(
+                        paginationData.loadedData.elementAt(i).id!);
+                },
               );
             },
             separatorBuilder: (_, i) => const SizedBox(

@@ -7,7 +7,7 @@ class HomeControllersBindings extends Bindings {
   @override
   void dependencies() {
     Get.put(CloudStorageController());
+    Get.put(FavoritesController());
     Get.put(ProductsController());
-    Get.lazyPut(() => FavoritesController());
   }
 }

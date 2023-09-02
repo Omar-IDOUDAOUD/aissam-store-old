@@ -11,13 +11,13 @@ class UserController extends GetxController {
   final AuthenticationService _authenticationService =
       AuthenticationService.instance;
 
-  late final DocumentReference<UserModel> _firestoreUsers;
-  late final DocumentReference<UserData> _firestoreUsersData;
+  late final DocumentReference<UserModel> firestoreUser;
+  late final DocumentReference<UserData> firestoreUserData;
   @override
   void onInit() {
     super.onInit();
 
-    _firestoreUsers = _fbfirestore
+    firestoreUser = _fbfirestore
         .collection('Users')
         .withConverter(
           fromFirestore: UserModel.fromFirestore,
@@ -25,13 +25,18 @@ class UserController extends GetxController {
         )
         .doc(_authenticationService.getUser!.uid);
 
-    _firestoreUsersData = _fbfirestore
+    firestoreUserData = _fbfirestore
         .collection('UsersData')
         .withConverter(
           fromFirestore: UserData.fromFireStore,
           toFirestore: (UserData model, _) => model.toMap(),
         )
         .doc(_authenticationService.getUser!.uid);
+    firestoreUserData.snapshots().listen((event) {
+      _userData = event.data();
+      // print(
+      //     'SNAPSHOT EVENT DETECTED: favs: ${_userData!.favoritedProducts.toString()}');
+    });
   }
 
   String? get userId => _authenticationService.getUser!.uid;
@@ -40,9 +45,8 @@ class UserController extends GetxController {
 
   Future<void> saveUser(UserModel user, List<String> categories) async {
     try {
-      await _firestoreUsers.set(user, SetOptions(merge: true));
-      await _firestoreUsersData.set(
-          UserData(id: userId!, categories: categories),
+      await firestoreUser.set(user, SetOptions(merge: true));
+      await firestoreUserData.set(UserData(id: userId!, categories: categories),
           SetOptions(merge: true));
     } catch (e) {
       throw Exception("can't save user and user data!, error: $e");
@@ -53,14 +57,14 @@ class UserController extends GetxController {
 
   Future<UserModel> getUser() async {
     if (_user != null) return _user!;
-    final userDoc = await _firestoreUsers.get();
+    final userDoc = await firestoreUser.get();
     _user = userDoc.data();
     return _user!;
   }
 
   Future<UserData> getUserData() async {
     if (_userData != null) return _userData!;
-    final userDoc = await _firestoreUsersData.get();
+    final userDoc = await firestoreUserData.get();
     _userData = userDoc.data();
     return _userData!;
   }
