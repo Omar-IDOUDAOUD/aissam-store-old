@@ -110,6 +110,7 @@ class _MainTabState extends State<MainTab> {
               ),
               const SizedBox(height: 10),
               const ProductsList(collection: ProductsCollections.Newest),
+              const SizedBox(height: 15),
               ProductsCollectionTitle(
                 title: 'Best Selling',
                 onSeeAllTap: () {

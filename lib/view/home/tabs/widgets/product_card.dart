@@ -1,135 +1,284 @@
+import 'dart:math';
+
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   ProductCard({
     Key? key,
     required this.data,
+    this.width = 0,
+    this.showShadow = false,
+    this.onFavorite,
+    this.isFavorited = false,
   }) : super(key: key);
 
   final Product data;
 
+  // default width to 155
+  final double width;
+  final bool showShadow;
+  final Function(bool b)? onFavorite;
+  bool isFavorited;
+
+  @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120,
+      width: max(widget.width, 155),
+      height: 300,
       child: GestureDetector(
         onTap: () {
           Get.toNamed('/product_details');
         },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 170,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.network(
-                      data.cardPicture!,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.topCenter,
-                    ),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.black.withOpacity(.5),
-                            Colors.black.withOpacity(.05),
-                            Colors.black.withOpacity(.0),
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: widget.showShadow ? Colors.white : Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              if (widget.showShadow)
+                BoxShadow(
+                  offset: Offset(5, 0),
+                  blurRadius: 60,
+                  color: Colors.black.withOpacity(.1),
+                )
+            ],
+          ),
+          // elevation: showShadow ? 100 : 0,
+          // shadowColor: Colors.black.withOpacity(.2),
+          // decoration: BoxDecoration(
+          // ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                flex: 6,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Positioned.fill(
+                        child: Image.network(
+                          widget.data.cardPicture!,
+                          fit: BoxFit.fitWidth,
+                          alignment: Alignment.topCenter,
                         ),
                       ),
-                    ),
-                    // if (isHot)
-                    //   Positioned(
-                    //     bottom: 10,
-                    //     left: 10,
-                    //     child: Container(
-                    //       height: 17,
-                    //       decoration: BoxDecoration(
-                    //           color: CstColors.d,
-                    //           borderRadius: BorderRadius.circular(8)),
-                    //       padding: EdgeInsets.only(left: 3, right: 5),
-                    //       child: Row(
-                    //         children: [
-                    //           SvgPicture.asset('assets/icons/flam.svg',
-                    //               height: 14),
-                    //           Text(
-                    //             'HOT',
-                    //             style: Get.textTheme.displayLarge!.copyWith(
-                    //               color: CstColors.e,
-                    //               fontWeight: FontWeight.normal,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${data.price} MAD',
-                  style: Get.textTheme.bodyMedium!.copyWith(
-                    color: CstColors.a,
-                    fontWeight: FontWeight.bold,
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        left: 0,
+                        height: 70,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.black.withOpacity(.4),
+                                Colors.black.withOpacity(.0),
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${widget.data.price} USD',
+                                    style:
+                                        Get.textTheme.headlineSmall!.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  // SizedBox(
+                                  //   height: 7,
+                                  // ),
+                                  Row(
+                                    children: List.generate(
+                                      5,
+                                      (index) => SvgPicture.asset(
+                                        'assets/icons/preview_star.svg',
+                                        color: index >= 3
+                                            ? Colors.white.withOpacity(.4)
+                                            : Colors.white,
+                                        height: 16,
+                                        width: 16,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  widget.isFavorited = !widget.isFavorited;
+                                });
+                                if (widget.onFavorite != null)
+                                  widget.onFavorite!(widget.isFavorited);
+                              },
+                              child: Container(
+                                height: 60,
+                                width: 40,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(.1),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15)),
+                                ),
+                                child: SvgPicture.asset(
+                                  widget.isFavorited
+                                      ? 'assets/icons/ic_fluent_heart_24_filled.svg'
+                                      : 'assets/icons/favorite.svg',
+                                  color: Colors.white,
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                SvgPicture.asset(
-                  'assets/icons/favorite.svg',
-                  height: 18,
-                )
-              ],
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              data.title!,
-              textAlign: TextAlign.start,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: Get.textTheme.bodyMedium!.copyWith(
-                color: CstColors.c,
-                height: 1.3,
               ),
-            ),
-            Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/del_alt.svg',
-                  height: 13,
-                ),
-                SizedBox(
-                  width: 3,
-                ),
-                Text(
-                  '${data.colors!.length} color',
-                  style: Get.textTheme.displayLarge!.copyWith(
-                    color: CstColors.c,
-                    // fontWeight: FontWeight.bold,
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.data.categories!.first,
+                            style: Get.textTheme.bodySmall!.copyWith(
+                              color: CstColors.c,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            '${widget.data.price} USD',
+                            style: Get.textTheme.bodySmall!.copyWith(
+                              color: CstColors.a,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        widget.data.title!,
+                        textAlign: TextAlign.start,
+                        maxLines: 2,
+                        overflow: TextOverflow.fade,
+                        style: Get.textTheme.bodyMedium!.copyWith(
+                          color: CstColors.a,
+                          fontWeight: FontWeight.w700,
+                          height: 1.3,
+                        ),
+                      ),
+                      Spacer(),
+                      Row(
+                        children: [
+                          Text(
+                            '${widget.data.colors!.length} colors',
+                            style: Get.textTheme.bodyMedium!.copyWith(
+                              color: CstColors.a,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              height: 15,
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: List.generate(
+                                  widget.data.colors!.length,
+                                  (index) => Positioned(
+                                    child: _getColorCircle(
+                                        widget.data.colors!.elementAt(index)),
+                                    right: 7.0 * index,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/preview_star.svg',
+                            color: Colors.orangeAccent,
+                            height: 16,
+                            width: 16,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            widget.data.rankingAverage.toString(),
+                            style: Get.textTheme.bodyMedium!.copyWith(
+                              color: CstColors.b,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            '${widget.data.reviews} reviews',
+                            style: Get.textTheme.bodyMedium!.copyWith(
+                              color: CstColors.b,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  Widget _getColorCircle(Color color) => SizedBox.square(
+        dimension: 15,
+        child: DecoratedBox(
+            decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+                border: Border.all(
+                    width: 1.5,
+                    color: widget.showShadow
+                        ? Colors.white
+                        : Colors.grey.shade200))),
+      );
 }

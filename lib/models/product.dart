@@ -106,8 +106,7 @@ class Product {
     final data = snapshot.data()!;
     return Product(
         id: snapshot.id,
-        title:
-            "${data['sells']}, ${(data['timestamp'] as Timestamp).toDate().second.toString()}",
+        title: data['title'],
         description: data['description'],
         price: data['price'],
         reviews: data['reviews'],

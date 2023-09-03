@@ -53,7 +53,7 @@ class _ProductsListState extends State<ProductsList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 270,
+      height: 300,
       child: GetBuilder<ProductsController>(
         id: _listUpdateTag,
         init: _productsController,
@@ -72,6 +72,7 @@ class _ProductsListState extends State<ProductsList> {
               ),
             );
           return ListView.separated(
+            clipBehavior: Clip.none,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             controller: _scrollController,
             itemCount: paginationData.loadedData.length +
@@ -80,7 +81,11 @@ class _ProductsListState extends State<ProductsList> {
             itemBuilder: (_, i) {
               if (i >= paginationData.loadedData.length)
                 return const LoadingProductCard();
-              return ProductCard(data: paginationData.loadedData.elementAt(i));
+              return ProductCard(
+                data: paginationData.loadedData.elementAt(i),
+                width: Get.size.width * 0.3,
+                showShadow: i == 0,
+              );
             },
             separatorBuilder: (_, i) => const SizedBox(
               width: 10,

@@ -159,6 +159,7 @@ class AissamStore extends StatelessWidget {
       ],
       initialRoute: '/onboarding/greeting',
       initialBinding: AuthenticationServiceBinding(),
+      // home: TestPage(),
     );
   }
 }
