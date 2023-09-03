@@ -7,6 +7,6 @@ class AuthenticationServiceBinding extends Bindings {
   void dependencies() {
     print('inject AuthenticationService to dependencie');
     Get.put(AuthenticationService(), permanent: true);
-    Get.put(UserController(), permanent: true);
+    Get.lazyPut(() => UserController());
   }
 }
