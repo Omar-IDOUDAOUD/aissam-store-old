@@ -32,46 +32,50 @@ class ErrorDialog extends StatefulWidget {
 class _ErrorDialogState extends State<ErrorDialog> {
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: Get.size.height * 0.8),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 60,
-            child: Row(
-              children: [
-                Text(
-                  'Error log: ',
-                  style: Get.textTheme.bodyLarge!.copyWith(color: Colors.black),
-                ),
-                Spacer(),
-                IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _ErrorsList.clear();
-                      });
-                    },
-                    icon: Icon(Icons.delete))
-              ],
+    return Material(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: Get.size.height * 0.8),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 60,
+              child: Row(
+                children: [
+                  Text(
+                    'Error log: ',
+                    style:
+                        Get.textTheme.bodyLarge!.copyWith(color: Colors.black),
+                  ),
+                  Spacer(),
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _ErrorsList.clear();
+                        });
+                      },
+                      icon: Icon(Icons.delete))
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.all(15),
-              itemCount: _ErrorsList.length,
-              separatorBuilder: (ctx, i) {
-                return SizedBox(
-                    height: 1, child: ColoredBox(color: Colors.black));
-              },
-              itemBuilder: (_, i) {
-                return Text(
-                  _ErrorsList.elementAt(i),
-                  style: Get.textTheme.bodyLarge!.copyWith(color: Colors.black),
-                );
-              },
+            Expanded(
+              child: ListView.separated(
+                padding: EdgeInsets.all(15),
+                itemCount: _ErrorsList.length,
+                separatorBuilder: (ctx, i) {
+                  return SizedBox(
+                      height: 1, child: ColoredBox(color: Colors.black));
+                },
+                itemBuilder: (_, i) {
+                  return Text(
+                    _ErrorsList.elementAt(i),
+                    style:
+                        Get.textTheme.bodyLarge!.copyWith(color: Colors.black),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
