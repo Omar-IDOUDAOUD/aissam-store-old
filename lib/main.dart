@@ -44,8 +44,7 @@ Future<void> main() async {
   });
 
   FlutterError.onError = (FlutterErrorDetails details) {
-    TestingErrorPopup.newApp(
-        'error by  catch two, ${details.exceptionAsString()}');
+    TestingErrorPopup.newApp('error by  catch two, ${details.exception}');
     print("=================== CAUGHT FLUTTER ERROR");
   };
 }
