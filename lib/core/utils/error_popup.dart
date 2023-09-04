@@ -5,6 +5,15 @@ import 'package:get/get_core/src/get_main.dart';
 List<String> _ErrorsList = [];
 
 class TestingErrorPopup {
+  static void newApp(String errorMsg) {
+    _ErrorsList.add(errorMsg);
+    runApp(MaterialApp(
+      home: Scaffold(
+        body: ErrorDialog(),
+      ),
+    ));
+  }
+
   static void show(String errorMsg) {
     _ErrorsList.add(errorMsg);
     Get.bottomSheet(
@@ -32,9 +41,9 @@ class ErrorDialog extends StatefulWidget {
 class _ErrorDialogState extends State<ErrorDialog> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: Get.size.height * 0.8),
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(

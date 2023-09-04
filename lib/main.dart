@@ -36,16 +36,17 @@ Future<void> main() async {
   runZonedGuarded(() {
     runApp(const AissamStore());
   }, (error, stackTrace) {
-    TestingErrorPopup.show(error.toString());
+    TestingErrorPopup.newApp(error.toString());
     print("Error FROM OUT_SIDE FRAMEWORK ");
     print("--------------------------------");
     print("Error :  $error");
     print("StackTrace :  $stackTrace");
   });
 
-  // FlutterError.onError = (FlutterErrorDetails details) {
-  //   print("=================== CAUGHT FLUTTER ERROR");
-  // };
+  FlutterError.onError = (FlutterErrorDetails details) {
+    TestingErrorPopup.newApp(details.toString());
+    print("=================== CAUGHT FLUTTER ERROR");
+  };
 }
 
 class AissamStore extends StatelessWidget {
