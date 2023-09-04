@@ -36,7 +36,7 @@ Future<void> main() async {
   runZonedGuarded(() {
     runApp(const AissamStore());
   }, (error, stackTrace) {
-    TestingErrorPopup.newApp('error by  catch one, ${error.toString()}');
+    TestingErrorPopup.newPage('error by  catch one, ${error.toString()}');
     print("Error FROM OUT_SIDE FRAMEWORK ");
     print("--------------------------------");
     print("Error :  $error");
@@ -44,7 +44,7 @@ Future<void> main() async {
   });
 
   FlutterError.onError = (FlutterErrorDetails details) {
-    TestingErrorPopup.newApp('error by  catch two, ${details.exception}');
+    TestingErrorPopup.newPage('error by  catch two, ${details.exception}');
     print("=================== CAUGHT FLUTTER ERROR");
   };
 }

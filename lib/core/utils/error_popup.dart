@@ -5,13 +5,9 @@ import 'package:get/get_core/src/get_main.dart';
 List<String> _ErrorsList = [];
 
 class TestingErrorPopup {
-  static void newApp(String errorMsg) {
+  static void newPage(String errorMsg) {
     _ErrorsList.add(errorMsg);
-    runApp(MaterialApp(
-      home: Scaffold(
-        body: ErrorDialog(),
-      ),
-    ));
+    Get.to(ErrorDialog());
   }
 
   static void show(String errorMsg) {
