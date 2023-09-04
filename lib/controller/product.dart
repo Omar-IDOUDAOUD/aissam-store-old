@@ -128,7 +128,7 @@ class ProductsController extends GetxController {
         print('ctach error: ' + e.toString());
         c.hasError = true;
         update([c.widgetToUpdateTag]);
-        TestingErrorPopup.show(e.toString());
+        TestingErrorPopup.show('sdf${e.toString()}');
       });
 
       print('get next pagination. l: ${result.docs.length}');
@@ -140,7 +140,7 @@ class ProductsController extends GetxController {
       c.loadedData.addAll(result.docs.map((e) => e.data()));
       update([c.widgetToUpdateTag]);
     } catch (e) {
-      TestingErrorPopup.show(e.toString());
+      TestingErrorPopup.show('sdfse${e.toString()}');
     }
     return c.loadedData;
   }

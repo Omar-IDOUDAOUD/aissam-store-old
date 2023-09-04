@@ -77,7 +77,7 @@ class FavoritesController extends GetxController {
       print('ctach error: ' + e.toString());
       _fpdr.hasError = true;
       update([_fpdr.widgetToUpdateTag]);
-      TestingErrorPopup.show(e.toString());
+      TestingErrorPopup.show('sdfsdf${e.toString()}');
     });
 
     print('get next pagination. l: ${result.docs.length}');
