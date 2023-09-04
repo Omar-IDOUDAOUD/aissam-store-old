@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/core/utils/error_popup.dart';
 import 'package:aissam_store/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,6 +55,8 @@ class _ProductCardState extends State<ProductCard> {
     });
     if (widget.onFavorite == null) return;
     widget.onFavorite!(_isFavorited).then((value) => null, onError: (e) {
+      TestingErrorPopup.show(e.toString());
+
       if (mounted)
         setState(() {
           _isFavorited = false;
@@ -67,6 +70,8 @@ class _ProductCardState extends State<ProductCard> {
     });
     if (widget.onFavorite == null) return;
     widget.onFavorite!(_isFavorited).then((value) => null, onError: (e) {
+      TestingErrorPopup.show(e.toString());
+
       if (mounted)
         setState(() {
           _isFavorited = true;

@@ -1,5 +1,6 @@
 import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/core/utils/error_popup.dart';
 import 'package:aissam_store/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,6 +28,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
     if (widget.onFavoriteChange == null) return;
     widget.onFavoriteChange!(_isFavorited).then((value) => null, onError: (e) {
       print('error occurred!1, e=$e');
+      TestingErrorPopup.show(e.toString());
       if (mounted)
         setState(() {
           _isFavorited = false;
@@ -41,6 +43,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
     if (widget.onFavoriteChange == null) return;
     widget.onFavoriteChange!(_isFavorited).then((value) => null, onError: (e) {
       print('error occurred!2, e=$e');
+      TestingErrorPopup.show(e.toString());
       if (mounted)
         setState(() {
           _isFavorited = true;

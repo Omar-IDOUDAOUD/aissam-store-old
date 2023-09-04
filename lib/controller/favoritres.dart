@@ -1,5 +1,6 @@
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/shared/pagination_data_result.dart';
+import 'package:aissam_store/core/utils/error_popup.dart';
 import 'package:aissam_store/models/product.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -76,6 +77,7 @@ class FavoritesController extends GetxController {
       print('ctach error: ' + e.toString());
       _fpdr.hasError = true;
       update([_fpdr.widgetToUpdateTag]);
+      TestingErrorPopup.show(e.toString());
     });
 
     print('get next pagination. l: ${result.docs.length}');

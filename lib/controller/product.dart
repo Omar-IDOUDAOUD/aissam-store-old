@@ -128,6 +128,7 @@ class ProductsController extends GetxController {
         print('ctach error: ' + e.toString());
         c.hasError = true;
         update([c.widgetToUpdateTag]);
+        TestingErrorPopup.show(e.toString());
       });
 
       print('get next pagination. l: ${result.docs.length}');

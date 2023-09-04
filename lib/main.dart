@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:aissam_store/bindings/authentication_service.dart';
 import 'package:aissam_store/bindings/home_controllers.dart';
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/core/utils/error_popup.dart';
 import 'package:aissam_store/firebase_options.dart';
 import 'package:aissam_store/middlewares/auth.dart';
 import 'package:aissam_store/view/add_checkout_address/add_checkout_address.dart';
@@ -25,9 +28,23 @@ import 'package:get/get_navigation/get_navigation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const AissamStore());
+  FlutterError.onError = (FlutterErrorDetails details) {
+    print("=================== CAUGHT FLUTTER ERROR");
+    TestingErrorPopup.show(details.toString());
+  };
+
+  runZoned<Future<void>>(
+    () async {
+      runApp(const AissamStore());
+    },
+    onError: (dynamic error, StackTrace stackTrace) {
+      print("=================== CAUGHT DART ERROR");
+      TestingErrorPopup.show(error.toString());
+    },
+  );
 }
 
 class AissamStore extends StatelessWidget {

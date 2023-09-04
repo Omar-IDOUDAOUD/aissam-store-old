@@ -70,10 +70,7 @@ class UserController extends GetxController {
   }
 
   Future<bool> checkUserExistence(uid) async {
-    final docUser =
-        await _fbfirestore.collection('Users').doc(uid).get().catchError((e) {
-      print('error: $e');
-    });
+    final docUser = await _fbfirestore.collection('Users').doc(uid).get();
     return docUser.exists;
   }
 
