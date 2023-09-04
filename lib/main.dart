@@ -31,20 +31,19 @@ Future<void> main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  runZonedGuarded(() async {
+    runApp(const AissamStore());
+  }, (error, stackTrace) {
+    TestingErrorPopup.show(error.toString());
+    print("Error FROM OUT_SIDE FRAMEWORK ");
+    print("--------------------------------");
+    print("Error :  $error");
+    print("StackTrace :  $stackTrace");
+  });
   FlutterError.onError = (FlutterErrorDetails details) {
     print("=================== CAUGHT FLUTTER ERROR");
     TestingErrorPopup.show(details.toString());
   };
-
-  runZoned<Future<void>>(
-    () async {
-      runApp(const AissamStore());
-    },
-    onError: (dynamic error, StackTrace stackTrace) {
-      print("=================== CAUGHT DART ERROR");
-      TestingErrorPopup.show(error.toString());
-    },
-  );
 }
 
 class AissamStore extends StatelessWidget {
