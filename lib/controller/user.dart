@@ -34,8 +34,8 @@ class UserController extends GetxController {
         .doc(_authenticationService.getUser!.uid);
     firestoreUserData.snapshots().listen((event) {
       _userData = event.data();
-      print(
-          'SNAPSHOT EVENT DETECTED: favs: ${_userData!.favoritedProducts.toString()}');
+      // print(
+      //     'SNAPSHOT EVENT DETECTED: favs: ${_userData!.favoritedProducts.toString()}');
     });
   }
 
