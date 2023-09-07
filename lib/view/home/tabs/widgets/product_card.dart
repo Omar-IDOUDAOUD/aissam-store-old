@@ -25,7 +25,7 @@ class ProductCard extends StatefulWidget {
   final double width;
   final bool showShadow;
   final Future Function(bool b)? onFavorite;
-  final Future<bool> Function(String productId)? isFavoritedProductChecker;
+  final bool Function(String productId)? isFavoritedProductChecker;
   // final Future Function(bool b)? onFavorite;
   // bool isFavorited;
 
@@ -39,11 +39,9 @@ class _ProductCardState extends State<ProductCard> {
   void initState() {
     // TODO: implement initState
     if (widget.isFavoritedProductChecker != null) {
-      widget.isFavoritedProductChecker!(widget.data.id!).then((value) {
-        if (mounted)
-          setState(() {
-            _isFavorited = value;
-          });
+      final value = widget.isFavoritedProductChecker!(widget.data.id!);
+      setState(() {
+        _isFavorited = value;
       });
     }
   }

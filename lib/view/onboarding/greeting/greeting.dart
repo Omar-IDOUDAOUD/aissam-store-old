@@ -105,7 +105,9 @@ class _OnBoardingGreetingPageState extends State<OnBoardingGreetingPage> {
                     });
                     if (response.success) {
                       await 1.seconds.delay();
-                      Get.offNamed('/');
+                      response.needsFillUserInfoAfterAuth
+                          ? Get.toNamed('/onboarding/user_info_customization')
+                          : Get.offAllNamed('/');
                     } else {
                       _showFailSnackBar(response.message!);
                     }
@@ -163,7 +165,7 @@ class _OnBoardingGreetingPageState extends State<OnBoardingGreetingPage> {
                         iconColor: Colors.green.shade900,
                         backroundColor: Colors.green.shade100,
                         onTap: () {
-                          Navigator.pushNamed(context, '/authentication');
+                          Get.toNamed('/authentication');
                         },
                       ),
                     ),
