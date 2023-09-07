@@ -16,6 +16,7 @@ import 'package:aissam_store/view/settings/account_info.dart';
 import 'package:aissam_store/view/settings/addresses.dart';
 import 'package:aissam_store/view/settings/appearence.dart';
 import 'package:aissam_store/view/settings/notifications.dart';
+import 'package:aissam_store/view/splash/splash_screen.dart';
 import 'package:aissam_store/view/testing/test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +26,6 @@ import 'package:get/get_navigation/get_navigation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const AissamStore());
 }
@@ -148,16 +148,22 @@ class AissamStore extends StatelessWidget {
           name: '/authentication/email_verification',
           page: () => EmailVerificationPage(),
         ),
-        //
-        // GetPage(
-        //   name: '/onboarding/greeting/lang_select_dropdown_menu',
-        //   page: () => LangDropdownMenu(),
-        //   showCupertinoParallax: false,
-        // )
+        GetPage(
+          name: '/splash_screen',
+          page: () => SplashScreen(),
+        ),
       ],
-      initialRoute: '/onboarding/greeting',
-      initialBinding: AuthenticationServiceBinding(),
-      // home: TestPage(),
+      initialRoute: '/splash_screen',
+      // initialBinding: AuthenticationServiceBinding(),
+      enableLog: true,
+      logWriterCallback: localLogWriter,
     );
+  }
+
+  void localLogWriter(String text, {bool isError = false}) {
+    print("LOG WRITER: $text");
+    // pass the message to your favourite logging package here
+    // please note that even if enableLog: false log messages will be pushed in this callback
+    // you get check the flag if you want through GetConfig.isLogEnable
   }
 }

@@ -54,17 +54,16 @@ class FavoritesController extends GetxController {
     _fpdr.isLoading = true;
     update([_fpdr.widgetToUpdateTag]);
 
-    final List<String> _productsIds = await _userController
-        .getUserData()
-        .then<List<String>>((data) => data.favoritedProducts!);
-    if (_productsIds.isEmpty) {
+    final List<String> productsIds =
+        _userController.getUserData.favoritedProducts!;
+    if (productsIds.isEmpty) {
       _fpdr.isLoading = false;
       _fpdr.canLoadMoreData = false;
       update([_fpdr.widgetToUpdateTag]);
       return _fpdr;
     }
     Query<Product> query =
-        _cloudProducts.where(FieldPath.documentId, whereIn: _productsIds);
+        _cloudProducts.where(FieldPath.documentId, whereIn: productsIds);
     if (_fpdr.lastLoadedDoc != null)
       query = query.startAfterDocument(_fpdr.lastLoadedDoc!);
 
@@ -90,7 +89,7 @@ class FavoritesController extends GetxController {
   }
 
   Future<void> addFavoritedProduct(String id) async {
-    await _userController.firestoreUserData.update({
+    await _userController.firestoreUserDataRef!.update({
       'favorited_products': FieldValue.arrayUnion([id])
     }).then((value) {
       _fpdr.reset();
@@ -98,17 +97,16 @@ class FavoritesController extends GetxController {
   }
 
   Future<void> removeFavoritedProduct(String id) async {
-    await _userController.firestoreUserData.update({
+    await _userController.firestoreUserDataRef!.update({
       'favorited_products': FieldValue.arrayRemove([id])
     }).then((value) {
       _fpdr.loadedData.removeWhere((element) => element.id == id);
     });
   }
 
-  Future<bool> checkProductIsFavorited(String productId) async {
-    final List<String> userFavsPrdsIds = await _userController
-        .getUserData()
-        .then((value) => value.favoritedProducts!);
+  bool checkProductIsFavorited(String productId) {
+    final List<String> userFavsPrdsIds =
+        _userController.getUserData.favoritedProducts!;
     return userFavsPrdsIds.contains(productId);
   }
 }

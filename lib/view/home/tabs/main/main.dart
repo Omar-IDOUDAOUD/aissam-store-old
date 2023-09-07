@@ -23,13 +23,12 @@ class _MainTabState extends State<MainTab> {
 
   bool _showForYouCollectionPart = false;
   _checkAndAddForYouCollectionPart() {
-    _userController.getUserData().then((value) {
-      if (value!.categories!.isNotEmpty && mounted) {
-        setState(() {
-          _showForYouCollectionPart = true;
-        });
-      }
-    });
+    final userCats = _userController.getUserData.categories;
+    if (userCats!.isNotEmpty) {
+      setState(() {
+        _showForYouCollectionPart = true;
+      });
+    }
   }
 
   @override

@@ -33,8 +33,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
 
   Future<void> _goNextPage([bool needEmailVerification = false]) async {
     await 1.seconds.delay();
-
-    Get.offNamed(needEmailVerification
+    Get.toNamed(needEmailVerification
         ? '/authentication/email_verification'
         : _authResult.needsFillUserInfoAfterAuth
             ? 'onboarding/user_info_customization'

@@ -52,11 +52,10 @@ class ProductsController extends GetxController {
           toFirestore: (Product model, _) => model.toMap(),
         );
 
-    _userController.firestoreUserData.snapshots().listen((event) {
+    _userController.firestoreUserDataRef!.snapshots().listen((event) {
       final d = event.data();
 
       /// handle on product favorated action:
-
       ///
     });
   }
@@ -115,8 +114,8 @@ class ProductsController extends GetxController {
     }
 
     if (c.collection == ProductsCollections.ForYou) {
-      final userData = await _userController.getUserData();
-      final userCats = userData!.categories;
+      final userData = _userController.getUserData;
+      final userCats = userData.categories;
       query = query.where('categories', arrayContainsAny: userCats);
     }
 
