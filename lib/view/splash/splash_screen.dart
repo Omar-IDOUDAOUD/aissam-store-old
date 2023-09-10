@@ -36,6 +36,9 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       await 1.seconds.delay();
     }
+    // await _test().catchError((e) {
+    //   print(e);
+    // });
     if (!_errorOccurred) Get.offNamed('/onboarding/greeting');
   }
 
@@ -44,6 +47,30 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement initState
     super.initState();
     _startFetchingData();
+  }
+
+  Future<void> _test() async {
+    print('=================TEST=============');
+    int? index = 0;
+
+    while (index! <= 10) {
+      print(index);
+      await 1.seconds.delay();
+      if (index == 5) {
+        index = null;
+        await throwFutError();
+      }
+      index!;
+      index++;
+    }
+    index++;
+    print(index);
+    print('=================TEST=============');
+  }
+
+  Future<void> throwFutError() async {
+    await 1.seconds.delay();
+    throw Exception('error: index == 5');
   }
 
   @override

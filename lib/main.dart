@@ -1,5 +1,6 @@
 import 'package:aissam_store/bindings/authentication_service.dart';
 import 'package:aissam_store/bindings/home_controllers.dart';
+import 'package:aissam_store/controller/connectivity.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/firebase_options.dart';
 import 'package:aissam_store/middlewares/auth.dart';
@@ -12,6 +13,7 @@ import 'package:aissam_store/view/home/home.dart';
 import 'package:aissam_store/view/onboarding/greeting/greeting.dart';
 import 'package:aissam_store/view/onboarding/user_info_customization/user_info_customization.dart';
 import 'package:aissam_store/view/product_dets/product_details.dart';
+import 'package:aissam_store/view/public/connection_statue_warning_bar.dart';
 import 'package:aissam_store/view/settings/account_info.dart';
 import 'package:aissam_store/view/settings/addresses.dart';
 import 'package:aissam_store/view/settings/appearence.dart';
@@ -26,13 +28,11 @@ import 'package:get/get_navigation/get_navigation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(const AissamStore());
+  runApp(AissamStore());
 }
 
 class AissamStore extends StatelessWidget {
-  const AissamStore({Key? key}) : super(key: key);
-
+  AissamStore({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
