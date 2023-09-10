@@ -1,9 +1,11 @@
+import 'package:aissam_store/controller/connectivity.dart';
 import 'package:aissam_store/view/home/nav_bar/nav_bar.dart';
 import 'package:aissam_store/view/home/tabs/my_cart/my_cart.dart';
 import 'package:aissam_store/view/home/tabs/favorites/favorites.dart';
 import 'package:aissam_store/view/home/tabs/main/main.dart';
 import 'package:aissam_store/view/home/tabs/search/search.dart';
 import 'package:aissam_store/view/home/tabs/settings/settings.dart';
+import 'package:aissam_store/view/public/connection_statue_warning_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -46,6 +48,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
       body: Stack(
         children: [
+          // Positioned(
+          //   top: 20,
+          //   right: 20,
+          //   child: MaterialButton(
+          //     onPressed: () {
+          //       setState(() {
+          //         _showBar = !_showBar;
+          //       });
+          //     },
+          //     color: Colors.green,
+          //   ),
+          // ),
           TabBarView(
             controller: _tabController,
             children: [
@@ -57,22 +71,43 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ],
           ),
           Positioned(
+            // duration: 200.milliseconds,
+            // curve: Curves.linearToEaseOut,
             bottom: 0,
             right: 0,
             left: 0,
-            child: NavBar(
-              activeIndex: _activeTabIndex,
-              onIndexChange: (int index) {
-                _tabController.animateTo(
-                  index,
-                  duration: 500.milliseconds,
-                  curve: Curves.linearToEaseOut,
-                );
-              },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                NavBar(
+                  activeIndex: _activeTabIndex,
+                  onIndexChange: (int index) {
+                    _tabController.animateTo(
+                      index,
+                      duration: 500.milliseconds,
+                      curve: Curves.linearToEaseOut,
+                    );
+                  },
+                ),
+                ConnectionStatueWarningBar(),
+              ],
             ),
           ),
+          // Positioned(
+          //   right: 0,
+          //   left: 0,
+          //   bottom: 0,
+          //   // duration: 200.milliseconds,
+          //   // curve: Curves.linearToEaseOut,
+          //   child:
+          // ),
         ],
       ),
     );
   }
+
+  ConnectivityController _connectivityController =
+      ConnectivityController.instance;
+
+  bool _showBar = false;
 }

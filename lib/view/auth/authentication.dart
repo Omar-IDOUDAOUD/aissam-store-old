@@ -188,15 +188,16 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                 unselectedLabelColor: CstColors.a,
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: CstColors.a,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black87.withOpacity(.2),
-                        offset: const Offset(0, 5),
-                        blurRadius: 15,
-                      )
-                    ]),
+                  borderRadius: BorderRadius.circular(15),
+                  color: CstColors.a,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black87.withOpacity(.2),
+                      offset: const Offset(0, 5),
+                      blurRadius: 15,
+                    )
+                  ],
+                ),
                 tabs: [
                   const Tab(
                     height: 50,

@@ -1,3 +1,4 @@
+import 'package:aissam_store/controller/connectivity.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/public/button.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,18 @@ class SettingsTab extends StatefulWidget {
 }
 
 class _SettingsTabState extends State<SettingsTab> {
+  final ConnectivityController _connectivityController = Get.find();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('start connectivity test');
+    _connectivityController.checkConnectivity.then((value) {
+      print(value);
+      print('finish connectivity test');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(

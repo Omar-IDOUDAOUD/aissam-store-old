@@ -1,4 +1,5 @@
 import 'package:aissam_store/controller/cloud_storage.dart';
+import 'package:aissam_store/controller/connectivity.dart';
 import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/controller/product.dart';
 import 'package:get/get.dart';
