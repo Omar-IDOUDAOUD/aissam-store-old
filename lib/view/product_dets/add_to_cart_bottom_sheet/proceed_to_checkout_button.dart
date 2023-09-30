@@ -1,4 +1,4 @@
-import 'package:aissam_store/view/public/button.dart';
+import 'package:aissam_store/view/public/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -90,7 +90,7 @@ class _ProceedToCheckoutButtonState extends State<ProceedToCheckoutButton> {
                                 ),
                               ),
                             ],
-                          ), 
+                          ),
                           SvgPicture.asset(
                             'assets/icons/arrow_right.svg',
                             color: Colors.white,

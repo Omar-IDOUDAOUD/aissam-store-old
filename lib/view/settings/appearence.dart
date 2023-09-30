@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/view/public/button.dart';
+import 'package:aissam_store/view/public/button/button.dart';
 import 'package:aissam_store/view/public/radio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +67,6 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
             left: 20,
             child: GestureDetector(
               onTap: Get.back,
-
               child: SvgPicture.asset(
                 'assets/icons/ic_fluent_chevron_left_24_filled.svg',
                 color: CstColors.a,
@@ -101,15 +100,14 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Text(
-                  'Appearence',
-                  style: Get.textTheme.headlineLarge!.copyWith(
-                    color: CstColors.a,
-                    height: 1.1,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                      
+                    Text(
+                      'Appearence',
+                      style: Get.textTheme.headlineLarge!.copyWith(
+                        color: CstColors.a,
+                        height: 1.1,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     Text(
                       isLightTheme ? 'Light Theme' : 'Dark Theme',
                       style: Get.textTheme.bodyMedium!.copyWith(
@@ -180,33 +178,32 @@ class _SettingsAppearenceState extends State<SettingsAppearence> {
                       ],
                     ),
                     Spacer(),
-                     Button(
-                    isHeightMinimize: true,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 22,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Save',
-                            textAlign: TextAlign.center,
-                            style: Get.textTheme.bodyLarge!.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
+                    Button(
+                      isHeightMinimize: true,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 22,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Save',
+                              textAlign: TextAlign.center,
+                              style: Get.textTheme.bodyLarge!.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                           ),
-                        ),
-                        SvgPicture.asset(
-                          'assets/icons/ic_fluent_checkmark_24_filled.svg',
-                          color: Colors.white,
-                          width: 22,
-                        ),
-                      ],
+                          SvgPicture.asset(
+                            'assets/icons/ic_fluent_checkmark_24_filled.svg',
+                            color: Colors.white,
+                            width: 22,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                 
                     SizedBox(height: 5),
                   ],
                 )),

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/checkout/steps/shipping.dart' as CheckoutPage
     show AddressCard;
-import 'package:aissam_store/view/public/button.dart';
+import 'package:aissam_store/view/public/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -76,14 +76,14 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Text(
-                  'Addresses',
-                  style: Get.textTheme.headlineLarge!.copyWith(
-                    color: CstColors.a,
-                    height: 1.1,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
+                    Text(
+                      'Addresses',
+                      style: Get.textTheme.headlineLarge!.copyWith(
+                        color: CstColors.a,
+                        height: 1.1,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     Text(
                       '2 added',
                       style: Get.textTheme.bodyMedium!.copyWith(

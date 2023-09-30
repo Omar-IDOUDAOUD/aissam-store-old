@@ -1,4 +1,4 @@
-import 'package:aissam_store/view/public/button.dart';
+import 'package:aissam_store/view/public/button/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,7 +10,7 @@ class AddToCartButton extends StatefulWidget {
     required this.isProceedToCartState,
     required this.animation,
     this.animationDur,
-    this.onTap, 
+    this.onTap,
   });
 
   final bool isProceedToCartState;

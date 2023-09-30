@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/view/public/button.dart';
+import 'package:aissam_store/view/public/button/button.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter/material.dart';
@@ -75,14 +75,14 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Text(
-                  'Notifications',
-                  style: Get.textTheme.headlineLarge!.copyWith(
-                    color: CstColors.a,
-                    height: 1.1,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
+                    Text(
+                      'Notifications',
+                      style: Get.textTheme.headlineLarge!.copyWith(
+                        color: CstColors.a,
+                        height: 1.1,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     Text(
                       'Active',
                       style: Get.textTheme.bodyMedium!.copyWith(
@@ -198,7 +198,6 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
                     ),
                   ),
                   SizedBox(height: 5),
-                 
                 ],
               ),
             ),

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/view/public/button/button_color_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -173,32 +174,34 @@ class _ProductCardState extends State<ProductCard> {
                                 ],
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                if (!_isFavorited)
-                                  _favoriteProduct();
-                                else
-                                  _unFavoriteProduct();
-                              },
-                              child: Container(
-                                height: 60,
-                                width: 40,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(.1),
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15)),
-                                ),
-                                child: SvgPicture.asset(
-                                  _isFavorited
-                                      ? 'assets/icons/ic_fluent_heart_24_filled.svg'
-                                      : 'assets/icons/favorite.svg',
-                                  color: Colors.white,
-                                  width: 20,
-                                  height: 20,
-                                ),
-                              ),
-                            )
+                            ButtonColorBuilder(
+                                color: Colors.black.withOpacity(.1),
+                                onTap: () {
+                                  if (!_isFavorited)
+                                    _favoriteProduct();
+                                  else
+                                    _unFavoriteProduct();
+                                },
+                                builder: (c, f) {
+                                  return Container(
+                                    height: 60,
+                                    width: 40,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: c,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15)),
+                                    ),
+                                    child: SvgPicture.asset(
+                                      _isFavorited
+                                          ? 'assets/icons/ic_fluent_heart_24_filled.svg'
+                                          : 'assets/icons/favorite.svg',
+                                      color: Colors.white,
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                  );
+                                })
                           ],
                         ),
                       )

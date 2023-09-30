@@ -1,9 +1,10 @@
-import 'package:aissam_store/view/public/button.dart';
+import 'package:aissam_store/view/public/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_card_bottom_sheet.dart' as ProductDetsPage ;
+import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_card_bottom_sheet.dart'
+    as ProductDetsPage;
 import 'package:aissam_store/view/home/tabs/my_cart/widgets/cart_item.dart'
     as CartItemFile show Button;
 
@@ -91,7 +92,6 @@ class _ModifyButtonState extends State<ModifyButton>
       },
     );
   }
-
 
   void _closeAddToCartButton() {
     Get.back();

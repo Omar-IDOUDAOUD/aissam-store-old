@@ -137,5 +137,6 @@ class Product {
         categories: ['Qaftans'],
         reviews: 5,
         rankingAverage: 4,
+        sells: 4,
       );
 }

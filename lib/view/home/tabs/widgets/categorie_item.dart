@@ -1,5 +1,6 @@
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/models/category.dart';
+import 'package:aissam_store/view/public/button/button_scale_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,14 +34,13 @@ class _CategorieItemState extends State<CategorieItem> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 83,
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _checked = !_checked;
-          });
-          if (widget.onCheck != null) widget.onCheck!(_checked);
-        },
-        child: Column(
+      child: ButtonScaleBuilder(onTap: () {
+        setState(() {
+          _checked = !_checked;
+        });
+        if (widget.onCheck != null) widget.onCheck!(_checked);
+      }, builder: (focus) {
+        return Column(
           children: [
             CircleAvatar(
               radius: 32,
@@ -88,8 +88,8 @@ class _CategorieItemState extends State<CategorieItem> {
               ),
             )
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 }

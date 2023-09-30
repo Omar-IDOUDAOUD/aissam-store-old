@@ -2,7 +2,7 @@ import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/checkout/steps/payment.dart';
 import 'package:aissam_store/view/checkout/steps/review.dart';
 import 'package:aissam_store/view/checkout/steps/shipping.dart';
-import 'package:aissam_store/view/public/button.dart';
+import 'package:aissam_store/view/public/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';

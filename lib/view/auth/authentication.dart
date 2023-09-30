@@ -4,7 +4,7 @@ import 'package:aissam_store/services/auth/auth_result.dart';
 import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:aissam_store/view/auth/widgets/sign_in_tab_fields.dart';
 import 'package:aissam_store/view/auth/widgets/sign_up_tab_field.dart';
-import 'package:aissam_store/view/public/button.dart';
+import 'package:aissam_store/view/public/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
