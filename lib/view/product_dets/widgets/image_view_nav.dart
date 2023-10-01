@@ -7,18 +7,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ImageViewNavButtons extends StatefulWidget {
-  const ImageViewNavButtons(
-      {Key? key,
-      required this.onNext,
-      required this.onBack,
-      required this.isBestSelling,
-      required this.onFullScreen})
-      : super(key: key);
+  const ImageViewNavButtons({
+    Key? key,
+    required this.pageController,
+    // required this.onNext,
+    // required this.onBack,
+    // required this.isBestSelling,
+    this.onFullScreen,
+  }) : super(key: key);
 
-  final bool isBestSelling;
-  final Function() onNext;
-  final Function() onBack;
-  final Function() onFullScreen;
+  final PageController pageController;
+  // final bool isBestSelling;
+  // final Function() onNext;
+  // final Function() onBack;
+  final Function()? onFullScreen;
 
   @override
   State<ImageViewNavButtons> createState() => _ImageViewNavButtonsState();
@@ -33,18 +35,18 @@ class _ImageViewNavButtonsState extends State<ImageViewNavButtons> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          if (widget.isBestSelling)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _getBestSellingMark(),
-                  _getNavButton(_IconType.FULLSCREEN)
-                ],
-              ),
+          // if (widget.isBestSelling)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _getBestSellingMark(),
+                _getNavButton(_IconType.FULLSCREEN)
+              ],
             ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -76,12 +78,22 @@ class _ImageViewNavButtonsState extends State<ImageViewNavButtons> {
     );
   }
 
+  void _onNext() {
+    widget.pageController
+        .nextPage(duration: 300.milliseconds, curve: Curves.linearToEaseOut);
+  }
+
+  void _onBack() {
+    widget.pageController.previousPage(
+        duration: 300.milliseconds, curve: Curves.linearToEaseOut);
+  }
+
   _getNavButton(_IconType type) {
     return GestureDetector(
       onTap: type == _IconType.TORIGHT
-          ? widget.onNext
+          ? _onNext
           : type == _IconType.TOLEFT
-              ? widget.onBack
+              ? _onBack
               : widget.onFullScreen,
       child: SizedBox.square(
         dimension: 40,

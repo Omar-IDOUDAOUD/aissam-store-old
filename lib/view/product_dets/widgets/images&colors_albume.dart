@@ -4,23 +4,27 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class ImagesAndColorsAlbum extends StatefulWidget {
-  const ImagesAndColorsAlbum(
-      {Key? key,
-      required this.onPictureChange,
-      required this.onColorChange,
-      required this.images,
-      this.colors,
-      this.colorsNames,
-      this.activeImageIndex = 0,
-      this.activeColorIndex})
-      : super(key: key);
-  final Function(int i) onPictureChange;
-  final Function(int i)? onColorChange;
+  const ImagesAndColorsAlbum({
+    Key? key,
+    // required this.onPictureChange,
+    // required this.onColorChange,
+    required this.images,
+    required this.imageViewerController,
+    this.isCollapsed,
+    this.colors,
+    this.colorsNames,
+    // this.activeImageIndex = 0,
+    // this.activeColorIndex,
+  }) : super(key: key);
+  final PageController imageViewerController;
+  // final Function(int i) onPictureChange;
+  // final Function(int i)? onColorChange;
   final List<String> images;
   final List<Color>? colors;
   final List<String>? colorsNames;
-  final int activeImageIndex;
-  final int? activeColorIndex;
+  final bool Function()? isCollapsed;
+  // final int activeImageIndex;
+  // final int? activeColorIndex;
 
   @override
   State<ImagesAndColorsAlbum> createState() => _ImagesAndColorsAlbumState();
@@ -28,6 +32,8 @@ class ImagesAndColorsAlbum extends StatefulWidget {
 
 class _ImagesAndColorsAlbumState extends State<ImagesAndColorsAlbum> {
   int _activePart = 0;
+  int _activeImage = 0;
+  int _activeColor = 0;
 
   late final PageController _controller;
 
@@ -36,12 +42,32 @@ class _ImagesAndColorsAlbumState extends State<ImagesAndColorsAlbum> {
     // TODO: implement initState
     super.initState();
     _controller = PageController();
+    widget.imageViewerController.addListener(_imageViewerListener);
+  }
+
+  void _imageViewerListener() {
+    setState(() {
+      _activeImage = widget.imageViewerController.page!.round();
+    });
+  }
+
+  void _toImage(int i) async {
+    setState(() {
+      _activeImage = i;
+    });
+    widget.imageViewerController.removeListener(_imageViewerListener);
+    widget.isCollapsed != null && widget.isCollapsed!()
+        ? widget.imageViewerController.jumpToPage(i)
+        : await widget.imageViewerController.animateToPage(i,
+            duration: 300.milliseconds, curve: Curves.linearToEaseOut);
+    widget.imageViewerController.addListener(_imageViewerListener);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     _controller.dispose();
+    widget.imageViewerController.removeListener(_imageViewerListener);
     super.dispose();
   }
 
@@ -91,10 +117,11 @@ class _ImagesAndColorsAlbumState extends State<ImagesAndColorsAlbum> {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (_, i) {
                         return _ListImage(
-                          focus: widget.activeImageIndex == i,
+                          focus: _activeImage == i,
                           path: widget.images.elementAt(i),
                           onTap: () {
-                            widget.onPictureChange(i);
+                            _toImage(i);
+                            // widget.onPictureChange(i);
                           },
                         );
                       },
@@ -105,11 +132,11 @@ class _ImagesAndColorsAlbumState extends State<ImagesAndColorsAlbum> {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (_, i) {
                               return _ListColor(
-                                focus: widget.activeColorIndex == i,
+                                focus: _activeColor == i,
                                 color: widget.colors!.elementAt(i),
                                 colorName: widget.colorsNames!.elementAt(i),
                                 onTap: () {
-                                  widget.onColorChange!(i);
+                                  // widget.onColorChange!(i);
                                 },
                               );
                             },

@@ -1,9 +1,14 @@
 // ignore: file_names
 
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/view/home/tabs/main/widgets/products_list.dart';
+import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
 import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_card_bottom_sheet.dart';
 import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_cart_button.dart';
 import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/proceed_to_checkout_button.dart';
+import 'package:aissam_store/view/product_dets/widgets/duscussion_platforms_field.dart';
+import 'package:aissam_store/view/product_dets/widgets/user_review_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -24,7 +29,7 @@ class DetsAndBuyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 25, left: 35, bottom: 20),
+      padding: const EdgeInsets.only(right: 35, left: 35, bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,10 +48,11 @@ class DetsAndBuyButton extends StatelessWidget {
                         color: CstColors.a,
                       ),
                     ),
-                    _getBodySmallText('${price.toStringAsFixed(2)} MAD',
+                    _getBodyLargeText('${price.toStringAsFixed(2)} MAD',
                         CstColors.a, FontWeight.w700),
-                    const SizedBox(height: 7),
-                    _getBodySmallText('Details', CstColors.b, FontWeight.w600),
+                    const SizedBox(height: 10),
+                    _getBodyLargeText('Details', CstColors.b, FontWeight.w500),
+                    const SizedBox(height: 2),
                     _getRichText('Material', '12-gouge cashmere'),
                     _getRichText('Shipping', 'in 2 to 5 days'),
                     _getRichText('Returns', 'ithin 30 days'),
@@ -70,36 +76,146 @@ class DetsAndBuyButton extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 0),
-          _getBodySmallText('Description', CstColors.b, FontWeight.w600),
-          _getBodyMediumText(
+          const SizedBox(height: 10),
+          _getBodyLargeText('Description', CstColors.b, FontWeight.w500),
+          const SizedBox(height: 2),
+          _getBodyLargeText(
               'Our cult-favorite premium jersey is super-soft, effortiess and made to last. it comes in our cult-favorite muted blush',
               CstColors.a,
               FontWeight.w500),
-          const SizedBox(height: 7),
-          _getBodySmallText('Chat with seller', CstColors.b, FontWeight.w600),
-          _getChatWithSellerMethod('Phone Call', '+21276858745', () {}),
-          _getChatWithSellerMethod('WhatsApp', '', () {})
+          const SizedBox(height: 10),
+          _getBodyLargeText(
+              'Discuss with seller', CstColors.b, FontWeight.w500),
+          const SizedBox(height: 5),
+          DiscussionPlatforms(),
+          // _getChatWithSellerButton('Phone Call', '+21276858745', () {}),
+          // const SizedBox(height: 7),
+          // _getChatWithSellerButton('WhatsApp', 'open', () {}),
+          // const SizedBox(height: 7),
+          // _getChatWithSellerButton('Facebook Messenger', 'open', () {}),
+          // const SizedBox(height: 7),
+          // _getChatWithSellerButton('Instagram', 'open', () {}),
+          const SizedBox(height: 15),
+          // _getBodyLargeText('Store location', CstColors.b, FontWeight.w500),
+          // const SizedBox(height: 5),
+          // _storeLocation(),
+          // const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _getBodyLargeText('Users reviews', CstColors.b, FontWeight.w500),
+              _getBodyLargeText('35 Reviews', CstColors.a, FontWeight.normal),
+            ],
+          ),
+          const SizedBox(height: 5),
+          UserReviewCard(),
+          const SizedBox(height: 10),
+          _showMoreReviewsButton(),
+          const SizedBox(height: 15),
+          _getBodyLargeText(
+            'Similair to this product',
+            CstColors.b,
+            FontWeight.w500,
+          ),
+          const SizedBox(height: 5),
+          SizedBox(
+            height: 300,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              // padding: EdgeInsets.symmetric(horizontal: 30),
+              children: [
+                ProductCard(data: Product.testModel()),
+                ProductCard(data: Product.testModel()),
+                ProductCard(data: Product.testModel()),
+                ProductCard(data: Product.testModel()),
+              ],
+            ),
+          )
+          // ProductsList(collection: Coll),
         ],
       ),
     );
   }
 
-  Widget _getChatWithSellerMethod(
-      String label, String subLabel, Function onTap) {
-    return Row(
-      children: [
-        _getBodySmallText(label, CstColors.a, FontWeight.w600),
-        const Spacer(),
-        _getBodyMediumText(subLabel, CstColors.c, FontWeight.normal),
-        const SizedBox(
-          width: 5,
+  Widget _showMoreReviewsButton() {
+    return SizedBox(
+      height: 55,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.grey.shade300),
+        child: Center(
+          child: Text(
+            'Show more reviews..',
+            style: Get.textTheme.bodyMedium!.copyWith(
+              color: CstColors.b,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
-        SvgPicture.asset(
-          'assets/icons/next.svg',
-          height: 20,
-        )
-      ],
+      ),
+    );
+  }
+
+  // Widget _getAddReviewField(){
+
+  // }
+
+  // Widget _storeLocation() {
+  //   return DecoratedBox(
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(10),
+  //       color: Colors.grey.shade200,
+  //     ),
+  //     child: Padding(
+  //       padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.stretch,
+  //         children: [
+  //           _getBodyLargeText(
+  //               'Aissam Store Location', CstColors.a, FontWeight.normal),
+  //           SizedBox(
+  //             height: 7,
+  //           ),
+  //           SizedBox(
+  //             height: 80,
+  //             child: DecoratedBox(
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(5),
+  //                 color: Colors.grey.shade400,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget _getChatWithSellerButton(
+      String label, String subLabel, Function onTap) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey.shade200,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Row(
+          children: [
+            _getBodyLargeText(label, CstColors.a, FontWeight.normal),
+            const Spacer(),
+            _getBodyLargeText(subLabel, CstColors.c, FontWeight.normal),
+            const SizedBox(
+              width: 5,
+            ),
+            SvgPicture.asset(
+              'assets/icons/next.svg',
+              height: 20,
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -109,16 +225,16 @@ class DetsAndBuyButton extends StatelessWidget {
         children: [
           TextSpan(
             text: '$txt1: ',
-            style: Get.textTheme.bodySmall!.copyWith(
+            style: Get.textTheme.bodyMedium!.copyWith(
               color: CstColors.a,
               fontWeight: FontWeight.w600,
             ),
           ),
           TextSpan(
             text: txt2,
-            style: Get.textTheme.bodySmall!.copyWith(
+            style: Get.textTheme.bodyMedium!.copyWith(
               color: CstColors.b,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.normal,
             ),
           ),
         ],
@@ -136,10 +252,10 @@ class DetsAndBuyButton extends StatelessWidget {
     );
   }
 
-  Widget _getBodyMediumText(String text, Color color, FontWeight fontWeight) {
+  Widget _getBodyLargeText(String text, Color color, FontWeight fontWeight) {
     return Text(
       text,
-      style: Get.textTheme.bodyMedium!.copyWith(
+      style: Get.textTheme.bodyLarge!.copyWith(
         color: color,
         fontWeight: fontWeight,
       ),

@@ -108,16 +108,17 @@ class AissamStore extends StatelessWidget {
           transition: Transition.cupertino,
         ),
         GetPage(
-            name: '/fullscreen_image',
-            page: () => FullScreenImage(),
-            transition: Transition.fadeIn,
-            showCupertinoParallax: false,
-            opaque: false),
-        // GetPage(
-        //   name: '/testing',
-        //   page: () => TestPage(),
-        //   binding: HomeControllersBindings()
-        // ),
+          name: '/fullscreen_image',
+          page: () => FullScreenImage(),
+          transition: Transition.fadeIn,
+          showCupertinoParallax: false,
+          opaque: false,
+        ),
+        GetPage(
+          name: '/testing',
+          page: () => TestPage(),
+          // binding: HomeControllersBindings()
+        ),
         GetPage(name: '/checkout', page: () => CheckoutPage()),
         GetPage(
             name: '/add_checkout_address', page: () => AddCheckoutAddress()),
@@ -153,7 +154,7 @@ class AissamStore extends StatelessWidget {
           page: () => SplashScreen(),
         ),
       ],
-      initialRoute: '/splash_screen',
+      initialRoute: '/product_details',
       // initialBinding: AuthenticationServiceBinding(),
       enableLog: true,
       logWriterCallback: localLogWriter,

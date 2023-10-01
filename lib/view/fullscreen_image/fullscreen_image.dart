@@ -13,29 +13,28 @@ class FullScreenImage extends StatefulWidget {
 class _FullScreenImageState extends State<FullScreenImage> {
   @override
   void initState() {
-    super.initState(); 
+    super.initState();
     _images = Get.arguments['images'];
-    _activeIndex = Get.arguments['image_tag_index'];
-    _tag = Get.arguments['images'][_activeIndex];
+    _activeIndex = Get.arguments['active_image'];
+    // _tag = _images[_activeIndex];
     _controller = PageController(initialPage: _activeIndex);
   }
 
-  late final String _tag;
-  late final int _activeIndex;
+  // late final String _tag;
+  late int _activeIndex;
   late final List<String> _images;
   late final PageController _controller;
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CstColors.a.withOpacity(.8),
       body: Column(
         children: [
           SizedBox(
-            height: 55,
             width: Get.size.width,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: EdgeInsets.fromLTRB(35, 33, 35, 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -80,7 +79,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
               onPageChanged: (i) {
                 setState(() {
                   //TODO: try getter method.
-                  _tag = _images.elementAt(i);
+                  // _tag = _images.elementAt(i);
                   _activeIndex = i;
                 });
               },
@@ -98,7 +97,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Hero(
-                        tag: _tag,
+                        tag: _activeIndex,
                         child: Image.asset(
                           _images.elementAt(i),
                         ),

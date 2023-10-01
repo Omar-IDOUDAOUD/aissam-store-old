@@ -5,6 +5,9 @@ import 'package:aissam_store/core/shared/products_collections.dart';
 import 'package:aissam_store/models/product.dart';
 import 'package:aissam_store/view/home/tabs/widgets/loading_product_card.dart';
 import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
+import 'package:aissam_store/view/product_dets/widgets/dets&buy_but.dart';
+import 'package:aissam_store/view/product_dets/widgets/image_view.dart';
+import 'package:aissam_store/view/product_dets/widgets/images&colors_albume.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -23,22 +26,7 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ProductCard(
-          data: Product(
-              title: 'Morocco abayas with its ultra chic polozza',
-              price: 215,
-              categories: ['Abaya'],
-              colors: [
-                Colors.orange.shade300,
-                Colors.purple.shade300,
-                Colors.pink.shade300,
-              ],
-              rankingAverage: 4.5,
-              reviews: 55,
-              cardPicture: 'assets/images/image_3.png'),
-        ),
-      ),
+      body: Center(),
     );
   }
 }
