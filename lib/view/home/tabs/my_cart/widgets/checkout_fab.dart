@@ -1,10 +1,13 @@
-import 'package:aissam_store/core/constants/colors.dart'; 
+import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/home/tabs/my_cart/widgets/cart_item.dart';
+import 'package:aissam_store/view/public/button/button_color_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class CheckoutFAB extends StatefulWidget {
-  const CheckoutFAB({super.key, required this.isExpand, required this.onExpand});
+  const CheckoutFAB(
+      {super.key, required this.isExpand, required this.onExpand});
 
   final bool isExpand;
   final Function() onExpand;
@@ -60,8 +63,7 @@ class _CheckoutFABState extends State<CheckoutFAB> {
           return;
         }
 
-        Get.toNamed('/checkout'); 
-       
+        Get.toNamed('/checkout');
       },
     );
   }

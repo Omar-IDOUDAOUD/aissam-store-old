@@ -1,5 +1,6 @@
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/services/auth/authentication.dart';
+import 'package:aissam_store/view/public/button/button_scale_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -17,10 +18,13 @@ class Header extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SvgPicture.asset(
-            'assets/icons/search_small.svg',
-            height: 28,
-          ),
+          ButtonScaleBuilder(builder: (focus) {
+            return SvgPicture.asset(
+              'assets/icons/search_small.svg',
+              height: 28,
+              color: focus ? CstColors.b : CstColors.a,
+            );
+          }),
           GestureDetector(
             child: AissamLogo(),
             onTap: () async {
@@ -33,10 +37,13 @@ class Header extends StatelessWidget {
             alignment: Alignment.bottomRight,
             clipBehavior: Clip.none,
             children: [
-              SvgPicture.asset(
-                'assets/icons/ic_fluent_alert_24_regular.svg',
-                height: 25,
-              ),
+              ButtonScaleBuilder(builder: (focus) {
+                return SvgPicture.asset(
+                  'assets/icons/ic_fluent_alert_24_regular.svg',
+                  height: 25,
+                  color: focus ? CstColors.b : CstColors.a,
+                );
+              }),
               Positioned(
                 bottom: 0,
                 right: -3.0 * _notificationsNumber.length,

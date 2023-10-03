@@ -1,5 +1,7 @@
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/home/tabs/my_cart/widgets/modify_button.dart';
+import 'package:aissam_store/view/public/button/button_color_builder.dart';
+import 'package:aissam_store/view/public/button/button_scale_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -236,18 +238,24 @@ class Button extends StatefulWidget {
 class _ButtonState extends State<Button> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: SizedBox(
-        height: 35,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(7),
-            color: widget.color.withOpacity(.2),
-          ),
-          child: Center(child: widget.child),
-        ),
-      ),
-    );
+    return ButtonScaleBuilder(
+        onTap: widget.onTap,
+        // color: widget.color,
+        // focusColor: Color.lerp(widget.color, Colors.black, 0.5),
+        builder: (focus) {
+          return SizedBox(
+            height: 35,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(7),
+                color: (focus
+                        ? Color.lerp(widget.color, Colors.black, 0.5)!
+                        : widget.color)
+                    .withOpacity(.2),
+              ),
+              child: Center(child: widget.child),
+            ),
+          );
+        });
   }
 }

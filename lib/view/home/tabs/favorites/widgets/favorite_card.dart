@@ -1,6 +1,8 @@
 import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/view/public/button/button_color_builder.dart';
+import 'package:aissam_store/view/public/button/button_scale_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -135,17 +137,30 @@ class _FavoriteCardState extends State<FavoriteCard> {
       );
   Widget _getCircleButton(
       {required String iconPath, required Color color, onTap}) {
-    return GestureDetector(
+    return ButtonScaleBuilder(
+      // color: color,
       onTap: onTap,
-      child: CircleAvatar(
-        radius: 20,
-        backgroundColor: color.withOpacity(.15),
-        child: SvgPicture.asset(
-          iconPath,
-          color: color,
-          width: 20,
-        ),
-      ),
+      // focusColor: Color.lerp(color, Colors.black, 0.5),
+      builder: (focus) {
+        return SizedBox.square(
+          dimension: 40,
+          child: ClipOval(
+            // radius: 20,
+            // backgroundColor: c.withOpacity(.15),
+            child: ColoredBox(
+              color: (focus ? Color.lerp(color, Colors.black, .5)! : color)
+                  .withOpacity(.15),
+              child: Center(
+                child: SvgPicture.asset(
+                  iconPath,
+                  color: color,
+                  width: 20,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/public/button/button_scale_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -51,7 +52,7 @@ class _NavBarState extends State<NavBar> {
             child: ColoredBox(
               color: Colors.white.withOpacity(0.7),
               child: Padding(
-                padding: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.only(top: 10, right: 17, left: 17),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -134,35 +135,47 @@ class NavBarItem extends StatefulWidget {
 class _NavBarItemState extends State<NavBarItem> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        GestureDetector(
+    return Expanded(
+      child: ButtonScaleBuilder(
           onTap: widget.onTap,
-          child: AnimatedPadding(
-            curve: const Cubic(0.175, 0.885, 0.32, 2.7),
-            duration: 350.milliseconds,
-            padding: EdgeInsets.only(top: widget.focus ? 5 : 15),
-            child: SvgPicture.asset(widget.iconPath),
-          ),
-        ),
-        SizedBox(
-          height: 4,
-        ),
-        Expanded(
-          child: AnimatedAlign(
-            alignment: widget.focus ? Alignment.topCenter : Alignment(0, 2),
-            duration: 200.milliseconds,
-            child: Container(
-              width: 5,
-              height: 5,
-              decoration:
-                  BoxDecoration(color: CstColors.a, shape: BoxShape.circle),
-            ),
-          ),
-        )
-      ],
+          builder: (focus) {
+            return ColoredBox(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AnimatedPadding(
+                    curve: const Cubic(0.175, 0.885, 0.32, 2.7),
+                    duration: 350.milliseconds,
+                    padding: EdgeInsets.only(top: widget.focus ? 5 : 15),
+                    child: SvgPicture.asset(widget.iconPath,
+                        color:
+                            focus ? CstColors.a.withOpacity(.5) : CstColors.a),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Expanded(
+                    child: AnimatedAlign(
+                      alignment:
+                          widget.focus ? Alignment.topCenter : Alignment(0, 2),
+                      duration: 200.milliseconds,
+                      child: Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                            color: focus
+                                ? CstColors.a.withOpacity(.5)
+                                : CstColors.a,
+                            shape: BoxShape.circle),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          }),
     );
   }
 }

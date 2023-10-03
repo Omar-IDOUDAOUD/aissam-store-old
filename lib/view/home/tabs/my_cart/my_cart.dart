@@ -2,6 +2,7 @@ import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/home/tabs/my_cart/widgets/cart_item.dart';
 import 'package:aissam_store/view/home/tabs/my_cart/widgets/checkout_fab.dart';
 import 'package:aissam_store/view/home/tabs/widgets/header_scroll_up_blur.dart';
+import 'package:aissam_store/view/public/button/button_color_builder.dart';
 import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -170,13 +171,19 @@ class _MyCartTabState extends State<MyCartTab> {
                 const SizedBox(
                   height: 105,
                 ),
-                Text(
-                  'View Checkout History',
-                  textAlign: TextAlign.center,
-                  style: Get.textTheme.bodyLarge!.copyWith(
-                    color: CstColors.b,
-                    fontWeight: FontWeight.w400,
-                  ),
+                ButtonColorBuilder(
+                        color: CstColors.b,
+                  
+                  builder: (color, _) {
+                    return Text(
+                      'View Checkout History',
+                      textAlign: TextAlign.center,
+                      style: Get.textTheme.bodyLarge!.copyWith(
+                        color: color,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
+                  }
                 ),
               ],
             ),

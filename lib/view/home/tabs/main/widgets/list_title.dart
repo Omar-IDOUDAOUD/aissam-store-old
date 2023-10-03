@@ -1,3 +1,6 @@
+import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/public/button/button_color_builder.dart';
+import 'package:aissam_store/view/public/button/button_scale_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -21,23 +24,29 @@ class ProductsCollectionTitle extends StatelessWidget {
           ),
           const Spacer(),
           if (onSeeAllTap != null)
-            GestureDetector(
+            ButtonColorBuilder(
+              color: CstColors.b,
               onTap: onSeeAllTap,
-              child: Row(
-                children: [
-                  Text(
-                    'See all',
-                    style: Get.textTheme.bodySmall,
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  SvgPicture.asset(
-                    "assets/icons/next.svg",
-                    height: 22,
-                  ),
-                ],
-              ),
+              builder: (color, focus) {
+                return Row(
+                  children: [
+                    Text(
+                      'See all',
+                      style: Get.textTheme.bodySmall!.copyWith(
+                        color: color,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    SvgPicture.asset(
+                      "assets/icons/next.svg",
+                      height: 22,
+                      color: color,
+                    ),
+                  ],
+                );
+              },
             ),
         ],
       ),

@@ -19,30 +19,31 @@ class ButtonColorBuilder extends StatefulWidget {
 }
 
 class _ButtonColorBuilderState extends State<ButtonColorBuilder>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _animationController;
-  late final Animation<Color?> _animation;
+// with SingleTickerProviderStateMixin
+{
+  // late final AnimationController _animationController;
+  // late final Animation<Color?> _animation;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: 100.milliseconds);
-    _animation = ColorTween(
-            begin: widget.color,
-            end:
-                widget.focusColor ?? Color.lerp(widget.color, Colors.black, .2))
-        .animate(CurvedAnimation(
-            parent: _animationController, curve: Curves.linearToEaseOut));
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   _animationController =
+  //       AnimationController(vsync: this, duration: 100.milliseconds);
+  //   _animation = ColorTween(
+  //           begin: widget.color,
+  //           end:
+  //               widget.focusColor ?? Color.lerp(widget.color, Colors.black, .2))
+  //       .animate(CurvedAnimation(
+  //           parent: _animationController, curve: Curves.linearToEaseOut));
+  // }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _animationController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   _animationController.dispose();
+  //   super.dispose();
+  // }
 
   bool _isFocus = false;
   @override
@@ -52,17 +53,23 @@ class _ButtonColorBuilderState extends State<ButtonColorBuilder>
       // onTapUp: (d) => widget.onTap != null ? widget.onTap!() : null,
       // onLongPress: widget.onTap,
       onLongPressDown: (c) {
-        _isFocus = true;
-        _animationController.animateTo(1, duration: 50.milliseconds);
+        setState(() {
+          _isFocus = true;
+        });
+        // _animationController.animateTo(1, duration: 50.milliseconds);
       },
       onLongPressCancel: () {
-        _isFocus = false;
-        _animationController.reverse();
+        setState(() {
+          _isFocus = false;
+        });
+        // _animationController.reverse();
       },
       onLongPressUp: () {
         // if (widget.onTap != null) widget.onTap!();
-        _isFocus = false;
-        _animationController.reverse();
+        setState(() {
+          _isFocus = false;
+        });
+        // _animationController.reverse();
       },
       // onTapDown: (c) {},
       // onTapCancel: () {
@@ -75,12 +82,26 @@ class _ButtonColorBuilderState extends State<ButtonColorBuilder>
 
       //   _animationController.reverse();
       // },
-      child: AnimatedBuilder(
-        animation: _animation,
-        builder: (context, c) {
-          return widget.builder(_animation.value!, _isFocus);
+      child: TweenAnimationBuilder<Color?>(
+        curve: Curves.linearToEaseOut,
+        tween: _getCurrentTween,
+        duration: _isFocus ? 50.milliseconds : 150.milliseconds,
+        builder: (_, Color? color, c) {
+          return widget.builder(color!, _isFocus);
         },
       ),
     );
   }
+
+  Tween<Color?> get _getCurrentTween => ColorTween(
+        begin: _isFocus ? widget.color : _getFocusColor,
+        end: _isFocus ? _getFocusColor : widget.color,
+      );
+  Color get _getFocusColor =>
+      widget.focusColor ??
+      Color.lerp(
+        widget.color,
+        Colors.black,
+        .2,
+      )!;
 }
