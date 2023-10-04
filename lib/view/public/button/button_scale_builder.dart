@@ -29,6 +29,14 @@ class _ButtonScaleBuilderState extends State<ButtonScaleBuilder>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap,
+      // onPanUpdate: (DragUpdateDetails dets) {
+      //   print(dets.delta.toString());
+      // },
+      onTapCancel: () {
+        setState(() {
+          _isFocus = false;
+        });
+      },
       onLongPressDown: (c) {
         setState(() {
           _isFocus = true;
