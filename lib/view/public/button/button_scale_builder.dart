@@ -32,17 +32,22 @@ class _ButtonScaleBuilderState extends State<ButtonScaleBuilder>
       // onPanUpdate: (DragUpdateDetails dets) {
       //   print(dets.delta.toString());
       // },
-      onTapCancel: () {
-        setState(() {
-          _isFocus = false;
-        });
-      },
+      // onTapCancel: () {
+      //   setState(() {
+      //     _isFocus = false;
+      //   });
+      // },
       onLongPressDown: (c) {
         setState(() {
           _isFocus = true;
         });
       },
       onLongPressCancel: () {
+        setState(() {
+          _isFocus = false;
+        });
+      },
+      onLongPressMoveUpdate: (LongPressMoveUpdateDetails d) {
         setState(() {
           _isFocus = false;
         });
