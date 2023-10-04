@@ -47,11 +47,21 @@ class _ButtonScaleBuilderState extends State<ButtonScaleBuilder>
           _isFocus = false;
         });
       },
-      onLongPressMoveUpdate: (LongPressMoveUpdateDetails d) {
+      onTapCancel: () {
         setState(() {
           _isFocus = false;
         });
       },
+      onPanDown: (d) {
+        setState(() {
+          _isFocus = false;
+        });
+      },
+      // onLongPressMoveUpdate: (LongPressMoveUpdateDetails d) {
+      //   setState(() {
+      //     _isFocus = false;
+      //   });
+      // },
       onLongPressUp: () {
         setState(() {
           _isFocus = false;
