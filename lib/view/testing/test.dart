@@ -1,8 +1,10 @@
 import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
+import 'package:aissam_store/models/cart_item.dart';
 
 import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/view/home/tabs/my_cart/widgets/cart_item.dart';
 import 'package:aissam_store/view/home/tabs/widgets/loading_product_card.dart';
 import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
 import 'package:flutter/material.dart';
@@ -18,26 +20,23 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  bool _canRequestData = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ProductCard(
-          data: Product(
-              title: 'Morocco abayas with its ultra chic polozza',
-              price: 215,
-              categories: ['Abaya'],
-              colors: [
-                Colors.orange.shade300,
-                Colors.purple.shade300,
-                Colors.pink.shade300,
-              ],
-              rankingAverage: 4.5,
-              reviews: 55,
-              cardPicture: 'assets/images/image_3.png'),
-        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+            sliver: SliverList.builder(
+              itemCount: 3,
+              itemBuilder: (_, i) {
+                return CartItem(listIndex: 0,
+                  data: CartItemData(productId: '444', id: ''),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

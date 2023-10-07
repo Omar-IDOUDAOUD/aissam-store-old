@@ -12,18 +12,18 @@ class UserData {
   List<String>? categories;
   List<String>? favoritedProducts;
   List<Map<String, dynamic>>? searchHistory;
-  List<CartItem>? userCart;
+  // List<CartItem>? userCart;
   UserData({
     this.id,
     this.categories,
     this.favoritedProducts,
     this.searchHistory,
-    this.userCart,
+    // this.userCart,
   }) {
     categories ??= List.empty();
     favoritedProducts ??= List.empty();
     searchHistory ??= List.empty();
-    userCart ??= List.empty();
+    // userCart ??= List.empty();
   }
 
   Map<String, dynamic> toMap() {

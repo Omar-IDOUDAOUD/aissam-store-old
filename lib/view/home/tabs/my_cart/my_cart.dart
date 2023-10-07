@@ -1,4 +1,7 @@
+import 'package:aissam_store/controller/user.dart';
+import 'package:aissam_store/controller/user_cart.dart';
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/home/tabs/favorites/widgets/loading_favorite_card.dart';
 import 'package:aissam_store/view/home/tabs/my_cart/widgets/cart_item.dart';
 import 'package:aissam_store/view/home/tabs/my_cart/widgets/checkout_fab.dart';
 import 'package:aissam_store/view/home/tabs/widgets/header_scroll_up_blur.dart';
@@ -85,11 +88,17 @@ class _MyCartTabState extends State<MyCartTab> {
   late ValueNotifier<double?> _scrollHeaderNotifier; //
   static const double _fixHeaderExtent = 70;
 
+  final UserCartController _userCartController = UserCartController.instance;
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController(initialScrollOffset: 0)
       ..addListener(() {
+        if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent) {
+          _userCartController.loadData();
+        }
         if (_expandCheckoutButton) _collapseCheckoutBottomSheet();
         if (_scrollController.offset <= _fixHeaderExtent &&
             _scrollController.offset >= 0) {
@@ -98,6 +107,7 @@ class _MyCartTabState extends State<MyCartTab> {
           _scrollHeaderNotifier.value = null;
         }
       });
+    _userCartController.loadData();
     _scrollHeaderNotifier = ValueNotifier(0);
   }
 
@@ -113,37 +123,57 @@ class _MyCartTabState extends State<MyCartTab> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          controller: _scrollController,
-          slivers: [
-            SliverPersistentHeader(
-              floating: true,
-              pinned: false,
-              delegate: _HeaderDelegate(
-                scrollController: _scrollController,
-                notifier: _scrollHeaderNotifier,
-                fixedExtent: _fixHeaderExtent,
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              sliver: SliverToBoxAdapter(
-                child: CustomTextField(
-                  prefixIconPath: 'assets/icons/search_small.svg',
-                  onClear: () {},
-                  focusNode: FocusNode(),
+        GetBuilder<UserCartController>(
+          init: _userCartController,
+          id: _userCartController.cartItemsPaginationData.widgetToUpdateTag,
+          builder: (c) {
+            return CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              controller: _scrollController,
+              slivers: [
+                SliverPersistentHeader(
+                  floating: true,
+                  pinned: false,
+                  delegate: _HeaderDelegate(
+                    scrollController: _scrollController,
+                    notifier: _scrollHeaderNotifier,
+                    fixedExtent: _fixHeaderExtent,
+                  ),
                 ),
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-              sliver: SliverList.builder(
-                itemCount: 20,
-                itemBuilder: (_, i) => const CartItem(),
-              ),
-            ),
-          ],
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  sliver: SliverToBoxAdapter(
+                    child: CustomTextField(
+                      prefixIconPath: 'assets/icons/search_small.svg',
+                      onClear: () {},
+                      focusNode: FocusNode(),
+                    ),
+                  ),
+                ),
+                if (!c.cartItemsPaginationData.isLoading &&
+                    c.cartItemsPaginationData.loadedData.isEmpty)
+                  SliverToBoxAdapter(child: Text('No Data'))
+                else
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 20),
+                    sliver: SliverList.builder(
+                      itemCount: c.cartItemsPaginationData.loadedData.length +
+                          (c.cartItemsPaginationData.isLoading ? 3 : 0),
+                      itemBuilder: (_, i) {
+                        if (i >= c.cartItemsPaginationData.loadedData.length)
+                          return LoadingFavoriteCard();
+                        return CartItem(
+                          listIndex: i,
+                          data:
+                              c.cartItemsPaginationData.loadedData.elementAt(i),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            );
+          },
         ),
         AnimatedPositioned(
           bottom: _expandCheckoutButton ? 0 : -230,

@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PaginationDataResult<M> {
-  final List<M> loadedData = [];
-  DocumentSnapshot? lastLoadedDoc;
+class PaginationDataResult<T> {
+  final List<T> loadedData = [];
+  DocumentSnapshot<T>? lastLoadedDoc;
   bool canLoadMoreData = true;
   bool isLoading = false;
   bool hasError = false;
