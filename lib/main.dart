@@ -113,11 +113,11 @@ class AissamStore extends StatelessWidget {
             transition: Transition.fadeIn,
             showCupertinoParallax: false,
             opaque: false),
-        // GetPage(
-        //   name: '/testing',
-        //   page: () => TestPage(),
-        //   binding: HomeControllersBindings()
-        // ),
+        GetPage(
+          name: '/testing',
+          page: () => TestPage(),
+          // binding: HomeControllersBindings(),
+        ),
         GetPage(name: '/checkout', page: () => CheckoutPage()),
         GetPage(
             name: '/add_checkout_address', page: () => AddCheckoutAddress()),

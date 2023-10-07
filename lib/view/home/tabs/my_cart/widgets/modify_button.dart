@@ -1,14 +1,20 @@
+import 'package:aissam_store/controller/user_cart.dart';
+import 'package:aissam_store/models/cart_item.dart';
+import 'package:aissam_store/models/product.dart';
 import 'package:aissam_store/view/public/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_card_bottom_sheet.dart' as ProductDetsPage ;
+import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_card_bottom_sheet.dart'
+    as ProductDetsPage;
 import 'package:aissam_store/view/home/tabs/my_cart/widgets/cart_item.dart'
     as CartItemFile show Button;
 
 class ModifyButton extends StatefulWidget {
-  const ModifyButton({super.key});
+  const ModifyButton({super.key, required this.data, required this.listIndex});
+  final CartItemData data;
+  final int listIndex;
 
   @override
   State<ModifyButton> createState() => _ModifyButtonState();
@@ -53,45 +59,69 @@ class _ModifyButtonState extends State<ModifyButton>
           bottom: 0,
           right: 0,
           left: 0,
-          child: AnimatedBuilder(
-            animation: _modifyProductButtonOverLayAn,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Material(
-                type: MaterialType.transparency,
-                child: Button(
-                  isHeightMinimize: true,
-                  onPressed: _closeAddToCartButton,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
+          // child: AnimatedBuilder(
+          //   animation: _modifyProductButtonOverLayAn,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Material(
+              type: MaterialType.transparency,
+              child: Button(
+                isHeightMinimize: true,
+                onPressed: () async {
+                  await _saveNewChanges();
+                  _closeAddToCartButton();
+                },
+                child: Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
                         'Save Modifications',
                         style: Get.textTheme.bodyLarge!.copyWith(
                           color: Colors.white,
                         ),
                       ),
-                      SvgPicture.asset(
-                        'assets/icons/ic_fluent_checkmark_24_filled.svg',
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
+                    ),
+                    _saving
+                        ? CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          )
+                        : SvgPicture.asset(
+                            'assets/icons/ic_fluent_checkmark_24_filled.svg',
+                            color: Colors.white,
+                          )
+                  ],
                 ),
+                enabled: !_saving,
               ),
             ),
-            builder: (context, c) {
-              return Transform.translate(
-                child: c,
-                offset: _modifyProductButtonOverLayAn.value,
-              );
-            },
           ),
+          //   builder: (context, c) {
+          //     return Transform.translate(
+          //       child: c,
+          //       offset: _modifyProductButtonOverLayAn.value,
+          //     );
+          //   },
+          // ),
         );
       },
     );
   }
 
+  bool _saving = false;
+  Future<void> _saveNewChanges() async {
+    _modifyProductOverLayState.setState(() {
+      _saving = true;
+    });
+
+    final UserCartController userCartController = UserCartController.instance;
+    await userCartController.modify(
+        widget.data..quantity = 150, widget.listIndex);
+    _modifyProductOverLayState.setState(() {
+      _saving = false;
+    });
+  }
 
   void _closeAddToCartButton() {
     Get.back();
@@ -109,6 +139,7 @@ class _ModifyButtonState extends State<ModifyButton>
       isScrollControlled: true,
       builder: (_) {
         return ProductDetsPage.AddToCartBottomSheet(
+          data: widget.data,
           title: 'Modify Product',
           pageController: PageController(),
           onDispose: _closeAddToCartButton,

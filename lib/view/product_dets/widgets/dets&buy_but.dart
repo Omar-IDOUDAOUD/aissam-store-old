@@ -1,6 +1,8 @@
 // ignore: file_names
 
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/models/cart_item.dart';
+import 'package:aissam_store/models/product.dart';
 import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_card_bottom_sheet.dart';
 import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/add_to_cart_button.dart';
 import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/proceed_to_checkout_button.dart';
@@ -257,6 +259,8 @@ class _BuyButtonState extends State<_BuyButton>
       builder: (_) {
         return AddToCartBottomSheet(
           title: 'ADD TO CART',
+          data: CartItemData(id: '', productId: 'ddd')
+            ..product = Product.testModel(),
           pageController: _addToCartPageController,
           onDispose: _closeAddToCartButton,
           animationDur: _animationDur,

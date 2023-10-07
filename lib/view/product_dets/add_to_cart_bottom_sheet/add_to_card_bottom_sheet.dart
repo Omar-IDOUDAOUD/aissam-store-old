@@ -1,4 +1,5 @@
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/models/cart_item.dart';
 import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/widgets/color_selection.dart';
 import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/widgets/quantity_selection.dart';
 import 'package:aissam_store/view/product_dets/add_to_cart_bottom_sheet/widgets/size_selection.dart';
@@ -7,18 +8,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class AddToCartBottomSheet extends StatefulWidget {
-  const AddToCartBottomSheet({
+  AddToCartBottomSheet({
     super.key,
+    required this.title,
+    required this.data,
     this.onDispose,
     this.animationDur,
-    required this.pageController,
-    required this.title, 
+    this.pageController,
   });
-  final Function()? onDispose;
   // final Function()? onSave;
+  final CartItemData data;
+  PageController? pageController = PageController();
   final Duration? animationDur;
-  final PageController pageController;
-  final String title; 
+  final Function()? onDispose;
+  final String title;
 
   @override
   State<AddToCartBottomSheet> createState() => _AddToCartBottomSheetState();
@@ -36,7 +39,7 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
   void initState() {
     super.initState();
     // TODO: implement initState
-    widget.pageController.addListener(() {
+    widget.pageController!.addListener(() {
       if (this.mounted) setState(() {});
     });
   }
@@ -51,7 +54,7 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
         ),
         Center(
           child: Text(
-           widget.title,
+            widget.title,
             style: Get.textTheme.headlineSmall!
                 .copyWith(color: Colors.black, fontWeight: FontWeight.w700),
           ),
@@ -63,8 +66,8 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
           duration: widget.animationDur ?? 400.milliseconds,
           curve: Curves.linearToEaseOut,
           child: SizedBox(
-            height: widget.pageController.hasClients
-                ? widget.pageController.page == 0
+            height: widget.pageController!.hasClients
+                ? widget.pageController!.page == 0
                     ? Get.height * 0.8
                     : Get.height * 0.4
                 : Get.height * 0.8,
@@ -72,7 +75,7 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
               controller: widget.pageController,
               physics: NeverScrollableScrollPhysics(),
               children: [
-                _FirstPart(),
+                _FirstPart(data: widget.data),
                 _SecondPart(),
               ],
             ),
@@ -84,7 +87,8 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
 }
 
 class _FirstPart extends StatelessWidget {
-  const _FirstPart({super.key});
+  const _FirstPart({super.key, required this.data});
+  final CartItemData data;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +98,7 @@ class _FirstPart extends StatelessWidget {
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Premium Jersey Hijab - Rose Quartz',
+            data.product!.title!,
             style: Get.textTheme.headlineMedium!.copyWith(
               color: CstColors.a,
               height: 1.2,
@@ -102,14 +106,14 @@ class _FirstPart extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            "Size",
+            data.size!,
             style: Get.textTheme.headlineSmall!.copyWith(color: CstColors.a),
           ),
           SizedBox(height: 5),
           SizeSelection(),
           SizedBox(height: 10),
           Text(
-            "Color",
+            data.color!,
             style: Get.textTheme.headlineSmall!.copyWith(color: CstColors.a),
           ),
           SizedBox(height: 5),
@@ -124,7 +128,7 @@ class _FirstPart extends StatelessWidget {
               ),
               Spacer(),
               Text(
-                "2 items",
+                "${data.quantity} items",
                 style: Get.textTheme.bodyMedium!.copyWith(color: CstColors.b),
               ),
             ],
