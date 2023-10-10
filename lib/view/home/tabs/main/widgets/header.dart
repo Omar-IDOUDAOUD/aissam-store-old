@@ -29,36 +29,42 @@ class Header extends StatelessWidget {
             },
           ),
           // SvgPicture.asset('assets/icons/menu_vertical.svg'),
-          Stack(
-            alignment: Alignment.bottomRight,
-            clipBehavior: Clip.none,
-            children: [
-              SvgPicture.asset(
-                'assets/icons/ic_fluent_alert_24_regular.svg',
-                height: 25,
-              ),
-              Positioned(
-                bottom: 0,
-                right: -3.0 * _notificationsNumber.length,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color.lerp(Colors.pink.shade100, Colors.white, 0.4),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 4, left: 4, top: 1),
-                    child: Text(
-                      _notificationsNumber,
-                      style: Get.textTheme.displaySmall!.copyWith(
-                        color: Colors.pinkAccent,
-                        fontWeight: FontWeight.bold,
-                        // height: 1.5,
+          GestureDetector(
+            onTap: () {
+              //
+            },
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              clipBehavior: Clip.none,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/ic_fluent_alert_24_regular.svg',
+                  height: 25,
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: -3.0 * _notificationsNumber.length,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color:
+                          Color.lerp(Colors.pink.shade100, Colors.white, 0.4),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 4, left: 4, top: 1),
+                      child: Text(
+                        _notificationsNumber,
+                        style: Get.textTheme.displaySmall!.copyWith(
+                          color: Colors.pinkAccent,
+                          fontWeight: FontWeight.bold,
+                          // height: 1.5,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
