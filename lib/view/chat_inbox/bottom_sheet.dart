@@ -17,11 +17,9 @@ class ShowChatInboxBottomSheet {
           onTap: Get.back,
           icon: SvgPicture.asset(
             'assets/icons/close.svg',
-            height: 20,
-            color: Colors.black,
-            // width: 20,
+            color: CstColors.a,
           ),
-        )
+        ),
       ],
       builder: (sc) => _ChatInboxBottomSheetContent(scrollController: sc),
       context: context,
