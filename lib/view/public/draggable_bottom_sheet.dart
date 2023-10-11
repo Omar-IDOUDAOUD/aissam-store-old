@@ -12,14 +12,17 @@ class BottomSheetActionButton {
 
 class ShowDraggableBottomSheet {
   final BuildContext context;
-  final Widget child;
+  final Widget Function(ScrollController scrollController) builder;
   final String title;
+  final String? subTitle;
   final List<BottomSheetActionButton>? actions;
-  ShowDraggableBottomSheet(
-      {required this.child,
-      required this.context,
-      required this.title,
-      this.actions}) {
+  ShowDraggableBottomSheet({
+    required this.builder,
+    required this.context,
+    required this.title,
+    this.subTitle,
+    this.actions,
+  }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -39,7 +42,7 @@ class ShowDraggableBottomSheet {
           builder: (_, ScrollController scrollController) {
             return Container(
               margin: EdgeInsets.all(15),
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 7),
+              padding: EdgeInsets.symmetric(horizontal: 25),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(
@@ -48,24 +51,44 @@ class ShowDraggableBottomSheet {
               child: Column(
                 children: [
                   SizedBox(
-                      height: 5,
-                      width: 50,
-                      child: DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(10)))),
+                    height: 7,
+                  ),
+                  SizedBox(
+                    height: 5,
+                    width: 50,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 10,
                   ),
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          title,
-                          style: Get.textTheme.headlineMedium!
-                              .copyWith(color: CstColors.a),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: Get.textTheme.headlineMedium!
+                                  .copyWith(color: CstColors.a),
+                            ),
+                            if (subTitle != null)
+                              Text(
+                                subTitle!,
+                                style: Get.textTheme.bodyMedium!.copyWith(
+                                  color: CstColors.b,
+                                  height: 1.1,
+                                ),
+                              ),
+                          ],
                         ),
                       ),
+
                       // SizedBox.square(
                       //   dimension: 20,
                       //   child: ColoredBox(color: Colors.red),
@@ -85,12 +108,11 @@ class ShowDraggableBottomSheet {
                         ),
                     ],
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Expanded(
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      child: child,
-                    ),
+                    child: builder(scrollController),
                   ),
                 ],
               ),

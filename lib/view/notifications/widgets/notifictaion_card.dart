@@ -1,4 +1,5 @@
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/notifications/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -45,11 +46,11 @@ class _NotificationCardState extends State<NotificationCard> {
               ),
               Row(
                 children: [
-                  _PrimaryButton(color: Colors.orange, text: 'Send feedback'),
+                  PrimaryButton(color: Colors.orange, text: 'Send feedback'),
                   SizedBox(
                     width: 7,
                   ),
-                  _PrimaryButton(
+                  PrimaryButton(
                     color: Colors.grey.shade300,
                     text: 'Not delivered to me',
                     textColor: Colors.grey.shade700,
@@ -67,54 +68,6 @@ class _NotificationCardState extends State<NotificationCard> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _PrimaryButton extends StatelessWidget {
-  const _PrimaryButton({
-    super.key,
-    required this.color,
-    required this.text,
-    this.textColor,
-  });
-
-  final Color color;
-  final String text;
-  final Color? textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 11, vertical: 6),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        text,
-        style: Get.textTheme.displayLarge!.copyWith(
-          color: textColor ?? Colors.white,
-        ),
-      ),
-    );
-  }
-}
-
-class _SecondaryButton extends StatelessWidget {
-  const _SecondaryButton({super.key, required this.text});
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 11, vertical: 6),
-      child: Text(
-        text,
-        style: Get.textTheme.displayLarge!.copyWith(
-          color: Colors.white,
-        ),
-      ),
     );
   }
 }
