@@ -21,17 +21,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     // _pageController =
     //     PageController(initialPage: _activeTabIndex, keepPage: true);
-    _tabController = TabController(length: 5, vsync: this)
-      ..addListener(() {
-        setState(() {
-          _activeTabIndex = _tabController.index;
-        });
-      });
+    _tabController =
+        TabController(length: 5, vsync: this, initialIndex: _activeTabIndex)
+          ..addListener(() {
+            setState(() {
+              _activeTabIndex = _tabController.index;
+            });
+          });
   }
 
   @override

@@ -54,9 +54,8 @@ class FavoritesController extends GetxController {
     _fpdr.isLoading = true;
     update([_fpdr.widgetToUpdateTag]);
 
-    final List<String> _productsIds = await _userController
-        .getUserData()
-        .then<List<String>>((data) => data.favoritedProducts!);
+    final List<String> _productsIds =
+        _userController.getUserData.favoritedProducts!;
     if (_productsIds.isEmpty) {
       _fpdr.isLoading = false;
       _fpdr.canLoadMoreData = false;
@@ -105,10 +104,9 @@ class FavoritesController extends GetxController {
     });
   }
 
-  Future<bool> checkProductIsFavorited(String productId) async {
-    final List<String> userFavsPrdsIds = await _userController
-        .getUserData()
-        .then((value) => value.favoritedProducts!);
+  bool checkProductIsFavorited(String productId) {
+    final List<String> userFavsPrdsIds =
+        _userController.getUserData.favoritedProducts!;
     return userFavsPrdsIds.contains(productId);
   }
 }

@@ -82,8 +82,8 @@ class _ProductsListState extends State<ProductsList> {
               if (i >= paginationData.loadedData.length)
                 return const LoadingProductCard();
               return ProductCard(
-                isFavoritedProductChecker:
-                    _favoritesController.checkProductIsFavorited,
+                isFavoritedProductChecker: (pId) async =>
+                    _favoritesController.checkProductIsFavorited(pId),
                 data: paginationData.loadedData.elementAt(i),
                 width: Get.size.width * 0.3,
                 showShadow: i == 0,

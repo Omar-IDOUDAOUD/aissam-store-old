@@ -115,8 +115,8 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
                           return const LoadingProductCard();
                         return ProductCard(
                           data: paginationData.loadedData.elementAt(i),
-                          isFavoritedProductChecker:
-                              _favoritesController.checkProductIsFavorited,
+                          isFavoritedProductChecker: (pId) async =>
+                              _favoritesController.checkProductIsFavorited(pId),
                           onFavorite: (b) async {
                             if (b)
                               await _favoritesController.addFavoritedProduct(

@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:aissam_store/controller/search.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -11,7 +12,7 @@ class UserData {
   String? id;
   List<String>? categories;
   List<String>? favoritedProducts;
-  List<Map<String, dynamic>>? searchHistory;
+  List<SearchHistoryItem>? searchHistory;
   List<CartItem>? userCart;
   UserData({
     this.id,
@@ -40,8 +41,9 @@ class UserData {
       id: map['user_id'],
       categories: List<String>.from(map['categories'] as List),
       favoritedProducts: List<String>.from(map['favorited_products'] as List),
-      searchHistory:
-          List<Map<String, dynamic>>.from((map['search_history'] as List)),
+      searchHistory: List<SearchHistoryItem>.from(
+          (map['search_history'] as List)
+              .map((e) => SearchHistoryItem.fromMap(e))),
     );
   }
   factory UserData.fromFireStore(
@@ -53,8 +55,9 @@ class UserData {
       id: data['user_id'],
       categories: List<String>.from(data['categories'] as List),
       favoritedProducts: List<String>.from(data['favorited_products'] as List),
-      searchHistory:
-          List<Map<String, dynamic>>.from((data['search_history'] as List)),
+      searchHistory: List<SearchHistoryItem>.from(
+          (data['search_history'] as List)
+              .map((e) => SearchHistoryItem.fromMap(e))),
     );
   }
 }

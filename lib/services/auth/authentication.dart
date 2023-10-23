@@ -27,7 +27,7 @@ class AuthenticationService extends GetxService {
 
   User? _user;
 
-  bool get userLoggenIn => _firebaseAuth.currentUser != null;
+  bool get userLoggedIn => _firebaseAuth.currentUser != null;
 
   User? get getUser => _firebaseAuth.currentUser;
 
@@ -41,10 +41,10 @@ class AuthenticationService extends GetxService {
       UserCredential userCredential) async {
     final UserController userController = UserController.instance;
     AuthResult authResult = AuthResult.success(user: userCredential);
-    if (await userController.checkUserExistence(userCredential.user!.uid))
-
-      ///check user if exists in case user sign in with google
+    if (await userController.checkUserExistence(userCredential.user!.uid)) {
+      await userController.initializeData();
       return authResult;
+    }
 
     // final user = userCredential.user!;
     final newUser = UserModel(
@@ -63,6 +63,8 @@ class AuthenticationService extends GetxService {
       authResult = AuthResult(message: e);
     });
     authResult.needsFillUserInfoAfterAuth = true;
+    if (authResult.success) await userController.initializeData();
+
     return authResult;
   }
 
@@ -138,12 +140,15 @@ class AuthenticationService extends GetxService {
       return AuthResult.fromErrorCode(
           code: e.code, type: AuthenticationModes.SignInWithEmailAndPassword);
     }
+    final UserController userController = UserController.instance;
+    await userController.initializeData();
     return AuthResult.success(user: userCredential);
   }
 
   Future<void> signOut() async {
-    print('Signed Out');
-    await _firebaseAuth.signOut();
+    print('Signed Out and delete user');
+    await _firebaseAuth.currentUser!.delete();
+    //  _firebaseAuth.signOut();
   }
 
   // Future<AuthResult> registerAnonymously() async {

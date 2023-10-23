@@ -8,7 +8,7 @@ class PaginationDataResult<M> {
   bool canLoadMoreData = true;
   bool isLoading = false;
   bool hasError = false;
-  final String widgetToUpdateTag = Random.secure().nextInt(1000).toString();
+  final String widgetToUpdateTag = Random.secure().nextInt(10000).toString();
   void reset() {
     loadedData.clear();
     lastLoadedDoc = null;

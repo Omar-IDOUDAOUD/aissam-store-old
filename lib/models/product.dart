@@ -20,6 +20,7 @@ class Product {
   List<String>? categories;
   Timestamp? timestamp;
   int? sells;
+  List<String>? tags;
   Product({
     this.id,
     this.title,
@@ -33,6 +34,7 @@ class Product {
     this.categories,
     this.timestamp,
     this.sells,
+    // this.tags,
   });
 
   // Product copyWith({
@@ -76,6 +78,7 @@ class Product {
           .toList(),
       'timestamp': FieldValue.serverTimestamp(),
       'sells': sells,
+      'tags': tags,
     };
   }
 
@@ -105,23 +108,23 @@ class Product {
   ) {
     final data = snapshot.data()!;
     return Product(
-        id: snapshot.id,
-        title: data['title'],
-        description: data['description'],
-        price: data['price'] as double,
-        reviews: data['reviews'] as int,
-        rankingAverage: data['ranking_average'] as double,
-        cardPicture: data['card_picture'],
-        categories:
-            (data['categories'] as List).map((e) => e.toString()).toList(),
-        images: (data['images'] as List).map((e) => e.toString()).toList(),
-        colors: (data['colors'] as List)
-            .map<Color>((e) => HexColor(e.toString()))
-            .toList(),
-        timestamp: data['timestamp'] as Timestamp,
-        sells: data['sells']
-        // number: data['number'] as int,
-        );
+      id: snapshot.id,
+      title: data['title'],
+      description: data['description'],
+      price: data['price'] as double,
+      reviews: data['reviews'] as int,
+      rankingAverage: data['ranking_average'] as double,
+      cardPicture: data['card_picture'],
+      categories:
+          (data['categories'] as List).map((e) => e.toString()).toList(),
+      images: (data['images'] as List).map((e) => e.toString()).toList(),
+      colors: (data['colors'] as List)
+          .map<Color>((e) => HexColor(e.toString()))
+          .toList(),
+      timestamp: data['timestamp'] as Timestamp,
+      sells: data['sells'] as int,
+      // number: data['number'] as int,
+    );
   }
   factory Product.testModel() => Product(
         cardPicture: "https://imageonline.co/image.jpg",

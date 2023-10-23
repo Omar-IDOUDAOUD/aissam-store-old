@@ -18,18 +18,17 @@ class MainTab extends StatefulWidget {
 }
 
 class _MainTabState extends State<MainTab> {
-  final FavoritesController _favoritesController = FavoritesController.instance;
+  final ProductsController _productsController = ProductsController.instance;
   final UserController _userController = UserController.instance;
 
   bool _showForYouCollectionPart = false;
   _checkAndAddForYouCollectionPart() {
-    _userController.getUserData().then((value) {
-      if (value!.categories!.isNotEmpty && mounted) {
-        setState(() {
-          _showForYouCollectionPart = true;
-        });
-      }
-    });
+    final userCats = _userController.getUserData.categories;
+    if (userCats!.isNotEmpty && mounted) {
+      setState(() {
+        _showForYouCollectionPart = true;
+      });
+    }
   }
 
   @override
@@ -56,15 +55,6 @@ class _MainTabState extends State<MainTab> {
       'Avk1MTiEQU1pokJDopF1',
       'DhMMBDB57a8D6cr7HzjK',
     ];
-
-    final Future Function() c = () async {
-      for (var element in ids) {
-        await _favoritesController.addFavoritedProduct(element);
-      }
-    };
-    // c().then((v) {
-    //   print('adding favs completed');
-    // });
   }
 
   @override

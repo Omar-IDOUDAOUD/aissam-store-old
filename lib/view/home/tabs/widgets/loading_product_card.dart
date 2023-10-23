@@ -26,8 +26,9 @@ class _LoadingProductCardState extends State<LoadingProductCard>
           ..addListener(() {
             setState(() {});
           });
-    _colorAnimation = ColorTween(begin: Colors.grey.shade500, end: Colors.grey.shade300)
-        .animate(_colorAnimationCtrl);
+    _colorAnimation =
+        ColorTween(begin: Colors.grey.shade500, end: Colors.grey.shade300)
+            .animate(_colorAnimationCtrl);
 
     _w1 = _randomWidthFraction;
     _w2 = _randomWidthFraction;
@@ -51,7 +52,6 @@ class _LoadingProductCardState extends State<LoadingProductCard>
         children: [
           SizedBox(
             height: 170,
-            width: 120,
             child: _getLoadingBoxDec(0),
           ),
           const SizedBox(
@@ -115,13 +115,15 @@ class _LoadingProductCardState extends State<LoadingProductCard>
   double? _w1;
   double? _w2;
   double? _w3;
-  double? _w4; 
-  Widget  _getLoadingBoxDec(franction) {
+  double? _w4;
+  Widget _getLoadingBoxDec(franction) {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Color.lerp(_colorAnimation.value, Colors.grey.shade400 , franction*0.7),
+        color: Color.lerp(
+            _colorAnimation.value, Colors.grey.shade400, franction * 0.7),
       ),
+      child: Center(),
     );
   }
 

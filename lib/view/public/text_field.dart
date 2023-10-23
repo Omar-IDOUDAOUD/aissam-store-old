@@ -29,7 +29,7 @@ class CustomTextField extends StatefulWidget {
   TextEditingController? controller;
   final String? prefixIconPath;
   final double borderRadius;
-  final String? hint; 
+  final String? hint;
 
   /// called when submit the field text using suffix button
   final Function()? onCommit;
@@ -71,6 +71,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.focusNode!.addListener(() {
+      if (!widget.focusNode!.hasFocus)
+        _showClearButton(widget.controller!.text);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedPhysicalModel(
       duration: 200.milliseconds,
@@ -84,7 +94,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         controller: widget.controller,
         onTap: widget.onTap,
         onSubmitted: (v) {
-          if (widget.onCommit != null) widget.onCommit!();
+          if (widget.onCommit != null && v.isNotEmpty) widget.onCommit!();
           _showClearButton(v);
         },
         cursorOpacityAnimates: true,

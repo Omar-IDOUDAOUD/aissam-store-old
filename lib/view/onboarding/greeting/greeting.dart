@@ -105,7 +105,7 @@ class _OnBoardingGreetingPageState extends State<OnBoardingGreetingPage> {
                     });
                     if (response.success) {
                       await 1.seconds.delay();
-                      Get.offNamed('/');
+                      Get.toNamed('/onboarding/user_info_customization');
                     } else {
                       _showFailSnackBar(response.message!);
                     }

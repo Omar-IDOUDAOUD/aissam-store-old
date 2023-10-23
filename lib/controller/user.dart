@@ -1,3 +1,4 @@
+import 'package:aissam_store/controller/search.dart';
 import 'package:aissam_store/models/user.dart';
 import 'package:aissam_store/models/user_data.dart';
 import 'package:aissam_store/services/auth/authentication.dart';
@@ -32,11 +33,6 @@ class UserController extends GetxController {
           toFirestore: (UserData model, _) => model.toMap(),
         )
         .doc(_authenticationService.getUser!.uid);
-    firestoreUserData.snapshots().listen((event) {
-      _userData = event.data();
-      print(
-          'SNAPSHOT EVENT DETECTED: favs: ${_userData!.favoritedProducts.toString()}');
-    });
   }
 
   String? get userId => _authenticationService.getUser!.uid;
@@ -51,23 +47,87 @@ class UserController extends GetxController {
     } catch (e) {
       throw Exception("can't save user and user data!, error: $e");
     }
-    _user = null;
-    _userData = null;
+    // return;
   }
 
-  Future<UserModel> getUser() async {
-    if (_user != null) return _user!;
-    final userDoc = await firestoreUser.get();
-    _user = userDoc.data();
-    return _user!;
+  void _startSnapshotListeners() {
+    firestoreUser.snapshots().listen((event) {
+      _user = event.data();
+      print('NEW USER SNAPSHOT EVENT DETECTED');
+    });
+    firestoreUserData.snapshots().listen((event) {
+      _userData = event.data();
+      print('NEW USER DATA SNAPSHOT EVENT DETECTED');
+    });
   }
 
-  Future<UserData> getUserData() async {
-    if (_userData != null) return _userData!;
-    final userDoc = await firestoreUserData.get();
-    _userData = userDoc.data();
-    return _userData!;
+  Future<bool> initializeData() async {
+    print('-------------INITIALIZE USER DATA-------------0');
+    if (_user != null && _userData != null) return true;
+    print('-------------INITIALIZE USER DATA-------------1');
+
+    DocumentSnapshot<UserModel>? userDoc;
+    DocumentSnapshot<UserData>? userDataDoc;
+    bool errorOccurred = false;
+
+    getData() async {
+      userDoc = await firestoreUser.get().catchError((e) {
+        errorOccurred = true;
+      });
+      userDataDoc = await firestoreUserData.get().catchError((e) {
+        errorOccurred = true;
+      });
+    }
+
+    await getData();
+    print(
+        '-------------INITIALIZE USER DATA-------------2, docs: 1: ${userDoc!.data()}, 2: ${userDataDoc!.data()}');
+
+    if (errorOccurred) return false;
+
+    if (!userDoc!.exists || !userDataDoc!.exists) {
+      print('-------------INITIALIZE USER DATA-------------3');
+      final userAuth = _authenticationService.getUser!;
+
+      final UserModel user = UserModel(
+        userId: userAuth.uid,
+        email: userAuth.email,
+        firstName: userAuth.displayName != null
+            ? userAuth.displayName!.split(' ').first
+            : null,
+        lastName: userAuth.displayName != null
+            ? userAuth.displayName!.split(' ').last
+            : null,
+        phoneNumber: userAuth.phoneNumber,
+        profilePhotoUrl: userAuth.photoURL,
+      );
+      await saveUser(user, List.empty()).catchError((e) {
+        errorOccurred = true;
+      });
+      if (errorOccurred) return false;
+    } else {
+      _startSnapshotListeners();
+      _user = userDoc!.data();
+      _userData = userDataDoc!.data();
+      print(
+          '-------------INITIALIZE USER DATA-------------3.5, 1: $_user, 2: $_userData-------------');
+      return !errorOccurred;
+    }
+    print('-------------INITIALIZE USER DATA-------------4');
+
+    await getData();
+    if (errorOccurred) return false;
+    _startSnapshotListeners();
+    _user = userDoc!.data();
+    _userData = userDataDoc!.data();
+    print(
+        '-------------FINISH INITIALIZE USER DATA, 1: $_user, 2: $_userData-------------');
+    return true;
   }
+
+  UserModel get getUser => _user!;
+
+  UserData get getUserData => _userData!;
 
   Future<bool> checkUserExistence(uid) async {
     final docUser =
@@ -75,6 +135,18 @@ class UserController extends GetxController {
       print('error: $e');
     });
     return docUser.exists;
+  }
+
+  Future<void> addSearchToHistoryLog(String searchTerm, {String? tagId}) async {
+    await firestoreUserData.update({
+      'search_history': FieldValue.arrayUnion([
+        SearchHistoryItem(
+                searchQuery: searchTerm,
+                searchDateTime: DateTime.now(),
+                tagId: tagId)
+            .toMap()
+      ])
+    });
   }
 
   // Future<bool> addFavoritedProduct(String productId) async {

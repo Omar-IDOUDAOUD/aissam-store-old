@@ -1,6 +1,8 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, curly_braces_in_flow_control_structures
 
+import 'package:aissam_store/controller/search.dart';
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/controller/search.dart' as ctrl;
 import 'package:aissam_store/view/home/tabs/search/filter_dialog.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/history_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
@@ -19,7 +21,6 @@ class SearchTab extends StatefulWidget {
 class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   late final ValueNotifier<bool> _isSearchBarFloatingNotifier;
   late final ScrollController _scrollController;
-  late final TextEditingController _searchController;
   late final FocusNode _searchFocusNode;
   late final TabController _tabController;
   late final TabController _searchResultsTabController;
@@ -30,12 +31,18 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   bool _showSearchResultsTitle = false;
   double? _titleHeaderHeight;
 
+  ///
+  final ctrl.SearchController _searchController =
+      ctrl.SearchController.instance;
+
   @override
   void dispose() {
+    _searchController.searchTextEditingController
+        .removeListener(_partsMovementsHandler);
     _isSearchBarFloatingNotifier.dispose();
     _scrollController.dispose();
     _searchFocusNode.dispose();
-    _searchController.dispose();
+    // _searchTextEditingController.dispose();
     _tabController.dispose();
     _searchResultsTabController.dispose();
     _searchResultsTabsAppearanceNotifier.dispose();
@@ -52,6 +59,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   }
 
   void _hideResultsTabs() async {
+    // _searchResultsTabController.animateTo(0);
     _searchResultsTabsAppearanceAn2 = false;
     _searchResultsTabsAppearanceNotifier.notifyListeners();
     await 200.milliseconds.delay();
@@ -76,6 +84,8 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    // _searchController.test();
+    // _searchController.searchFor('DVRZXtp4egRqlwyg3UtI');
     _isSearchBarFloatingNotifier = ValueNotifier(false);
     _backToTopFabNotifier = ValueNotifier(false);
     _scrollController = ScrollController()
@@ -91,22 +101,31 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     _searchFocusNode = FocusNode();
     _tabController = TabController(length: 5, vsync: this)
       ..addListener(() async {
-        if (_tabController.index >= 2)
+        if (_tabController.index >= 2) {
           _showResultsTabs();
-        else
+          print('show tabs');
+        } else {
           _hideResultsTabs();
-      });
-    _searchResultsTabController = TabController(length: 3, vsync: this);
-    _searchController = TextEditingController()
-      ..addListener(() {
-        if (_searchController.text.isEmpty && _tabController.index != 0) {
-          _showHistory();
-        } else if (_searchController.text.isNotEmpty &&
-            _tabController.index != 1) {
-          _showSuggestions();
+          print('hide tabs');
         }
       });
+    _searchResultsTabController = TabController(length: 3, vsync: this);
+    _searchController.searchTextEditingController
+        .addListener(_partsMovementsHandler);
     _searchResultsTabsAppearanceNotifier = ValueNotifier(false);
+    // final x = _searchController
+    //     .searchSuggestions('Abayas')
+    //     .then((value) => print(value));
+  }
+
+  void _partsMovementsHandler() {
+    if (_searchController.searchTextEditingController.text.isEmpty &&
+        _tabController.index != 0) {
+      _showHistory();
+    } else if (_searchController.searchTextEditingController.text.isNotEmpty &&
+        _tabController.index != 1) {
+      _showSuggestions();
+    }
   }
 
   void _showBackToTopFAB() {
@@ -133,16 +152,19 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   }
 
   void _showHistory() {
+    print('SHOW HISTORYYY');
     _updateHeader(false);
     _tabController.animateTo(0, duration: 200.milliseconds);
   }
 
   void _showSuggestions() {
+    print('SHOW SUGGESTIONS');
     _updateHeader(false);
     _tabController.animateTo(1, duration: 200.milliseconds);
   }
 
   void _showResults() {
+    _searchFocusNode.unfocus();
     _updateHeader(true);
     _scrollController.animateTo(0,
         duration: 200.milliseconds, curve: Curves.linearToEaseOut);
@@ -164,6 +186,11 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
       barrierColor: Colors.black.withOpacity(.3),
       barrierDismissible: true,
     );
+  }
+
+  void _submitSearchTerm(searchTerm) {
+    _searchController.searchTerm = searchTerm;
+    _showResults();
   }
 
   @override
@@ -190,6 +217,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                      // Tool
                       if (_showSearchResultsTitle)
                         GestureDetector(
                           onTap: _openSearchFilterDialog,
@@ -204,7 +232,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                   if (_showSearchResultsTitle) SizedBox(height: 5),
                   Text(
                     _showSearchResultsTitle
-                        ? 'White Style Abayas'
+                        ? _searchController.searchTextEditingController.text
                         : "Let's find something",
                     style: Get.textTheme.bodyMedium!.copyWith(
                       fontWeight: FontWeight.w500,
@@ -213,14 +241,22 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                     ),
                   ),
                   if (_showSearchResultsTitle)
-                    Text(
-                      '20 result',
-                      style: Get.textTheme.bodyMedium!.copyWith(
-                        // fontWeight: FontWeight.w600,
-                        height: 1.2,
-                        color: CstColors.a,
-                      ),
-                    ),
+                    GetBuilder<ctrl.SearchController>(
+                        init: _searchController,
+                        id: _searchController.searchResultsNumberWidgetId,
+                        builder: (c) {
+                          print('updateeeeeeeeeeee');
+                          final n = c.resultsNumberBy(ResultsTypes.values
+                              .elementAt(_searchResultsTabController.index));
+                          return Text(
+                            n == null ? 'Loading ...' : '$n results',
+                            style: Get.textTheme.bodyMedium!.copyWith(
+                              // fontWeight: FontWeight.w600,
+                              height: 1.2,
+                              color: CstColors.a,
+                            ),
+                          );
+                        }),
                 ],
               ),
             ),
@@ -237,10 +273,10 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
               await 100.milliseconds.delay();
               _onSeachingFocus();
             },
-            controller: _searchController,
+            controller: _searchController.searchTextEditingController,
             onCommit: () async {
-              _searchFocusNode.unfocus();
-              _showResults();
+              _submitSearchTerm(SearchTerm(
+                  term: _searchController.searchTextEditingController.text));
             },
           ),
         ),
@@ -278,11 +314,9 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                                         .notifyListeners();
                                   },
                                   tabs: [
-                                    _getSearchResultsTypeTab('All', 20, 0),
-                                    _getSearchResultsTypeTab(
-                                        'Bset Selling', 5, 1),
-                                    _getSearchResultsTypeTab(
-                                        'Most liked', 15, 2),
+                                    _getSearchResultsTypeTab('All', 0),
+                                    _getSearchResultsTypeTab('Bset Selling', 1),
+                                    _getSearchResultsTypeTab('Most liked', 2),
                                   ],
                                 ),
                               ),
@@ -300,15 +334,20 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
             controller: _tabController,
             children: [
               // HISTORY PART
-              HistoryPart(), //0
-              SearchingPart(), //1
-              ResultesPart(testTmage: 'assets/images/image_2.png'),
+              HistoryPart(onSearchRequest: (historyItem) {
+                _submitSearchTerm(SearchTerm(
+                    term: historyItem.searchQuery,
+                    suggestionTagId: historyItem.tagId));
+              }), //0
+              SearchingPart(onSuggestionClick: _submitSearchTerm), //1
               ResultesPart(
-                testTmage: 'assets/images/image_3.png',
-              ), //3
+                  scrollController: _scrollController, type: ResultsTypes.all),
               ResultesPart(
-                testTmage: 'assets/images/image_4.png',
-              ), //4
+                  scrollController: _scrollController,
+                  type: ResultsTypes.bestSelling), //3
+              ResultesPart(
+                  scrollController: _scrollController,
+                  type: ResultsTypes.mostLiked), //4
             ],
           ),
           ValueListenableBuilder<bool>(
@@ -344,7 +383,7 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
     );
   }
 
-  Widget _getSearchResultsTypeTab(String title, int resultsAmount, int index) {
+  Widget _getSearchResultsTypeTab(String title, int index) {
     return Tab(
       child: Row(
         children: [
@@ -360,25 +399,44 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
                 // color: MaterialStateColor.resolveWith((states) => )
                 ),
           ),
-          SizedBox(
-            width: 4,
+          AnimatedSize(
+            duration: 200.milliseconds,
+            alignment: Alignment.centerLeft,
+            curve: Curves.linearToEaseOut,
+            child: GetBuilder<ctrl.SearchController>(
+              init: _searchController,
+              id: _searchController.searchResultsNumberWidgetId,
+              builder: (c) {
+                final n =
+                    c.resultsNumberBy(ResultsTypes.values.elementAt(index));
+                if (n == null) return SizedBox.shrink();
+                return Row(
+                  children: [
+                    SizedBox(
+                      width: 4,
+                    ),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: _searchResultsTabController.index == index
+                            ? CstColors.g
+                            : CstColors.b,
+                      ),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                        child: Text(
+                          n.toString(),
+                          style: Get.textTheme.displaySmall!
+                              .copyWith(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
+            ),
           ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(3),
-              color: _searchResultsTabController.index == index
-                  ? CstColors.g
-                  : CstColors.b,
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-              child: Text(
-                resultsAmount.toString(),
-                style:
-                    Get.textTheme.displaySmall!.copyWith(color: Colors.white),
-              ),
-            ),
-          )
         ],
       ),
     );

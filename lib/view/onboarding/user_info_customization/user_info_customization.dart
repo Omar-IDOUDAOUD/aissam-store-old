@@ -30,6 +30,24 @@ class _OnBoardingUserInfoCustomizationPageState
   void initState() {
     // TODO: implement initState
     super.initState();
+    try {
+      _buildingUserModel = _userController.getUser;
+    } catch (e) {
+      print('hhhhhhhhhhhhhhhhhhhhh, e = $e');
+    }
+    _firstNameCtrl = TextEditingController(text: _buildingUserModel!.firstName)
+      ..addListener(() {
+        _buildingUserModel!.firstName = _firstNameCtrl.text;
+      });
+    _lastNameCtrl = TextEditingController(text: _buildingUserModel!.lastName)
+      ..addListener(() {
+        _buildingUserModel!.lastName = _lastNameCtrl.text;
+      });
+    _phoneNumberCtrl =
+        TextEditingController(text: _buildingUserModel!.phoneNumber)
+          ..addListener(() {
+            _buildingUserModel!.phoneNumber = _phoneNumberCtrl.text;
+          });
   }
 
   @override
@@ -45,104 +63,74 @@ class _OnBoardingUserInfoCustomizationPageState
     return Scaffold(
         body: Padding(
       padding: EdgeInsets.all(20),
-      child: FutureBuilder<UserModel>(
-          initialData: _buildingUserModel,
-          future: _buildingUserModel != null
-              ? null
-              : _userController.getUser().then((value) {
-                  _buildingUserModel = value;
-                  _firstNameCtrl =
-                      TextEditingController(text: _buildingUserModel!.firstName)
-                        ..addListener(() {
-                          _buildingUserModel!.firstName = _firstNameCtrl.text;
-                        });
-                  _lastNameCtrl =
-                      TextEditingController(text: _buildingUserModel!.lastName)
-                        ..addListener(() {
-                          _buildingUserModel!.lastName = _lastNameCtrl.text;
-                        });
-                  _phoneNumberCtrl = TextEditingController(
-                      text: _buildingUserModel!.phoneNumber)
-                    ..addListener(() {
-                      _buildingUserModel!.phoneNumber = _phoneNumberCtrl.text;
-                    });
-                  return value!;
-                }),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) return Text('AN ERROR OCCURRED');
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return CircularProgressIndicator();
-            if (snapshot.hasData)
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: _buildingUserModel!.profilePhotoUrl != null
-                        ? NetworkImage(_buildingUserModel!.profilePhotoUrl!)
-                        : null,
-                    backgroundColor: Colors.pink,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextField(
-                          controller: _firstNameCtrl,
-                          hint: 'First name',
-                        ),
-                      ),
-                      Expanded(
-                        child: CustomTextField(
-                          controller: _lastNameCtrl,
-                          hint: 'last name',
-                        ),
-                      ),
-                    ],
-                  ),
-                  CustomTextField(
-                    controller: _phoneNumberCtrl,
-                    hint: 'phone number',
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextField(
-                          controller: _categoriesController,
-                          hint: 'insert category',
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          _categories.add(_categoriesController.text);
-                          _categoriesController.text = '';
-                        },
-                        icon: Icon(Icons.add),
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                  if (_isLoading) CircularProgressIndicator(),
-                  if (_saveUserSuccess != null)
-                    if (_saveUserSuccess!)
-                      (Text('Save success'))
-                    else if (!_saveUserSuccess!)
-                      Text('save failed'),
-                  MaterialButton(
-                    child: Text('Save User'),
-                    onPressed: () {
-                      if (!_isLoading) _submitData();
-                    },
-                  ),
-                  MaterialButton(
-                    child: Text('Skip'),
-                    onPressed: () {
-                      if (!_isLoading) goNextPage();
-                    },
-                  ),
-                ],
-              );
-            return Text('unhandeled exception');
-          }),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundImage: _buildingUserModel!.profilePhotoUrl != null
+                ? NetworkImage(_buildingUserModel!.profilePhotoUrl!)
+                : null,
+            backgroundColor: Colors.pink,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  controller: _firstNameCtrl,
+                  hint: 'First name',
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  controller: _lastNameCtrl,
+                  hint: 'last name',
+                ),
+              ),
+            ],
+          ),
+          CustomTextField(
+            controller: _phoneNumberCtrl,
+            hint: 'phone number',
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  controller: _categoriesController,
+                  hint: 'insert category',
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  _categories.add(_categoriesController.text);
+                  _categoriesController.text = '';
+                },
+                icon: Icon(Icons.add),
+              ),
+            ],
+          ),
+          Spacer(),
+          if (_isLoading) CircularProgressIndicator(),
+          if (_saveUserSuccess != null)
+            if (_saveUserSuccess!)
+              (Text('Save success'))
+            else if (!_saveUserSuccess!)
+              Text('save failed'),
+          MaterialButton(
+            child: Text('Save User'),
+            onPressed: () {
+              if (!_isLoading) _submitData();
+            },
+          ),
+          MaterialButton(
+            child: Text('Skip'),
+            onPressed: () {
+              if (!_isLoading) goNextPage();
+            },
+          ),
+        ],
+      ),
     ));
   }
 

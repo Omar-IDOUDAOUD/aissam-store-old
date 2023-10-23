@@ -73,7 +73,7 @@ class ProductsController extends GetxController {
   ProductCollectionPaginationData paginationDataOfCollection(
       ProductsCollections collection) {
     return _pagingDataByCollection
-        .firstWhere((element) => element.collection == collection);
+        .singleWhere((element) => element.collection == collection);
   }
 
   List<Category> _selectedProductsCategories = [];
@@ -115,7 +115,7 @@ class ProductsController extends GetxController {
     }
 
     if (c.collection == ProductsCollections.ForYou) {
-      final userData = await _userController.getUserData();
+      final userData = _userController.getUserData;
       final userCats = userData!.categories;
       query = query.where('categories', arrayContainsAny: userCats);
     }
@@ -179,6 +179,11 @@ class ProductsController extends GetxController {
       'https://images.unsplash.com/photo-1546460573-e6c02e39568a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=400&q=60',
       "https://images.unsplash.com/photo-1575785662490-1e3ce6806ed5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDN8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=400&q=60",
     ];
+    final tags = [
+      'wfceoRY4988Zbzz0cTnB',
+      'btCQfBCx1Q8m0aeDBguO',
+      'DVRZXtp4egRqlwyg3UtI'
+    ];
     final cats = ['Qaftans', 'Hijabs', 'Jelaba', 'Abayas'];
     try {
       await _cloudProducts
@@ -198,11 +203,20 @@ class ProductsController extends GetxController {
           reviews: 5,
           categories: [cats.elementAt(Random.secure().nextInt(cats.length))],
           sells: Random.secure().nextInt(100),
+          // tags: [tags.elementAt(Random.secure().nextInt(tags.length))],
           // number: _cloudProducts.count().query.get()
         ),
       )
-          .then((value) {
+          .then((value) async {
         print('success: $value');
+        final tagId = tags.elementAt(Random.secure().nextInt(tags.length));
+        await _cloudProducts
+            .doc(value.id)
+            .collection('search_tags')
+            .doc(tagId)
+            .set({
+          'tag_id': tagId,
+        });
       }).catchError((e) {
         print('catch error: $e');
       });

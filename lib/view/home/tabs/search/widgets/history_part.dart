@@ -1,10 +1,15 @@
+import 'package:aissam_store/controller/search.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:aissam_store/controller/search.dart' as ctrls;
 
 class HistoryPart extends StatelessWidget {
-  const HistoryPart({super.key});
+  HistoryPart({super.key, required this.onSearchRequest});
+  final Function(SearchHistoryItem searchHistoryItem) onSearchRequest;
+
+  final ctrls.SearchController _controller = ctrls.SearchController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +52,19 @@ class HistoryPart extends StatelessWidget {
         ),
         SliverList.separated(
           // padding: EdgeInsets.only(top: 15),
-          itemCount: 100,
+          itemCount: _controller.searchHistory.length,
           separatorBuilder: (_, i) => SizedBox(
             height: 10,
           ),
           itemBuilder: (_, i) {
-            return _HistoryItem();
+            return InkWell(
+                onTap: () =>
+                    onSearchRequest(_controller.searchHistory.elementAt(i)),
+                onFocusChange: (b) {
+                  print('Focus changed: $b');
+                },
+                child:
+                    _HistoryItem(data: _controller.searchHistory.elementAt(i)));
           },
         )
       ],
@@ -61,7 +73,9 @@ class HistoryPart extends StatelessWidget {
 }
 
 class _HistoryItem extends StatelessWidget {
-  const _HistoryItem({super.key});
+  const _HistoryItem({super.key, required this.data});
+
+  final SearchHistoryItem data;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +88,7 @@ class _HistoryItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Chabolla',
+                data.searchQuery,
                 style: Get.textTheme.headlineMedium!.copyWith(
                   color: CstColors.a,
                   height: 1.2,
@@ -82,7 +96,7 @@ class _HistoryItem extends StatelessWidget {
                 ),
               ),
               Text(
-                'Yesterday',
+                data.searchDateTime.toString(),
                 style: Get.textTheme.bodySmall!.copyWith(
                   color: CstColors.c,
                   fontWeight: FontWeight.w400,

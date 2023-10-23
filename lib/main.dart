@@ -16,6 +16,7 @@ import 'package:aissam_store/view/settings/account_info.dart';
 import 'package:aissam_store/view/settings/addresses.dart';
 import 'package:aissam_store/view/settings/appearence.dart';
 import 'package:aissam_store/view/settings/notifications.dart';
+import 'package:aissam_store/view/splash/splash_screen.dart';
 import 'package:aissam_store/view/testing/test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -148,6 +149,10 @@ class AissamStore extends StatelessWidget {
           name: '/authentication/email_verification',
           page: () => EmailVerificationPage(),
         ),
+        GetPage(
+          name: '/splash_screen',
+          page: () => SplashScreen(),
+        ),
         //
         // GetPage(
         //   name: '/onboarding/greeting/lang_select_dropdown_menu',
@@ -155,7 +160,7 @@ class AissamStore extends StatelessWidget {
         //   showCupertinoParallax: false,
         // )
       ],
-      initialRoute: '/onboarding/greeting',
+      initialRoute: '/splash_screen',
       initialBinding: AuthenticationServiceBinding(),
       // home: TestPage(),
     );
