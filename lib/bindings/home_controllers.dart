@@ -11,5 +11,6 @@ class HomeControllersBindings extends Bindings {
     Get.put(FavoritesController());
     Get.put(ProductsController());
     Get.lazyPut(() => SearchController());
+    Get.lazyPut(() => SearchControllerV2());
   }
 }

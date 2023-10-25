@@ -8,9 +8,245 @@ import 'package:aissam_store/view/home/tabs/search/widgets/history_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/search_bar_persistent.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/searching_part.dart';
+import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+class SearchTabV2 extends StatefulWidget {
+  const SearchTabV2({super.key});
+
+  @override
+  State<SearchTabV2> createState() => _SearchTabV2State();
+}
+
+class _SearchTabV2State extends State<SearchTabV2>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+  late final ScrollController _scrollController;
+  final SearchControllerV2 _controller = SearchControllerV2.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _scrollController = ScrollController();
+    _controller.searchFieldController.addListener(_searchTextFieldListener);
+    _controller.currentTabUIState.addListener(_tabMovementHandler);
+    _controller.currentTabUIState.addListener(_scrollFocusModeHandler);
+  }
+
+  void _searchTextFieldListener() {
+    if (_controller.searchFieldController.text.isNotEmpty)
+      _controller.currentTabUIState.value = SearchTabUIStates.Searching;
+    else if (_controller.searchFieldController.text.isEmpty)
+      _controller.currentTabUIState.value = SearchTabUIStates.History;
+  }
+
+  void _tabMovementHandler() {
+    if (_controller.currentTabUIState.value == SearchTabUIStates.History)
+      _tabController.animateTo(0, duration: 300.milliseconds);
+    else if (_controller.currentTabUIState.value == SearchTabUIStates.Searching)
+      _tabController.animateTo(1, duration: 300.milliseconds);
+    else if (_controller.currentTabUIState.value == SearchTabUIStates.Results)
+      _tabController.animateTo(2, duration: 300.milliseconds);
+  }
+
+  void _scrollFocusModeHandler() {
+    if (_controller.currentTabUIState.value == SearchTabUIStates.Searching) {
+      print('Scroll Focus Mode enabled');
+      _scrollController.animateTo(100,
+          duration: 300.milliseconds, curve: Curves.linearToEaseOut);
+    } else {
+      print('Scroll Focus Mode disanabled');
+      _scrollController.animateTo(0,
+          duration: 300.milliseconds, curve: Curves.linearToEaseOut);
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.searchFieldController.removeListener(_searchTextFieldListener);
+    _controller.currentTabUIState.removeListener(_tabMovementHandler);
+    _controller.currentTabUIState.removeListener(_scrollFocusModeHandler);
+    _controller.currentTabUIState.value = SearchTabUIStates.values.elementAt(0);
+    _tabController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NestedScrollView(
+      controller: _scrollController,
+      headerSliverBuilder: (_, __) => [
+        SliverToBoxAdapter(
+          child: TabHeaderTitles(),
+        ),
+        // SliverPersistentHeader(
+        //   delegate: SearchBarHeaderPersistent(),
+        //   pinned: true,
+        //   floating: true,
+        // ),
+        SliverToBoxAdapter(
+          child: SearchBarV2(),
+        ),
+      ],
+      body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: _tabController,
+        children: [
+          HistoryPartV2(),
+          SuggestionsPartV2(),
+          ResultsPartV2(),
+        ],
+      ),
+    );
+  }
+}
+
+class TabHeaderTitles extends StatefulWidget {
+  const TabHeaderTitles({super.key});
+
+  @override
+  State<TabHeaderTitles> createState() => _TabHeaderTitlesState();
+}
+
+class _TabHeaderTitlesState extends State<TabHeaderTitles> {
+  final SearchControllerV2 _controller = SearchControllerV2.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller.currentTabUIState
+        .addListener(_reasultsTabTextLeandingApperenceHandler);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.currentTabUIState
+        .removeListener(_reasultsTabTextLeandingApperenceHandler);
+    super.dispose();
+  }
+
+  bool _isResultsTab = false;
+  void _reasultsTabTextLeandingApperenceHandler() {
+    if (!_isResultsTab &&
+        _controller.currentTabUIState == SearchTabUIStates.Results)
+      setState(() {
+        _isResultsTab = true;
+      });
+    else if (_isResultsTab &&
+        _controller.currentTabUIState != SearchTabUIStates.Results)
+      setState(() {
+        _isResultsTab = false;
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Colors.blue,
+      child: SizedBox(
+        height: 100,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _isResultsTab ? 'Results Tab' : 'Search Results',
+              style: Get.textTheme.headlineLarge!.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              "Let's find something",
+              style: Get.textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.w500,
+                height: 1.2,
+                color: CstColors.a,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// class SearchBarV2 extends StatefulWidget {
+//   const SearchBarV2({super.key});
+
+//   @override
+//   State<SearchBarV2> createState() => SearchBarV2State();
+// }
+
+// class SearchBarV2State extends State<SearchBarV2> {
+//   final SearchControllerV2 _controller = SearchControllerV2.instance;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//   }
+// }
+
+class HistoryPartV2 extends StatelessWidget {
+  const HistoryPartV2({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (_, i) {
+        if (i == 0) return Text('History');
+        i = 1;
+        return Text(
+          'Histsory Item',
+          style: TextStyle(fontSize: 25),
+        );
+      },
+    );
+  }
+}
+
+class SuggestionsPartV2 extends StatelessWidget {
+  const SuggestionsPartV2({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (_, i) {
+        if (i == 0) return Text('History');
+        i = 1;
+        return Text(
+          'Suggestion Item',
+          style: TextStyle(fontSize: 25),
+        );
+      },
+    );
+  }
+}
+
+class ResultsPartV2 extends StatelessWidget {
+  const ResultsPartV2({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (_, i) {
+        if (i == 0) return Text('History');
+        i = 1;
+        return Text(
+          'Results Item',
+          style: TextStyle(fontSize: 25),
+        );
+      },
+    );
+  }
+}
+
+//////////////OLD PART
 class SearchTab extends StatefulWidget {
   const SearchTab({super.key});
 
@@ -262,24 +498,24 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
             ),
           ),
         ),
-        SliverPersistentHeader(
-          pinned: true,
-          floating: true,
-          delegate: SearchBarHeaderPersistent(
-            isFloatingNotifier: _isSearchBarFloatingNotifier,
-            focusNode: _searchFocusNode,
-            onTap: () async {
-              if (_tabController.index >= 2) _showSuggestions();
-              await 100.milliseconds.delay();
-              _onSeachingFocus();
-            },
-            controller: _searchController.searchTextEditingController,
-            onCommit: () async {
-              _submitSearchTerm(SearchTerm(
-                  term: _searchController.searchTextEditingController.text));
-            },
-          ),
-        ),
+        // SliverPersistentHeader(
+        //   pinned: true,
+        //   floating: true,
+        //   delegate: SearchBarHeaderPersistent(
+        //       // isFloatingNotifier: _isSearchBarFloatingNotifier,
+        //       // focusNode: _searchFocusNode,
+        //       // onTap: () async {
+        //       //   if (_tabController.index >= 2) _showSuggestions();
+        //       //   await 100.milliseconds.delay();
+        //       //   _onSeachingFocus();
+        //       // },
+        //       // controller: _searchController.searchTextEditingController,
+        //       // onCommit: () async {
+        //       //   _submitSearchTerm(SearchTerm(
+        //       //       term: _searchController.searchTextEditingController.text));
+        //       // },
+        //       ),
+        // ),
         SliverToBoxAdapter(
           child: ValueListenableBuilder(
               valueListenable: _searchResultsTabsAppearanceNotifier,
@@ -327,56 +563,11 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
               }),
         ),
       ],
-      body: Stack(
+      body: TabBarView(
+        controller: TabController(length: 3, vsync: this),
         children: [
-          TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            controller: _tabController,
-            children: [
-              // HISTORY PART
-              HistoryPart(onSearchRequest: (historyItem) {
-                _submitSearchTerm(SearchTerm(
-                    term: historyItem.searchQuery,
-                    suggestionTagId: historyItem.tagId));
-              }), //0
-              SearchingPart(onSuggestionClick: _submitSearchTerm), //1
-              ResultesPart(
-                  scrollController: _scrollController, type: ResultsTypes.all),
-              ResultesPart(
-                  scrollController: _scrollController,
-                  type: ResultsTypes.bestSelling), //3
-              ResultesPart(
-                  scrollController: _scrollController,
-                  type: ResultsTypes.mostLiked), //4
-            ],
-          ),
-          ValueListenableBuilder<bool>(
-            valueListenable: _backToTopFabNotifier,
-            builder: (context, v, c) {
-              return AnimatedPositioned(
-                duration: 600.milliseconds,
-                curve: Curves.linearToEaseOut,
-                bottom: 100,
-                right: v ? 25 : -50,
-                height: 50,
-                width: 50,
-                child: FloatingActionButton.extended(
-                  label: Icon(
-                    Icons.keyboard_double_arrow_up_rounded,
-                    color: Colors.white,
-                  ),
-                  tooltip: "Back to top",
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  backgroundColor: CstColors.a,
-                  onPressed: () {
-                    _scrollController.animateTo(0,
-                        duration: 1.seconds, curve: Curves.linearToEaseOut);
-                  },
-                ),
-              );
-            },
+          ListView.builder(
+            itemBuilder: (BuildContext context, int index) {},
           ),
         ],
       ),

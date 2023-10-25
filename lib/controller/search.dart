@@ -242,3 +242,31 @@ class SearchController extends GetxController {
   ///
   ///
 }
+
+class SearchControllerV2 extends GetxController {
+  static SearchControllerV2 get instance => Get.find();
+  late final TextEditingController searchFieldController;
+  ValueNotifier<SearchTabUIStates> currentTabUIState =
+      ValueNotifier(SearchTabUIStates.History);
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    searchFieldController = TextEditingController();
+  }
+
+  String? _searchTerm;
+
+  String? get getSearchTerm => _searchTerm;
+
+  set setSearchTerm(String? term) {
+    _searchTerm = term;
+  }
+}
+
+enum SearchTabUIStates {
+  History,
+  Searching,
+  Results,
+}
