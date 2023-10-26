@@ -6,67 +6,41 @@ import 'package:get/get.dart';
 import 'package:aissam_store/controller/search.dart' as ctrls;
 
 class HistoryPart extends StatelessWidget {
-  HistoryPart({super.key, required this.onSearchRequest});
-  final Function(SearchHistoryItem searchHistoryItem) onSearchRequest;
+  // HistoryPart({t});
+  // final Function(SearchHistoryItem searchHistoryItem) onSearchRequest;
 
-  final ctrls.SearchController _controller = ctrls.SearchController.instance;
+  final ctrls.SearchControllerV2 _controller =
+      ctrls.SearchControllerV2.instance;
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      physics: BouncingScrollPhysics(),
-      slivers: [
-        SliverPadding(
-          padding: EdgeInsets.all(25),
-          sliver: SliverToBoxAdapter(
-            child: SizedBox(
-              height: 10,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'HISTORY',
-                    style: Get.textTheme.bodyMedium!.copyWith(
-                      color: CstColors.b,
-                      height: 0.4,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 7,
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      height: 1,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: CstColors.b,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+    return Column(
+      children: [
+        Text(
+          'HISTORY',
+          style: Get.textTheme.bodyMedium!.copyWith(
+            color: CstColors.b,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Expanded(
+          child: ListView.separated(
+            itemCount: 100,
+            itemBuilder: (_, i) => _HistoryItem(
+              // data: _controller.history.elementAt(i),
+              data: SearchHistoryItem(
+                searchQuery: 'History ',
+                searchDateTime: DateTime.now(),
               ),
+            ),
+            separatorBuilder: (_, i) => SizedBox(
+              height: 10,
             ),
           ),
         ),
-        SliverList.separated(
-          // padding: EdgeInsets.only(top: 15),
-          itemCount: _controller.searchHistory.length,
-          separatorBuilder: (_, i) => SizedBox(
-            height: 10,
-          ),
-          itemBuilder: (_, i) {
-            return InkWell(
-                onTap: () =>
-                    onSearchRequest(_controller.searchHistory.elementAt(i)),
-                onFocusChange: (b) {
-                  print('Focus changed: $b');
-                },
-                child:
-                    _HistoryItem(data: _controller.searchHistory.elementAt(i)));
-          },
-        )
       ],
     );
   }

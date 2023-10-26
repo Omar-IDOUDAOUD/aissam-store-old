@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PaginationDataResult<M> {
   final List<M> loadedData = [];
-  DocumentSnapshot? lastLoadedDoc;
+  DocumentSnapshot<M>? lastLoadedDoc;
   bool canLoadMoreData = true;
   bool isLoading = false;
   bool hasError = false;

@@ -45,13 +45,15 @@ enum SuffixIcons { submit, clear, none }
 
 class _CustomTextFieldState extends State<CustomTextField> {
   ///////////////new code////////////////
-  ///
+
   bool _isFocus = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _suffixIcon =
+        widget.controller!.text.isEmpty ? SuffixIcons.none : SuffixIcons.clear;
     widget.controller!.addListener(_controllerListener);
     if (widget.prefixIconPath != null)
       widget.focusNode!.addListener(_focusListener);
@@ -173,16 +175,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget _getSuffixIcon(String iconPath, Function() onTap) {
     return GestureDetector(
       onTap: onTap,
-      child: ColoredBox(
-        color: Colors.blue,
-        child: SvgPicture.asset(
-          iconPath,
-          height: 13,
-          fit: BoxFit.scaleDown,
-          allowDrawingOutsideViewBox: true,
-          alignment: Alignment.center,
-          color: CstColors.c,
-        ),
+      child: SvgPicture.asset(
+        iconPath,
+        height: 13,
+        fit: BoxFit.scaleDown,
+        allowDrawingOutsideViewBox: true,
+        alignment: Alignment.center,
+        color: CstColors.c,
       ),
     );
   }

@@ -10,7 +10,7 @@ class HomeControllersBindings extends Bindings {
     Get.put(CloudStorageController());
     Get.put(FavoritesController());
     Get.put(ProductsController());
-    Get.lazyPut(() => SearchController());
+    // Get.lazyPut(() => SearchController());
     Get.lazyPut(() => SearchControllerV2());
   }
 }

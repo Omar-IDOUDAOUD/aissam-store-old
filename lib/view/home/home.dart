@@ -51,7 +51,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             children: [
               MainTab(),
               FavoritesTab(),
-              SearchTabV2(),
+              SearchTab(),
               MyCartTab(),
               SettingsTab(),
             ],
