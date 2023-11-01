@@ -79,7 +79,9 @@ class _SearchTabState extends State<SearchTab> with TickerProviderStateMixin {
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.searchFieldController.removeListener(_searchTextFieldListener);
+    _controller.searchFieldController
+      ..removeListener(_searchTextFieldListener)
+      ..clear();
     _controller.currentTabUIState.removeListener(_tabMovementHandler);
     _controller.currentTabUIState.removeListener(_scrollFocusModeHandler);
     _controller.currentTabUIState.value = SearchTabUIStates.values.elementAt(0);

@@ -189,10 +189,10 @@ class _SearchBarV2State extends State<SearchBarV2> {
             onClear: () {
               print('Clear Function');
               _controller.currentTabUIState.value = SearchTabUIStates.History;
-              _controller.setSearchTerm = null;
             },
             onCommit: () {
               print('Commit Function');
+              _controller.setSearchTerm;
               _controller.currentTabUIState.value = SearchTabUIStates.Results;
               // _controller.setSearchTerm =
               //     _controller.searchFieldController.text;

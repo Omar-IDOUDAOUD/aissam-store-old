@@ -14,34 +14,30 @@ class HistoryPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          'HISTORY',
-          style: Get.textTheme.bodyMedium!.copyWith(
-            color: CstColors.b,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Expanded(
-          child: ListView.separated(
-            itemCount: 100,
-            itemBuilder: (_, i) => _HistoryItem(
-              // data: _controller.history.elementAt(i),
-              data: SearchHistoryItem(
-                searchQuery: 'History ',
-                searchDateTime: DateTime.now(),
-              ),
+    return ListView.separated(
+      padding: EdgeInsets.all(25),
+      itemCount: 100,
+      itemBuilder: (_, i) {
+        if (i == 0)
+          return Text(
+            'HISTORY',
+            style: Get.textTheme.bodyMedium!.copyWith(
+              color: CstColors.b,
+              fontWeight: FontWeight.w400,
             ),
-            separatorBuilder: (_, i) => SizedBox(
-              height: 10,
-            ),
+          );
+        i--;
+        return _HistoryItem(
+          // data: _controller.history.elementAt(i),
+          data: SearchHistoryItem(
+            searchQuery: 'History ',
+            searchDateTime: DateTime.now(),
           ),
-        ),
-      ],
+        );
+      },
+      separatorBuilder: (_, i) => SizedBox(
+        height: 10,
+      ),
     );
   }
 }
@@ -53,34 +49,31 @@ class _HistoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                data.searchQuery,
-                style: Get.textTheme.headlineMedium!.copyWith(
-                  color: CstColors.a,
-                  height: 1.2,
-                  fontWeight: FontWeight.w400,
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              data.searchQuery,
+              style: Get.textTheme.headlineMedium!.copyWith(
+                color: CstColors.a,
+                height: 1.2,
+                fontWeight: FontWeight.w400,
               ),
-              Text(
-                data.searchDateTime.toString(),
-                style: Get.textTheme.bodySmall!.copyWith(
-                  color: CstColors.c,
-                  fontWeight: FontWeight.w400,
-                ),
+            ),
+            Text(
+              data.searchDateTime.toString(),
+              style: Get.textTheme.bodySmall!.copyWith(
+                color: CstColors.c,
+                fontWeight: FontWeight.w400,
               ),
-            ],
-          ),
-          SvgPicture.asset('assets/icons/search_small.svg')
-        ],
-      ),
+            ),
+          ],
+        ),
+        SvgPicture.asset('assets/icons/search_small.svg')
+      ],
     );
   }
 }

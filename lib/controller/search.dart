@@ -271,20 +271,23 @@ class SearchControllerV2 extends GetxController {
 
   SearchTerm? get getSearchTerm => _searchTerm;
 
-  set setSearchTerm(SearchTerm? term) {
+  void setSearchTerm(SearchTerm? term) {
+    if (term == null) term = SearchTerm(query: searchFieldController.text);
     _searchTerm = term;
   }
 
-  Future<List<SearchTerm>> suggestions(String term) async {
+  Future<List<SearchTerm>> suggestions() async {
+    final term = searchFieldController.text.toLowerCase();
     final ref = _fbfirestore.collection('Products-Tags');
-    term = term.toLowerCase();
     final res = await ref
         .orderBy('tag')
         .startAt([term])
         .endAt(["$term\uf8ff"])
         .limit(11)
         .get();
-    return res.docs.map(SearchTerm.fromFirebase).toList();
+    final x = res.docs.map(SearchTerm.fromFirebase).toList();
+    print(x);
+    return x;
   }
 
   final PaginationDataResult<Product> paginationData = PaginationDataResult();
@@ -333,13 +336,16 @@ class SearchControllerV2 extends GetxController {
 }
 
 class SearchTerm {
-  final String id;
-  final String term;
+  final String? id;
+  final String query;
 
-  SearchTerm({required this.id, required this.term});
+  const SearchTerm({
+    this.id,
+    required this.query,
+  });
 
   factory SearchTerm.fromFirebase(QueryDocumentSnapshot<Map> docSnapshot) {
-    return SearchTerm(id: docSnapshot.id, term: docSnapshot.data()['tag']);
+    return SearchTerm(id: docSnapshot.id, query: docSnapshot.data()['tag']);
   }
 }
 

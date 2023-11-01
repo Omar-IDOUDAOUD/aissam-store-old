@@ -1,5 +1,9 @@
 // // ignore_for_file: curly_braces_in_flow_control_structures
 
+// ignore_for_file: curly_braces_in_flow_control_structures
+
+import 'dart:math';
+
 import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/models/category.dart';
@@ -11,40 +15,235 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:aissam_store/controller/search.dart' as ctrls;
 
-class SuggestionsPart extends StatelessWidget {
+class SuggestionsPart extends StatefulWidget {
   const SuggestionsPart({super.key});
 
   @override
+  State<SuggestionsPart> createState() => _SuggestionsPartState();
+}
+
+class _SuggestionsPartState extends State<SuggestionsPart> {
+  ctrls.SearchControllerV2 _controller = ctrls.SearchControllerV2.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller.searchFieldController.addListener(_searchFieldListener);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.searchFieldController.removeListener(_searchFieldListener);
+    super.dispose();
+  }
+
+  void _searchFieldListener() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          'Suggestions',
-          style: Get.textTheme.bodyMedium!.copyWith(
-            color: CstColors.b,
-            fontWeight: FontWeight.w400,
+    // TODO: implement
+    return FutureBuilder<List<ctrls.SearchTerm>>(
+        future: _controller.searchFieldController.text.isNotEmpty
+            ? _controller.suggestions()
+            : null,
+        builder: (context, snapshot) {
+          final isWaiting = snapshot.connectionState == ConnectionState.waiting;
+          final noData = !snapshot.hasData;
+          final hasError = snapshot.hasError;
+          final noSuggestions = !noData && snapshot.data!.isEmpty;
+          return CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                sliver: _sliverToChild(
+                  Row(
+                    children: [
+                      Text(
+                        'SEARCH COLLECTION',
+                        style: Get.textTheme.bodyLarge!.copyWith(
+                          color: CstColors.a,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        '1 category | ',
+                        style: Get.textTheme.bodyMedium!.copyWith(
+                          color: CstColors.b,
+                          height: 0.4,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        'All',
+                        style: Get.textTheme.bodyMedium!.copyWith(
+                          color: CstColors.g,
+                          height: 0.4,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              _sliverToChild(
+                _CategoriesCostumizationList(),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    'SUGGESTIONS',
+                    style: Get.textTheme.bodyLarge!.copyWith(
+                      color: CstColors.a,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ),
+              if (noData)
+                _sliverToChild(Text('SearchForSomethong'))
+              else if (isWaiting)
+                _sliverToChild(CircularProgressIndicator())
+              else if (noSuggestions)
+                _sliverToChild(Text('No Suggestions'))
+              else if (hasError)
+                _sliverToChild(Text('An Error occurred'))
+              else
+                SliverList.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (_, i) {
+                    return Text(snapshot.data!.elementAt(i).query);
+                  },
+                )
+            ],
+          );
+        });
+  }
+
+  Widget _sliverToChild(Widget child) {
+    return SliverToBoxAdapter(
+      child: child,
+    );
+  }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return FutureBuilder<List<ctrls.SearchTerm>>(
+  //     future: _controller.searchFieldController.text.isNotEmpty
+  //         ? _controller.suggestions()
+  //         : null,
+  //     builder: (context, snapshot) {
+  //       return ListView.builder(
+  //         itemCount:
+  //             3 + (snapshot.hasData ? max(snapshot.data!.length - 1, 0) : 0),
+  //         itemBuilder: (_, i) {
+  //           if (i == 0)
+  //             return Padding(
+  //               padding: EdgeInsets.symmetric(horizontal: 25),
+  //               child: Row(
+  //                 children: [
+  //                   Text(
+  //                     'SEARCH COLLECTION',
+  //                     style: Get.textTheme.bodyLarge!.copyWith(
+  //                       color: CstColors.a,
+  //                       fontWeight: FontWeight.w400,
+  //                     ),
+  //                   ),
+  //                   Spacer(),
+  //                   Text(
+  //                     '1 category | ',
+  //                     style: Get.textTheme.bodyMedium!.copyWith(
+  //                       color: CstColors.b,
+  //                       height: 0.4,
+  //                       fontWeight: FontWeight.w400,
+  //                     ),
+  //                   ),
+  //                   Text(
+  //                     'All',
+  //                     style: Get.textTheme.bodyMedium!.copyWith(
+  //                       color: CstColors.g,
+  //                       height: 0.4,
+  //                       fontWeight: FontWeight.w400,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             );
+  //           if (i == 1) return _CategoriesCostumizationList();
+  //           if (i == 2)
+  //             return Padding(
+  //               padding: EdgeInsets.symmetric(horizontal: 25),
+  //               child: Text(
+  //                 'SUGGESTIONS',
+  //                 style: Get.textTheme.bodyLarge!.copyWith(
+  //                   color: CstColors.a,
+  //                   fontWeight: FontWeight.w400,
+  //                 ),
+  //               ),
+  //             );
+  //          i -= 2;
+  //           // i = 0
+  //           if (snapshot.connectionState == ConnectionState.waiting)
+  //             return const Text('Loading');
+  //           if (snapshot.hasError) return Text('Error Occurred');
+  //           if (!snapshot.hasData) return Text('Search For Sometrhing');
+  //           if (snapshot.hasData && snapshot.data!.isEmpty)
+  //             return Text('No Suggestions');
+  //           return Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 25),
+  //             child: Text(
+  //               snapshot.data!.elementAt(i).query,
+  //               style: TextStyle(fontSize: 25),
+  //             ),
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+}
+
+class _CategoriesCostumizationList extends StatelessWidget {
+  _CategoriesCostumizationList({super.key});
+  final ProductsController _productsController = ProductsController.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Category>>(
+      future: _productsController.categories(),
+      initialData: _productsController.loadedCategories,
+      builder: (context, snapshot) {
+        if (snapshot.hasError)
+          return const Center(
+            child: Text('There was an error'),
+          );
+        final isWaiting = snapshot.connectionState == ConnectionState.waiting &&
+            !snapshot.hasData;
+        return SizedBox(
+          height: 85,
+          child: ListView.separated(
+            itemCount: isWaiting ? 3 : snapshot.data!.length,
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            scrollDirection: Axis.horizontal,
+            separatorBuilder: (_, i) => SizedBox(
+              width: 10,
+            ),
+            itemBuilder: (_, i) => isWaiting
+                ? LoadingCategoryItem()
+                : CategorieItem(
+                    data: snapshot.data!.elementAt(i),
+                  ),
           ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: 200,
-            itemBuilder: (_, i) {
-              return Text(
-                'Suggestion Item',
-                style: TextStyle(fontSize: 25),
-              );
-            },
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
-
-
 
 // class SearchingPart extends StatefulWidget {
 //   SearchingPart({super.key, required this.onSuggestionClick});

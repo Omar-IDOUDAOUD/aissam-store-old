@@ -18,13 +18,17 @@ class ResultesPart extends StatefulWidget {
 class _ResultesPartState extends State<ResultesPart> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return GridView.builder(
+      padding: EdgeInsets.all(25),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 2 / 4,
+      ),
       itemCount: 500,
       itemBuilder: (_, i) {
-        return Text(
-          'Omar //////////',
-          style: TextStyle(height: 5),
-        );
+        return ProductCard(data: Product.testModel());
       },
     );
   }
