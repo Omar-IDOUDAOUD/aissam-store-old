@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:aissam_store/controller/search.dart';
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/core/utils/hex_color.dart';
 import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +17,62 @@ class SearchFilterDialog extends StatefulWidget {
 }
 
 class _SearchFilterDialogState extends State<SearchFilterDialog> {
+  final SearchControllerV2 _controller = SearchControllerV2.instance;
+
+  void _submitChanges() {
+    _controller.setResultsFilters(
+      (currentFilters) => currentFilters.update(
+        colors: _colorsNames.isNotEmpty ? _colorsNames : null,
+        maxPrice:
+            _maxPrice.text.isNotEmpty ? double.parse(_maxPrice.text) : null,
+        minPrice:
+            _minPrice.text.isNotEmpty ? double.parse(_minPrice.text) : null,
+        size: _size,
+      ),
+    );
+    Get.back();
+  }
+
+  void _getCurrentFilters() {
+    final f = _controller.filterParameters;
+    _minPrice.text = (f.minPrice ?? '').toString();
+    _maxPrice.text = (f.maxPrice ?? '').toString();
+    _size = f.size;
+    _colorsNames = f.colors ?? [];
+  }
+
+  late final TextEditingController _minPrice;
+  late final TextEditingController _maxPrice;
+
+  int? _size;
+
+  List<int> _colorsNames = [];
+
+  final List<ColorName> _colors = [
+    ColorName(hex: 'F30000', name: 'Red'),
+    ColorName(hex: 'EEF300', name: 'Yellow'),
+    ColorName(hex: '0061F3', name: 'Blue'),
+    ColorName(hex: '00F353', name: 'Green'),
+  ];
+  final List<String> _sizes = ['S', 'M', 'L', 'X', 'XXL'];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _minPrice = TextEditingController();
+    _maxPrice = TextEditingController();
+    _getCurrentFilters();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _minPrice.dispose();
+    _maxPrice.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -37,25 +95,25 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                     color: CstColors.a,
                   ),
                 ),
-
                 const SizedBox(
                   height: 15,
                 ),
                 _getFieldTitle('Price', 'All Prices'),
                 const SizedBox(height: 4),
-
                 Row(
                   children: [
                     Expanded(
                         child: CustomTextField(
+                      controller: _minPrice,
                       borderRadius: 10,
                       hint: 'min',
                     )),
                     const SizedBox(width: 7),
                     Expanded(
                         child: CustomTextField(
+                      controller: _maxPrice,
                       borderRadius: 10,
-                      hint: 'max ',
+                      hint: 'max',
                     )),
                   ],
                 ),
@@ -64,7 +122,6 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                 ),
                 _getFieldTitle('Size', 'All Sizes'),
                 const SizedBox(height: 4),
-
                 GridView(
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -73,38 +130,46 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                       crossAxisSpacing: 7,
                       mainAxisExtent: 30),
                   // childAspectRatio: 5,
-                  children: [
-                    _getSizeItem('S', 0),
-                    _getSizeItem('M', 1),
-                    _getSizeItem('L', 2),
-                    _getSizeItem('X', 3),
-                    _getSizeItem('XXL', 4),
-                  ],
+                  children: List.generate(
+                    _sizes.length,
+                    (index) => _getSizeItem(_sizes.elementAt(index), index),
+                  ),
                 ),
                 const SizedBox(
                   height: 15,
                 ),
-                _getFieldTitle('Colors', 'All Colors'),
+                _getFieldTitle(
+                    'Colors',
+                    _colorsNames.isEmpty
+                        ? 'All Colors'
+                        : _colorsNames.length.toString()),
                 const SizedBox(height: 4),
-                //
-                const SelectColorDropdownMenu(),
-
+                SelectColorDropdownMenu(
+                  colors: _colors,
+                  onAddOrRemoveColor: (int i, bool isAdded) {
+                    if (isAdded) {
+                      _colorsNames.add(i);
+                    } else {
+                      _colorsNames.remove(i);
+                    }
+                    setState(() {});
+                  },
+                  selectedColors: _colorsNames,
+                ),
                 const Divider(
                   height: 20,
                 ),
-
                 Row(
                   children: [
                     Expanded(
-                      child: _getButton('Cancel', false),
+                      child: _getButton('Cancel', false, Get.back),
                     ),
                     const SizedBox(
                       width: 7,
                     ),
-                    Expanded(child: _getButton('Submit', true)),
+                    Expanded(child: _getButton('Submit', true, _submitChanges)),
                   ],
                 ),
-
                 const SizedBox(
                   height: 15,
                 ),
@@ -116,9 +181,9 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
     );
   }
 
-  _getButton(String label, bool recommendedButton) {
+  _getButton(String label, bool recommendedButton, [Function()? onTap]) {
     return MaterialButton(
-      onPressed: Get.back,
+      onPressed: onTap,
       elevation: recommendedButton ? 15 : 0,
       focusElevation: 0,
       hoverElevation: 0,
@@ -161,31 +226,30 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
     );
   }
 
-  int _selectedSize = 1;
+  // int _selectedSize = 1;
 
   Color get _fillColor => Colors.brown;
   Color get _outlineColor => Colors.grey;
   _getSizeItem(String name, int index) {
+    var isSelected = _size == index;
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedSize = index;
+          _size = isSelected ? null : index;
         });
       },
       child: AnimatedContainer(
         duration: 100.milliseconds,
         decoration: BoxDecoration(
-          color:
-              _selectedSize == index ? _fillColor : _fillColor.withOpacity(0),
-          border: Border.all(
-              color: _selectedSize == index ? _fillColor : _outlineColor),
+          color: isSelected ? _fillColor : _fillColor.withOpacity(0),
+          border: Border.all(color: isSelected ? _fillColor : _outlineColor),
           borderRadius: BorderRadius.circular(10),
         ),
         alignment: Alignment.center,
         child: Text(
           name,
           style: Get.textTheme.bodyLarge!.copyWith(
-            color: _selectedSize == index ? Colors.white : CstColors.a,
+            color: isSelected ? Colors.white : CstColors.a,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -194,8 +258,23 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
   }
 }
 
+class ColorName {
+  final String hex;
+  final String name;
+
+  ColorName({required this.hex, required this.name});
+}
+
 class SelectColorDropdownMenu extends StatefulWidget {
-  const SelectColorDropdownMenu({super.key});
+  const SelectColorDropdownMenu(
+      {super.key,
+      required this.colors,
+      required this.onAddOrRemoveColor,
+      required this.selectedColors});
+
+  final List<ColorName> colors;
+  final List<int> selectedColors;
+  final Function(int i, bool isAdded) onAddOrRemoveColor;
 
   @override
   State<SelectColorDropdownMenu> createState() =>
@@ -205,29 +284,16 @@ class SelectColorDropdownMenu extends StatefulWidget {
 class _SelectColorDropdownMenuState extends State<SelectColorDropdownMenu> {
   GlobalKey _key = GlobalKey();
 
-  int _selectedColors = 0;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Get.dialog(
           _ColorDropdownMenu(
-            onAddColor: () {
-              setState(() {
-                _selectedColors++;
-                print('----------------,$_selectedColors ');
-              });
-            },
+            selectedColors: widget.selectedColors,
             dropdownButtonKey: _key,
-            colorsNames: [
-              'red',
-              'blue',
-              'red',
-              'red',
-              'blue',
-            ],
-            colors: [Colors.red, Colors.blue, Colors.red, Colors.blue],
+            colors: widget.colors,
+            onAddOrRemoveColor: widget.onAddOrRemoveColor,
           ),
         );
       },
@@ -245,30 +311,11 @@ class _SelectColorDropdownMenuState extends State<SelectColorDropdownMenu> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  _selectedColors == 0
-                      ? 'No colors'
-                      : '$_selectedColors colors',
+                  widget.selectedColors.length.toString() + 'Color',
                   style: Get.textTheme.bodyLarge!.copyWith(
                     color: CstColors.a,
                   ),
                 ),
-                // Expanded(
-                //   child: Stack(
-                //     alignment: Alignment.centerRight,
-                //     children:[
-                //       ...List.generate(_selectedColors, (index) {
-                //         return Positioned(
-                //         right: _selectedColors * 5,
-                //         child: CircleAvatar(
-                //           radius: 12,
-                //           backgroundColor: Colors.accents.elementAt(0),
-                //         ),
-                //       );
-                //       },),
-                //
-                //     ]
-                //   ),
-                // ),
                 Icon(
                   Icons.keyboard_arrow_down_rounded,
                   color: CstColors.a,
@@ -285,15 +332,15 @@ class _SelectColorDropdownMenuState extends State<SelectColorDropdownMenu> {
 class _ColorDropdownMenu extends StatefulWidget {
   const _ColorDropdownMenu({
     super.key,
-    required this.colorsNames,
     required this.colors,
     required this.dropdownButtonKey,
-    required this.onAddColor,
+    required this.onAddOrRemoveColor,
+    required this.selectedColors,
   });
-  final List<String> colorsNames;
-  final List<Color> colors;
+  final List<ColorName> colors;
+  final List<int> selectedColors;
   final GlobalKey dropdownButtonKey;
-  final Function() onAddColor;
+  final Function(int colorIndex, bool isAdded) onAddOrRemoveColor;
 
   @override
   State<_ColorDropdownMenu> createState() => _ColorDropdownMenuState();
@@ -338,7 +385,7 @@ class _ColorDropdownMenuState extends State<_ColorDropdownMenu> {
   double get _getMenuExpandHeight {
     late double h;
     final double totalMenuItemsHeight =
-        widget.colorsNames.length * _itemHeight + _searchFieldItemHeight;
+        widget.colors.length * _itemHeight + _searchFieldItemHeight;
     if (_openToTop) {
       h = min(totalMenuItemsHeight,
               _menuInitOffset!.dy + _menuInitSize!.height - _padding) +
@@ -430,11 +477,14 @@ class _ColorDropdownMenuState extends State<_ColorDropdownMenu> {
                   Expanded(
                     child: ListView.builder(
                       // padding: EdgeInsets.only(bottom: 5),
-                      itemCount: widget.colorsNames.length,
+                      itemCount: widget.colors.length,
                       itemBuilder: (_, i) => SizedBox(
                         height: _itemHeight,
                         child: _colorMenuItem(
-                          onAddColor: widget.onAddColor,
+                          isSelected: widget.selectedColors.contains(i),
+                          color: widget.colors.elementAt(i),
+                          onAddColor: (bool isAdded) =>
+                              widget.onAddOrRemoveColor(i, isAdded),
                         ),
                       ),
                     ),
@@ -450,8 +500,14 @@ class _ColorDropdownMenuState extends State<_ColorDropdownMenu> {
 }
 
 class _colorMenuItem extends StatefulWidget {
-  const _colorMenuItem({super.key, required this.onAddColor});
-  final Function() onAddColor;
+  const _colorMenuItem(
+      {super.key,
+      required this.onAddColor,
+      required this.color,
+      required this.isSelected});
+  final Function(bool isAdded) onAddColor;
+  final ColorName color;
+  final bool isSelected;
 
   @override
   State<_colorMenuItem> createState() => __colorMenuItemState();
@@ -460,13 +516,22 @@ class _colorMenuItem extends StatefulWidget {
 class __colorMenuItemState extends State<_colorMenuItem> {
   bool _selected = false;
 
+  Color get _color => HexColor(widget.color.hex);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _selected = widget.isSelected;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
           _selected = !_selected;
-          widget.onAddColor();
+          widget.onAddColor(_selected);
         });
       },
       child: Row(
@@ -476,7 +541,7 @@ class __colorMenuItemState extends State<_colorMenuItem> {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(3),
-                color: Colors.red,
+                color: _color,
               ),
             ),
           ),
@@ -488,12 +553,12 @@ class __colorMenuItemState extends State<_colorMenuItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Charcoal',
+                Text(widget.color.name,
                     style: Get.textTheme.bodyLarge!.copyWith(
                       color: CstColors.a,
                       fontWeight: FontWeight.normal,
                     )),
-                Text('54D8F2',
+                Text(widget.color.hex,
                     style: Get.textTheme.bodySmall!.copyWith(
                       height: 1.2,
                       color: CstColors.b,

@@ -20,23 +20,25 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   bool _canRequestData = true;
 
+  bool _listener(n) {
+    print('listener called, ${n.toString()}');
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ProductCard(
-          data: Product(
-              title: 'Morocco abayas with its ultra chic polozza',
-              price: 215,
-              categories: ['Abaya'],
-              colors: [
-                Colors.orange.shade300,
-                Colors.purple.shade300,
-                Colors.pink.shade300,
-              ],
-              rankingAverage: 4.5,
-              reviews: 55,
-              cardPicture: 'assets/images/image_3.png'),
+      body: NotificationListener<ScrollUpdateNotification>(
+        onNotification: (ScrollUpdateNotification n) {
+          if (n.metrics.pixels >= n.metrics.maxScrollExtent)
+            print('load more data');
+          return true;
+        },
+        child: ListView.builder(
+          itemCount: 50,
+          itemBuilder: (_, i) => ListTile(
+            title: Text('Hello $i'),
+          ),
         ),
       ),
     );

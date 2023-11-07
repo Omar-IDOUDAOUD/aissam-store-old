@@ -241,6 +241,7 @@ class ProductsController extends GetxController {
       for (var element in res.docs) {
         final e = element.data();
         final cat = Category(
+          id: element.id,
           name: e['name'],
           color: HexColor(e['color']),
           imageUrl: await _cloudStorageController!

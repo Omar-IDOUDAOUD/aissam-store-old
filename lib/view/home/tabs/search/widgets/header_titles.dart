@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:aissam_store/controller/search.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/controller/search.dart' as ctrl;
@@ -13,8 +15,8 @@ import 'package:get/get.dart';
 class TabHeaderTitles extends StatefulWidget {
   const TabHeaderTitles({super.key});
 
-  static const double height1 = 65;
-  static const double height2 = 80;
+  static const double height1 = 65 + 20; //20: padding
+  static const double height2 = 80 + 20;
 
   @override
   State<TabHeaderTitles> createState() => _TabHeaderTitlesState();
@@ -55,25 +57,50 @@ class _TabHeaderTitlesState extends State<TabHeaderTitles> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: Colors.blue,
-      child: AnimatedSize(
-        duration: 300.milliseconds,
+    final double hPadding = 20;
+    final double height =
+        (_isResultsTab ? TabHeaderTitles.height2 : TabHeaderTitles.height1) -
+            20;
+    return AnimatedSize(
+      duration: 300.milliseconds,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(25, hPadding, 25, 0),
         child: SizedBox(
-          height:
-              _isResultsTab ? TabHeaderTitles.height2 : TabHeaderTitles.height1,
+          height: height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                _isResultsTab ? 'Results Tab' : 'Search Results',
-                style: Get.textTheme.headlineLarge!.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _isResultsTab ? 'Search Results' : 'Search',
+                    style: Get.textTheme.headlineLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  if (_isResultsTab)
+                    GestureDetector(
+                      onTap: () => Get.dialog(SearchFilterDialog()),
+                      child: ColoredBox(
+                        color: Colors.transparent,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 3),
+                          child: Icon(
+                            Icons.filter_list_rounded,
+                            color: CstColors.a,
+                            size: 25,
+                          ),
+                        ),
+                      ),
+                    )
+                ],
               ),
               Text(
-                "Let's find something",
+                _isResultsTab
+                    ? _controller.searchFieldController.text
+                    : "Let's find something",
                 style: Get.textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.w500,
                   height: 1.2,
@@ -81,11 +108,14 @@ class _TabHeaderTitlesState extends State<TabHeaderTitles> {
                 ),
               ),
               if (_isResultsTab)
-                SizedBox(
-                  height: 15,
-                  width: 50,
-                  child: ColoredBox(color: Colors.red),
-                )
+                GetBuilder<SearchControllerV2>(
+                  id: _controller.resultsCountWidgetsTag,
+                  init: _controller,
+                  builder: (c) {
+                    if (c.resultsCount == null) return Text('Loading...');
+                    return Text('${c.resultsCount!.toString()} results');
+                  },
+                ),
             ],
           ),
         ),

@@ -5,17 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../filter_dialog.dart';
+
 class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
   SearchControllerV2 _controller = SearchControllerV2.instance;
   FocusNode _focusNode = FocusNode();
-
-  // void _requestFocus() {
-  //   _controller.currentTabUIState.value = SearchTabUIStates.Searching;
-  //   400
-  //       .milliseconds
-  //       .delay()
-  //       .then((value) => _focusNode.requestFocus()); //300.mili
-  // }
 
   @override
   Widget build(
@@ -52,6 +46,9 @@ class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
   }
 
   Widget _getFakeSearchBar(Key key) {
+    final isHintNotText = _controller.searchFieldController.text.isEmpty;
+    final hint = 'search here...';
+    final text = _controller.searchFieldController.text;
     return DecoratedBox(
       key: key,
       decoration: BoxDecoration(
@@ -77,11 +74,11 @@ class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
               ),
               Expanded(
                 child: Text(
-                  _controller.searchFieldController.text,
+                  isHintNotText ? hint : text,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: Get.textTheme.headlineSmall!.copyWith(
-                    color: CstColors.a,
+                    color: isHintNotText ? CstColors.c : CstColors.a,
                     fontWeight: FontWeight.w400,
                     height: 1.2,
                   ),
@@ -186,16 +183,15 @@ class _SearchBarV2State extends State<SearchBarV2> {
             focusNode: _controller.searchFieldfocusNode,
             // enabled: isEnabled,
             controller: _controller.searchFieldController,
+            hint: 'search here...',
             onClear: () {
               print('Clear Function');
               _controller.currentTabUIState.value = SearchTabUIStates.History;
             },
             onCommit: () {
               print('Commit Function');
-              _controller.setSearchTerm;
+              _controller.setSearchTerm();
               _controller.currentTabUIState.value = SearchTabUIStates.Results;
-              // _controller.setSearchTerm =
-              //     _controller.searchFieldController.text;
             },
           ),
         ),
@@ -205,13 +201,16 @@ class _SearchBarV2State extends State<SearchBarV2> {
             duration: 100.milliseconds,
             child: _showFilterIcon
                 ? GestureDetector(
-                    onTap: () {},
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 3),
-                      child: Icon(
-                        Icons.filter_list_rounded,
-                        color: CstColors.a,
-                        size: 25,
+                    onPanDown: (d) => _openSearchFilterDialog(),
+                    child: ColoredBox(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 3),
+                        child: Icon(
+                          Icons.filter_list_rounded,
+                          color: CstColors.a,
+                          size: 25,
+                        ),
                       ),
                     ),
                   )
@@ -229,5 +228,10 @@ class _SearchBarV2State extends State<SearchBarV2> {
         ),
       ],
     );
+  }
+
+  void _openSearchFilterDialog() {
+    print('Openning filter dialog box');
+    Get.dialog(SearchFilterDialog());
   }
 }

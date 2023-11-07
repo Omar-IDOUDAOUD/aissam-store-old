@@ -30,6 +30,7 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
     // TODO: implement initState
     super.initState();
     _controller.searchFieldController.addListener(_searchFieldListener);
+    _checkHistoryTermExistence();
   }
 
   @override
@@ -40,89 +41,164 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
   }
 
   void _searchFieldListener() {
+    _checkHistoryTermExistence();
     setState(() {});
+  }
+
+  final List<ctrls.SearchTerm> _previousSuggestionsResults =
+      List.empty(growable: true);
+
+  final List<ctrls.SearchTerm> _suggsetionsFromHistory =
+      List.empty(growable: true);
+  void _checkHistoryTermExistence() {
+    if (_controller.searchFieldController.text.isEmpty) return;
+    final result = _controller.history.where((element) =>
+        element.searchQuery.startsWith(_controller.searchFieldController.text));
+    _suggsetionsFromHistory
+      ..clear()
+      ..addAll(result
+          .map((e) => ctrls.SearchTerm(query: e.searchQuery, id: e.tagId))
+          .toList());
+    print(
+        'test 11: find new history sugg: ${_suggsetionsFromHistory.map((e) => e.query).toString()}');
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement
+
     return FutureBuilder<List<ctrls.SearchTerm>>(
-        future: _controller.searchFieldController.text.isNotEmpty
-            ? _controller.suggestions()
-            : null,
-        builder: (context, snapshot) {
-          final isWaiting = snapshot.connectionState == ConnectionState.waiting;
-          final noData = !snapshot.hasData;
-          final hasError = snapshot.hasError;
-          final noSuggestions = !noData && snapshot.data!.isEmpty;
-          return CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 25),
-                sliver: _sliverToChild(
-                  Row(
-                    children: [
-                      Text(
-                        'SEARCH COLLECTION',
-                        style: Get.textTheme.bodyLarge!.copyWith(
-                          color: CstColors.a,
-                          fontWeight: FontWeight.w400,
-                        ),
+      future: _controller.searchFieldController.text.isNotEmpty
+          ? _controller
+              .suggestions()
+              .then((value) => _previousSuggestionsResults
+                ..clear()
+                ..addAll(value))
+          : null,
+      initialData: _previousSuggestionsResults,
+      builder: (context, snapshot) {
+        final isWaiting = snapshot.connectionState == ConnectionState.waiting;
+        // final noData = snapshot.data!.isEmpty;
+        final hasError = snapshot.hasError;
+        final selectedCategoriesLength =
+            _controller.filterParameters.categoriesIds.length;
+
+        return CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              sliver: _sliverToChild(
+                Row(
+                  children: [
+                    Text(
+                      'SEARCH COLLECTIONS',
+                      style: Get.textTheme.bodyLarge!.copyWith(
+                        color: CstColors.a,
+                        fontWeight: FontWeight.w400,
                       ),
-                      Spacer(),
-                      Text(
-                        '1 category | ',
-                        style: Get.textTheme.bodyMedium!.copyWith(
-                          color: CstColors.b,
-                          height: 0.4,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Text(
-                        'All',
-                        style: Get.textTheme.bodyMedium!.copyWith(
-                          color: CstColors.g,
-                          height: 0.4,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              _sliverToChild(
-                _CategoriesCostumizationList(),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 25),
-                sliver: SliverToBoxAdapter(
-                  child: Text(
-                    'SUGGESTIONS',
-                    style: Get.textTheme.bodyLarge!.copyWith(
-                      color: CstColors.a,
-                      fontWeight: FontWeight.w400,
                     ),
-                  ),
+                    Spacer(),
+                    Text(
+                      selectedCategoriesLength != 0
+                          ? '$selectedCategoriesLength categories | '
+                          : 'All Categories',
+                      style: Get.textTheme.bodyMedium!.copyWith(
+                        color: CstColors.b,
+                        height: 0.4,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    if (selectedCategoriesLength != 0)
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _controller.setCategoriesFilter(List.empty());
+                          });
+                        },
+                        child: Text(
+                          'All',
+                          style: Get.textTheme.bodyMedium!.copyWith(
+                            color: CstColors.g,
+                            height: 0.4,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              if (noData)
-                _sliverToChild(Text('SearchForSomethong'))
-              else if (isWaiting)
-                _sliverToChild(CircularProgressIndicator())
-              else if (noSuggestions)
-                _sliverToChild(Text('No Suggestions'))
-              else if (hasError)
-                _sliverToChild(Text('An Error occurred'))
-              else
-                SliverList.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (_, i) {
-                    return Text(snapshot.data!.elementAt(i).query);
-                  },
-                )
-            ],
-          );
-        });
+            ),
+            _sliverToChild(
+              _CategoriesCostumizationList(),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(25, 10, 25, 0),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'SUGGESTIONS',
+                      style: Get.textTheme.bodyLarge!.copyWith(
+                        color: CstColors.a,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    if (isWaiting)
+                      SizedBox.square(
+                        dimension: 15,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1.5,
+                          color: CstColors.b,
+                        ),
+                      )
+                  ],
+                ),
+              ),
+            ),
+            if (hasError)
+              _sliverToChild(Text('An Error occurred'))
+            else
+              SliverList.builder(
+                itemCount:
+                    _suggsetionsFromHistory.length + snapshot.data!.length,
+                itemBuilder: (_, i) {
+                  final isFromHistory = i < _suggsetionsFromHistory.length;
+                  final term = isFromHistory
+                      ? _suggsetionsFromHistory.elementAt(i)
+                      : snapshot.data!
+                          .elementAt(i - _suggsetionsFromHistory.length);
+                  final userInput = _controller.searchFieldController.text;
+                  final suggestion = term.query;
+                  String boldClip;
+                  String lightClip;
+                  int index =
+                      suggestion.toLowerCase().indexOf(userInput.toLowerCase());
+                  if (index >= 0) {
+                    boldClip =
+                        suggestion.substring(index, index + userInput.length);
+                    lightClip = suggestion.substring(index + userInput.length);
+                  } else {
+                    boldClip = '';
+                    lightClip = suggestion;
+                  }
+                  return _SuggestionItem(
+                    isFromHistory: isFromHistory,
+                    boldClip: boldClip,
+                    normalClip: lightClip,
+                    onClick: () {
+                      _controller.searchFieldController.text = term.query;
+                      _controller.setSearchTerm(term);
+                      _controller.currentTabUIState.value =
+                          ctrls.SearchTabUIStates.Results;
+                    },
+                  );
+                },
+              )
+          ],
+        );
+      },
+    );
   }
 
   Widget _sliverToChild(Widget child) {
@@ -130,90 +206,18 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
       child: child,
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return FutureBuilder<List<ctrls.SearchTerm>>(
-  //     future: _controller.searchFieldController.text.isNotEmpty
-  //         ? _controller.suggestions()
-  //         : null,
-  //     builder: (context, snapshot) {
-  //       return ListView.builder(
-  //         itemCount:
-  //             3 + (snapshot.hasData ? max(snapshot.data!.length - 1, 0) : 0),
-  //         itemBuilder: (_, i) {
-  //           if (i == 0)
-  //             return Padding(
-  //               padding: EdgeInsets.symmetric(horizontal: 25),
-  //               child: Row(
-  //                 children: [
-  //                   Text(
-  //                     'SEARCH COLLECTION',
-  //                     style: Get.textTheme.bodyLarge!.copyWith(
-  //                       color: CstColors.a,
-  //                       fontWeight: FontWeight.w400,
-  //                     ),
-  //                   ),
-  //                   Spacer(),
-  //                   Text(
-  //                     '1 category | ',
-  //                     style: Get.textTheme.bodyMedium!.copyWith(
-  //                       color: CstColors.b,
-  //                       height: 0.4,
-  //                       fontWeight: FontWeight.w400,
-  //                     ),
-  //                   ),
-  //                   Text(
-  //                     'All',
-  //                     style: Get.textTheme.bodyMedium!.copyWith(
-  //                       color: CstColors.g,
-  //                       height: 0.4,
-  //                       fontWeight: FontWeight.w400,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             );
-  //           if (i == 1) return _CategoriesCostumizationList();
-  //           if (i == 2)
-  //             return Padding(
-  //               padding: EdgeInsets.symmetric(horizontal: 25),
-  //               child: Text(
-  //                 'SUGGESTIONS',
-  //                 style: Get.textTheme.bodyLarge!.copyWith(
-  //                   color: CstColors.a,
-  //                   fontWeight: FontWeight.w400,
-  //                 ),
-  //               ),
-  //             );
-  //          i -= 2;
-  //           // i = 0
-  //           if (snapshot.connectionState == ConnectionState.waiting)
-  //             return const Text('Loading');
-  //           if (snapshot.hasError) return Text('Error Occurred');
-  //           if (!snapshot.hasData) return Text('Search For Sometrhing');
-  //           if (snapshot.hasData && snapshot.data!.isEmpty)
-  //             return Text('No Suggestions');
-  //           return Padding(
-  //             padding: EdgeInsets.symmetric(horizontal: 25),
-  //             child: Text(
-  //               snapshot.data!.elementAt(i).query,
-  //               style: TextStyle(fontSize: 25),
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 }
 
 class _CategoriesCostumizationList extends StatelessWidget {
   _CategoriesCostumizationList({super.key});
   final ProductsController _productsController = ProductsController.instance;
+  final ctrls.SearchControllerV2 _controller =
+      ctrls.SearchControllerV2.instance;
 
   @override
   Widget build(BuildContext context) {
+    final List<String> selectedCategories =
+        _controller.filterParameters.categoriesIds;
     return FutureBuilder<List<Category>>(
       future: _productsController.categories(),
       initialData: _productsController.loadedCategories,
@@ -236,6 +240,17 @@ class _CategoriesCostumizationList extends StatelessWidget {
             itemBuilder: (_, i) => isWaiting
                 ? LoadingCategoryItem()
                 : CategorieItem(
+                    onCheck: (isChecked) {
+                      if (isChecked) {
+                        selectedCategories.add(snapshot.data!.elementAt(i).id);
+                      } else {
+                        selectedCategories
+                            .remove(snapshot.data!.elementAt(i).id);
+                      }
+                      _controller.setCategoriesFilter(selectedCategories);
+                    },
+                    checked: selectedCategories
+                        .contains(snapshot.data!.elementAt(i).id),
                     data: snapshot.data!.elementAt(i),
                   ),
           ),
@@ -245,246 +260,42 @@ class _CategoriesCostumizationList extends StatelessWidget {
   }
 }
 
-// class SearchingPart extends StatefulWidget {
-//   SearchingPart({super.key, required this.onSuggestionClick});
+class _SuggestionItem extends StatelessWidget {
+  const _SuggestionItem(
+      {super.key,
+      this.isFromHistory = false,
+      required this.boldClip,
+      required this.normalClip,
+      required this.onClick});
+  final bool isFromHistory;
+  final String boldClip;
+  final String normalClip;
+  final Function() onClick;
 
-//   final Function(ctrls.SearchTerm term) onSuggestionClick;
-
-//   @override
-//   State<SearchingPart> createState() => _SearchingPartState();
-// }
-
-// class _SearchingPartState extends State<SearchingPart> {
-//   final ctrls.SearchController _controller = ctrls.SearchController.instance;
-//   final ProductsController _productsController = ProductsController.instance;
-
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-
-//     super.initState();
-//     print('INIT STATE SEARCHING PART');
-//     _controller.searchTextEditingController.addListener(() {
-//       if (!_checkSearchEmptiness && mounted) {
-//         print('trying get data');
-//         setState(() {});
-//       }
-//     });
-//   }
-
-//   @override
-//   void dispose() {
-//     // TODO: implement dispose
-//     print('DISPOSE SEARCHING PART');
-//     super.dispose();
-//   }
-
-//   bool get _checkSearchEmptiness =>
-//       _controller.searchTextEditingController.text.isEmpty;
-//   // bool _canSendRequest = false;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // print('rebuild widget, v=$_canSendRequest');
-//     return FutureBuilder<List<ctrls.SearchTerm>>(
-//       initialData: _controller.lastSearchSuggestions,
-//       future: _controller
-//           .searchSuggestions(_controller.searchTextEditingController.text),
-//       builder: (context, sn) {
-//         if (sn.hasError) return Text('An error occurred');
-//         if (sn.hasData) {
-//           return CustomScrollView(
-//             physics: const BouncingScrollPhysics(),
-//             slivers: [
-//               SliverPadding(
-//                 padding:
-//                     EdgeInsets.only(right: 25, left: 25, top: 25, bottom: 15),
-//                 sliver: SliverToBoxAdapter(
-//                   child: Row(
-//                     children: [
-//                       Text(
-//                         'SEARCH COLLECTION',
-//                         style: Get.textTheme.bodyLarge!.copyWith(
-//                           color: CstColors.a,
-//                           height: 0.4,
-//                           fontWeight: FontWeight.w400,
-//                         ),
-//                       ),
-//                       Spacer(),
-//                       Text(
-//                         '1 category | ',
-//                         style: Get.textTheme.bodyMedium!.copyWith(
-//                           color: CstColors.b,
-//                           height: 0.4,
-//                           fontWeight: FontWeight.w400,
-//                         ),
-//                       ),
-//                       Text(
-//                         'All',
-//                         style: Get.textTheme.bodyMedium!.copyWith(
-//                           color: CstColors.g,
-//                           height: 0.4,
-//                           fontWeight: FontWeight.w400,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//               SliverToBoxAdapter(
-//                 child: SizedBox(
-//                   height: 85,
-//                   child: FutureBuilder<List<Category>>(
-//                       initialData: _productsController.loadedCategories,
-//                       future: _productsController.categories(),
-//                       builder: (context, snapshot) {
-//                         if (snapshot.hasError)
-//                           return Center(
-//                             child: Text('There was an error'),
-//                           );
-//                         final isWaiting = snapshot.connectionState ==
-//                                 ConnectionState.waiting &&
-//                             !snapshot.hasData;
-//                         return ListView.separated(
-//                           itemCount: isWaiting ? 3 : snapshot.data!.length,
-//                           padding: EdgeInsets.symmetric(horizontal: 25),
-//                           scrollDirection: Axis.horizontal,
-//                           separatorBuilder: (_, i) => SizedBox(
-//                             width: 10,
-//                           ),
-//                           itemBuilder: (_, i) => LoadingCategoryItem(),
-//                           // isWaiting
-//                           //     ? LoadingCategoryItem()
-//                           //     : CategorieItem(
-//                           //         data: snapshot.data!.elementAt(i),
-//                           //       ),
-//                         );
-//                       }),
-//                 ),
-//               ),
-//               SliverPadding(
-//                 padding:
-//                     EdgeInsets.only(right: 25, left: 25, top: 25, bottom: 15),
-//                 sliver: SliverToBoxAdapter(
-//                   child: SizedBox(
-//                     height: 20,
-//                     child: Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text(
-//                           'SUGGESTIONS',
-//                           style: Get.textTheme.bodyLarge!.copyWith(
-//                             color: CstColors.a,
-//                             // height: 0.4,
-//                             fontWeight: FontWeight.w400,
-//                           ),
-//                         ),
-//                         if (sn.connectionState == ConnectionState.waiting)
-//                           SizedBox.square(
-//                             dimension: 20,
-//                             child: CircularProgressIndicator(
-//                               color: Colors.grey,
-//                               strokeWidth: 1.5,
-//                             ),
-//                           )
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               if (sn.connectionState == ConnectionState.waiting && !sn.hasData)
-//                 Center(child: CircularProgressIndicator())
-//               else
-//                 SliverList.separated(
-//                   itemCount: sn.data!.isNotEmpty ? sn.data!.length : 1,
-//                   separatorBuilder: (_, i) => SizedBox(height: 15),
-//                   itemBuilder: (_, i) => Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 25),
-//                     child: Builder(builder: (context) {
-//                       final userInput =
-//                           _controller.searchTextEditingController.text;
-//                       final suggestion = sn.data!.isNotEmpty
-//                           ? sn.data!.elementAt(i).term
-//                           : userInput;
-//                       var boldClip;
-//                       var lightClip;
-//                       if (_controller.searchTextEditingController.text.length <=
-//                           suggestion.length) {
-//                         boldClip = _controller.searchTextEditingController.text;
-//                         lightClip = suggestion.substring(_controller
-//                             .searchTextEditingController.text.length);
-//                         for (var i2 = 0;
-//                             i2 <
-//                                 _controller
-//                                     .searchTextEditingController.text.length;
-//                             i2++) {
-//                           if (userInput[i2].toLowerCase() ==
-//                               suggestion[i2].toLowerCase()) continue;
-//                           boldClip = '';
-//                           lightClip = suggestion;
-//                         }
-//                       } else {
-//                         lightClip = suggestion;
-//                       }
-//                       return InkWell(
-//                         onTap: () => widget.onSuggestionClick(sn.data!.isEmpty
-//                             ? ctrls.SearchTerm(term: suggestion)
-//                             : sn.data!.elementAt(i)),
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                           children: [
-//                             Text.rich(
-//                               TextSpan(
-//                                 children: [
-//                                   TextSpan(
-//                                     text: boldClip,
-//                                     style:
-//                                         Get.textTheme.headlineMedium!.copyWith(
-//                                       color: CstColors.a,
-//                                       height: 1.2,
-//                                       fontWeight: FontWeight.w500,
-//                                     ),
-//                                   ),
-//                                   TextSpan(
-//                                     text: lightClip,
-//                                     style:
-//                                         Get.textTheme.headlineMedium!.copyWith(
-//                                       color: CstColors.c,
-//                                       height: 1.2,
-//                                       fontWeight: FontWeight.w400,
-//                                     ),
-//                                   )
-//                                 ],
-//                               ),
-//                             ),
-//                             // Text(
-//                             //   sn.data!.elementAt(i),
-//                             //   style: Get.textTheme.headlineMedium!.copyWith(
-//                             //     color: CstColors.c,
-//                             //     height: 1.2,
-//                             //     fontWeight: FontWeight.w400,
-//                             //   ),
-//                             // ),
-//                             SvgPicture.asset('assets/icons/search_small.svg')
-//                           ],
-//                         ),
-//                       );
-//                     }),
-//                   ),
-//                 ),
-//             ],
-//           );
-//         }
-
-//         if (sn.connectionState == ConnectionState.waiting && !sn.hasData)
-//           return Center(
-//               child: CircularProgressIndicator(
-//             color: Colors.grey,
-//             strokeWidth: 1.5,
-//           ));
-//         return Center(child: Text('Something went wrong'));
-//       },
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 25),
+      onTap: onClick,
+      trailing: SvgPicture.asset(isFromHistory
+          ? 'assets/icons/ic_fluent_arrow_counterclockwise_24_filled.svg'
+          : 'assets/icons/search_small.svg'),
+      title: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: boldClip,
+              style: Get.textTheme.headlineSmall!
+                  .copyWith(fontWeight: FontWeight.bold, color: CstColors.a),
+            ),
+            TextSpan(
+              text: normalClip,
+              style: Get.textTheme.headlineSmall!
+                  .copyWith(fontWeight: FontWeight.normal, color: CstColors.c),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
