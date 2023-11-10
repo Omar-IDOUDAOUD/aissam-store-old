@@ -6,6 +6,7 @@ import 'dart:isolate';
 
 import 'package:aissam_store/core/utils/iterable_distinct_extension.dart';
 import 'package:aissam_store/models/category.dart';
+import 'package:aissam_store/view/home/tabs/search/filter_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,17 +51,38 @@ class SearchControllerV2 extends GetxController {
 
   final UserController _userController = UserController.instance;
   final FirebaseFirestore _fbfirestore = FirebaseFirestore.instance;
+  final ProductsController _productsController = ProductsController.instance;
   late CollectionReference<Product> _cloudProducts;
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    // _productsController.addTestProducts();
     searchFieldController = TextEditingController()..addListener(_resetResults);
     searchFieldfocusNode = FocusNode();
     _cloudProducts = _fbfirestore.collection('Products').withConverter(
         fromFirestore: Product.fromFirestore,
         toFirestore: (Product model, _) => model.toMap());
+    _test();
+  }
+
+  void _test() {
+    print('start test function');
+    Query<Product> query = _cloudProducts;
+    query = query.where(Filter.and(
+      Filter('categories', arrayContainsAny: ['Jelaba']),
+      Filter('price', isLessThanOrEqualTo: 20),
+      Filter('price', isGreaterThanOrEqualTo: 10),
+      Filter('sells', isEqualTo: 20),
+      Filter('saves_number', isEqualTo: 15),
+      Filter('colors', arrayContains: '#c7287f'),
+    ));
+    // query = query.orderBy('price').orderBy('sells');
+    final results = query.limit(5).get().then((value) {
+      print(
+          'Results gotted: ${value.docs.map((e) => e.data().price).toString()}');
+    });
   }
 
   List<SearchHistoryItem> get history =>
@@ -95,7 +117,7 @@ class SearchControllerV2 extends GetxController {
 
   final PaginationDataResult<Product> paginationData = PaginationDataResult();
   ResultsFiltersParameters filterParameters = ResultsFiltersParameters(
-      type: ResultsTypes.All, categoriesIds: List.empty(growable: true));
+      type: ResultsTypes.All, categoriesNames: List.empty(growable: true));
 
   void setResultsTypeFilter(ResultsTypes newType) {
     filterParameters.type = newType;
@@ -111,8 +133,8 @@ class SearchControllerV2 extends GetxController {
     filterParameters = newFilters(filterParameters);
   }
 
-  void setCategoriesFilter(List<String> newCategoriesIds) {
-    filterParameters.categoriesIds = newCategoriesIds;
+  void setCategoriesFilter(List<String> newCategoriesNames) {
+    filterParameters.categoriesNames = newCategoriesNames;
   }
 
   Future<void> search() async {
@@ -137,10 +159,13 @@ class SearchControllerV2 extends GetxController {
       _resultsCountQuery = query;
       if (paginationData.lastLoadedDoc != null)
         query = query.startAfterDocument(paginationData.lastLoadedDoc!);
+      query = QueryFilter.setFilter(filterParameters, query);
+
       results = await query.limit(10).get().then((value) => value.docs);
     } else {
-      Query<Product> query = _cloudProducts
-          .orderBy('title')
+      Query<Product> query =
+          QueryFilter.setFilter(filterParameters, _cloudProducts);
+      query = query
           .startAt([_searchTerm!.query]).endAt(["${_searchTerm!.query}\uf8ff"]);
       _resultsCountQuery = query;
       if (paginationData.lastLoadedDoc != null)
@@ -204,7 +229,7 @@ enum SearchTabUIStates {
 
 class ResultsFiltersParameters {
   ResultsTypes type;
-  List<String> categoriesIds;
+  List<String> categoriesNames;
   double? minPrice;
   double? maxPrice;
   int? size;
@@ -212,7 +237,7 @@ class ResultsFiltersParameters {
 
   ResultsFiltersParameters({
     required this.type,
-    required this.categoriesIds,
+    required this.categoriesNames,
     this.minPrice,
     this.maxPrice,
     this.colors,
@@ -228,13 +253,51 @@ class ResultsFiltersParameters {
   }) {
     return ResultsFiltersParameters(
       // ignore: unnecessary_this
-      categoriesIds: this.categoriesIds,
+      categoriesNames: this.categoriesNames,
       type: this.type,
       minPrice: minPrice,
       maxPrice: maxPrice,
       size: size,
       colors: colors,
     );
+  }
+}
+
+abstract class QueryFilter {
+  static Query<Product> setFilter(
+      ResultsFiltersParameters params, Query<Product> filterableQuery) {
+    final List<ColorName> colorsColl = [
+      ColorName(hex: '#28c7bf', name: 'Red'),
+      ColorName(hex: 'EEF300', name: 'Yellow'),
+      ColorName(hex: '0061F3', name: 'Blue'),
+      ColorName(hex: '00F353', name: 'Green'),
+    ];
+    final List<String> sizes = ['S', 'M', 'L', 'X', 'XXL'];
+    // cats fil
+    final catsFilter = params.categoriesNames.isNotEmpty
+        ? Filter('categories', arrayContainsAny: params.categoriesNames)
+        : null;
+    // specs fil
+    final minPrice =
+        Filter('price', isGreaterThanOrEqualTo: params.minPrice ?? 0);
+    final maxPrice =
+        Filter('price', isLessThan: params.maxPrice ?? double.infinity);
+    final price = Filter.and(minPrice, maxPrice);
+    final size = params.size != null
+        ? Filter('size', arrayContainsAny: [sizes.elementAt(params.size!)])
+        : null;
+    final colors = params.colors != null && params.colors!.isNotEmpty
+        ? Filter(
+            'colors',
+            arrayContainsAny:
+                params.colors!.map<String>((e) => colorsColl.elementAt(e).hex),
+          )
+        : null;
+    final specsFilter = Filter.and(price, price, size, colors);
+    //submit filters to query
+    filterableQuery =
+        filterableQuery.where(Filter.and(specsFilter, specsFilter, catsFilter));
+    return filterableQuery;
   }
 }
 

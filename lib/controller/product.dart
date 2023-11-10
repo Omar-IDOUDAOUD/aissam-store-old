@@ -144,28 +144,14 @@ class ProductsController extends GetxController {
     return c.loadedData;
   }
 
-  Future<void> addTestProduct() async {
+  Future<void> addTestProducts() async {
+    ////
+
+    ///
     final titles = [
-      'Once upon a time in a quaint village nestled betwee',
-      "rolling hills, lived a young girl named",
-      ' Lily. Lily was known throughout',
-      'the village for her boundless ',
-      "le smiled more, shared more, and worked together more harmoniously.",
-      'Once upon a time in a quaint village nestled betwee',
-      "rolling hills, lived a young girl named",
-      ' Lily. Lily was known throughout',
-      'the village for her boundless ',
-      "le smiled more, shared more, and worked together more harmoniously.",
-      'Once upon a time in a quaint village nestled betwee',
-      "rolling hills, lived a young girl named",
-      ' Lily. Lily was known throughout',
-      'the village for her boundless ',
-      "le smiled more, shared more, and worked together more harmoniously.",
-      'Once upon a time in a quaint village nestled betwee',
-      "rolling hills, lived a young girl named",
-      ' Lily. Lily was known throughout',
-      'the village for her boundless ',
-      "le smiled more, shared more, and worked together more harmoniously.",
+      'title 1',
+      'title 2',
+      'title 3',
     ];
     final imgs = [
       'https://images.unsplash.com/photo-1608744882201-52a7f7f3dd60?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=60',
@@ -179,47 +165,38 @@ class ProductsController extends GetxController {
       'https://images.unsplash.com/photo-1546460573-e6c02e39568a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=400&q=60',
       "https://images.unsplash.com/photo-1575785662490-1e3ce6806ed5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDN8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=400&q=60",
     ];
-    final tags = [
-      'wfceoRY4988Zbzz0cTnB',
-      'btCQfBCx1Q8m0aeDBguO',
-      'DVRZXtp4egRqlwyg3UtI'
+    final thumbnails = [
+      'https://firebasestorage.googleapis.com/v0/b/aissam-store-fb-backend.appspot.com/o/products%2Fthumbnails%2Fabaya-fluid-caftan-marwae.webp?alt=media&token=9dd01d72-b2d8-4ede-bd3e-cebb6206ee35&_gl=1*b1ioov*_ga*MTgxODE0NDQ0LjE2OTMyMzIwNzM.*_ga_CW55HF8NVT*MTY5OTQ0MTg4Ni44Mi4xLjE2OTk0NDQ0NDMuNDguMC4w',
+      'https://firebasestorage.googleapis.com/v0/b/aissam-store-fb-backend.appspot.com/o/products%2Fthumbnails%2Fabaya-maheen-dress-with-sequin-trim.webp?alt=media&token=07885fd3-0993-4020-9d6a-39aa6c397576&_gl=1*ai1e3u*_ga*MTgxODE0NDQ0LjE2OTMyMzIwNzM.*_ga_CW55HF8NVT*MTY5OTQ0NzMzMy44My4wLjE2OTk0NDczMzMuNjAuMC4w',
+      'https://firebasestorage.googleapis.com/v0/b/aissam-store-fb-backend.appspot.com/o/products%2Fthumbnails%2Fabaya-shirt-wafa.webp?alt=media&token=0cdba4a5-8678-4888-a739-af5f7649cdb0&_gl=1*1l76ch4*_ga*MTgxODE0NDQ0LjE2OTMyMzIwNzM.*_ga_CW55HF8NVT*MTY5OTQ0NzMzMy44My4xLjE2OTk0NDczNDQuNDkuMC4w',
+      'https://firebasestorage.googleapis.com/v0/b/aissam-store-fb-backend.appspot.com/o/products%2Fthumbnails%2Fgandoura-interior-ryelle.webp?alt=media&token=138afec7-7d81-4e49-aa68-628bcb23acd1&_gl=1*1wqhg2r*_ga*MTgxODE0NDQ0LjE2OTMyMzIwNzM.*_ga_CW55HF8NVT*MTY5OTQ0NzMzMy44My4xLjE2OTk0NDczNjMuMzAuMC4w',
+      'https://firebasestorage.googleapis.com/v0/b/aissam-store-fb-backend.appspot.com/o/products%2Fthumbnails%2Fgandoura-orientale-farashaa.webp?alt=media&token=9d640c2d-0835-4d52-8bc7-722564da5650&_gl=1*1bz5cy2*_ga*MTgxODE0NDQ0LjE2OTMyMzIwNzM.*_ga_CW55HF8NVT*MTY5OTQ0NzMzMy44My4xLjE2OTk0NDczNzIuMjEuMC4w',
     ];
     final cats = ['Qaftans', 'Hijabs', 'Jelaba', 'Abayas'];
+    final colors = ['#595dcf', '#c7287f', '#c7287f', '#c79528', '#28c7bf'];
+    final List<Product> list = List.generate(
+      12,
+      (index) => Product(
+        thumbnailPicture: (thumbnails..shuffle()).first,
+        categories: (cats..shuffle()).take(1).toList(),
+        colors: (colors..shuffle()).take(2).toList(),
+        description: 'No description',
+        title: (titles..shuffle()).first,
+        images: imgs..shuffle(),
+        price: Random.secure().nextDouble() * 200.0,
+        rankingAverage: Random.secure().nextDouble() * 5.0,
+        sells: Random.secure().nextInt(100),
+        reviews: Random.secure().nextInt(100),
+        timestamp: Timestamp.now(),
+        savesNumber: Random.secure().nextInt(50),
+      ),
+    );
+
     try {
-      await _cloudProducts
-          .add(
-        Product(
-          cardPicture: imgs.elementAt(Random.secure().nextInt(imgs.length)),
-          colors: [
-            Colors.red,
-            Colors.blue,
-            Colors.yellow,
-          ],
-          description: titles.elementAt(Random.secure().nextInt(titles.length)),
-          price: 152,
-          title: titles.elementAt(Random.secure().nextInt(titles.length)),
-          images: imgs,
-          rankingAverage: 2.3,
-          reviews: 5,
-          categories: [cats.elementAt(Random.secure().nextInt(cats.length))],
-          sells: Random.secure().nextInt(100),
-          // tags: [tags.elementAt(Random.secure().nextInt(tags.length))],
-          // number: _cloudProducts.count().query.get()
-        ),
-      )
-          .then((value) async {
-        print('success: $value');
-        final tagId = tags.elementAt(Random.secure().nextInt(tags.length));
-        await _cloudProducts
-            .doc(value.id)
-            .collection('search_tags')
-            .doc(tagId)
-            .set({
-          'tag_id': tagId,
-        });
-      }).catchError((e) {
-        print('catch error: $e');
-      });
+      for (var element in list) {
+        await _cloudProducts.add(element);
+        print('a product added successfuly');
+      }
     } catch (e) {
       print(e);
     }

@@ -13,7 +13,7 @@ class CategorieItem extends StatefulWidget {
   }) : super(key: key);
   final Category data;
   // final bool checkable;
-  final bool checked;
+  bool checked;
   final Function(bool state)? onCheck;
 
   @override
@@ -21,13 +21,13 @@ class CategorieItem extends StatefulWidget {
 }
 
 class _CategorieItemState extends State<CategorieItem> {
-  bool _checked = false;
-  @override
-  void initState() {
-    super.initState();
-    // TODO: implement initState
-    _checked = widget.checked;
-  }
+  // bool _checked = false;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // TODO: implement initState
+  //   _checked = widget.checked;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,9 @@ class _CategorieItemState extends State<CategorieItem> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            _checked = !_checked;
+            widget.checked = !widget.checked;
           });
-          if (widget.onCheck != null) widget.onCheck!(_checked);
+          if (widget.onCheck != null) widget.onCheck!(widget.checked);
         },
         child: Column(
           children: [
@@ -57,18 +57,20 @@ class _CategorieItemState extends State<CategorieItem> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: _checked ? CstColors.g : Colors.transparent,
-                          width: _checked ? 2.5 : 0,
+                          color:
+                              widget.checked ? CstColors.g : Colors.transparent,
+                          width: widget.checked ? 2.5 : 0,
                         ),
                       ),
                     ),
                     CircleAvatar(
                       radius: 10,
-                      backgroundColor:
-                          _checked ? CstColors.g : Colors.black.withOpacity(.1),
+                      backgroundColor: widget.checked
+                          ? CstColors.g
+                          : Colors.black.withOpacity(.1),
                       child: AnimatedScale(
                         duration: 100.milliseconds,
-                        scale: _checked ? 1 : 0,
+                        scale: widget.checked ? 1 : 0,
                         child: Icon(
                           Icons.check_rounded,
                           size: 13,
@@ -84,7 +86,7 @@ class _CategorieItemState extends State<CategorieItem> {
             Text(
               widget.data.name,
               style: Get.textTheme.displayLarge!.copyWith(
-                color: _checked ? CstColors.g : CstColors.b,
+                color: widget.checked ? CstColors.g : CstColors.b,
               ),
             )
           ],

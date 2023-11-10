@@ -60,7 +60,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                widget.data.cardPicture!,
+                widget.data.thumbnailPicture!,
                 fit: BoxFit.cover,
               ),
             ),

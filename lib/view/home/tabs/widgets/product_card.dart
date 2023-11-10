@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/core/utils/hex_color.dart';
 import 'package:aissam_store/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -112,7 +113,7 @@ class _ProductCardState extends State<ProductCard> {
                     children: [
                       Positioned.fill(
                         child: Image.network(
-                          widget.data.cardPicture!,
+                          widget.data.thumbnailPicture!,
                           fit: BoxFit.fitWidth,
                           alignment: Alignment.topCenter,
                         ),
@@ -266,8 +267,8 @@ class _ProductCardState extends State<ProductCard> {
                                 children: List.generate(
                                   widget.data.colors!.length,
                                   (index) => Positioned(
-                                    child: _getColorCircle(
-                                        widget.data.colors!.elementAt(index)),
+                                    child: _getColorCircle(HexColor(
+                                        widget.data.colors!.elementAt(index))),
                                     right: 7.0 * index,
                                   ),
                                 ),

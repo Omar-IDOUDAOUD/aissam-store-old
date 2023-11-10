@@ -14,13 +14,15 @@ class Product {
   double? price;
   int? reviews;
   double? rankingAverage;
-  String? cardPicture;
+  String? thumbnailPicture;
   List<String>? images;
-  List<Color>? colors;
+
+  /// color hex
+  List<String>? colors;
   List<String>? categories;
   Timestamp? timestamp;
   int? sells;
-  List<String>? tags;
+  int? savesNumber;
   Product({
     this.id,
     this.title,
@@ -28,12 +30,13 @@ class Product {
     this.price,
     this.reviews,
     this.rankingAverage,
-    this.cardPicture,
+    this.thumbnailPicture,
     this.images,
     this.colors,
     this.categories,
     this.timestamp,
     this.sells,
+    this.savesNumber,
     // this.tags,
   });
 
@@ -69,16 +72,13 @@ class Product {
       'price': price,
       'reviews': reviews,
       'ranking_average': rankingAverage,
-      'card_picture': cardPicture,
+      'thumbnail': thumbnailPicture,
       'images': images,
       'categories': categories,
-      'colors': colors!
-          .map<String>(
-              (c) => c.value.toRadixString(16).toUpperCase().substring(2))
-          .toList(),
+      'colors': colors,
       'timestamp': FieldValue.serverTimestamp(),
       'sells': sells,
-      'tags': tags,
+      'saves_number': savesNumber,
     };
   }
 
@@ -90,14 +90,13 @@ class Product {
       price: data['price'] as double,
       reviews: data['reviews'] as int,
       rankingAverage: data['ranking_average'] as double,
-      cardPicture: data['card_picture'],
+      thumbnailPicture: data['thumbnail'],
       images: data['images'],
       categories: data['categories'],
-      colors: (data['colors'] as List<String>)
-          .map<Color>((e) => HexColor(e))
-          .toList(),
+      colors: data['colors'],
       timestamp: data['timestamp'] as Timestamp,
       sells: data['sells'],
+      savesNumber: data['saves_number'],
       // number: data['number'] as int,
     );
   }
@@ -114,21 +113,20 @@ class Product {
       price: data['price'] as double,
       reviews: data['reviews'] as int,
       rankingAverage: data['ranking_average'] as double,
-      cardPicture: data['card_picture'],
+      thumbnailPicture: data['thumbnail'],
       categories:
           (data['categories'] as List).map((e) => e.toString()).toList(),
       images: (data['images'] as List).map((e) => e.toString()).toList(),
-      colors: (data['colors'] as List)
-          .map<Color>((e) => HexColor(e.toString()))
-          .toList(),
+      colors: (data['colors'] as List).map((e) => e.toString()).toList(),
       timestamp: data['timestamp'] as Timestamp,
       sells: data['sells'] as int,
+      savesNumber: data['sells'] as int,
       // number: data['number'] as int,
     );
   }
   factory Product.testModel() => Product(
-        cardPicture: "https://imageonline.co/image.jpg",
-        colors: [Colors.red, Colors.blue],
+        thumbnailPicture: "https://imageonline.co/image.jpg",
+        colors: ['#fcba03', '#2c993b'],
         title: 'Premium jersy hijab roze quatrz',
         description: 'No Description',
         images: [
@@ -140,5 +138,8 @@ class Product {
         categories: ['Qaftans'],
         reviews: 5,
         rankingAverage: 4,
+        savesNumber: 5,
+        sells: 10,
+        timestamp: Timestamp.now(),
       );
 }

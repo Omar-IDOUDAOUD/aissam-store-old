@@ -63,6 +63,8 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
         'test 11: find new history sugg: ${_suggsetionsFromHistory.map((e) => e.query).toString()}');
   }
 
+  final ValueNotifier<Object> _categoriesChangeNotifier = ValueNotifier(Object);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement
@@ -80,56 +82,68 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
         final isWaiting = snapshot.connectionState == ConnectionState.waiting;
         // final noData = snapshot.data!.isEmpty;
         final hasError = snapshot.hasError;
-        final selectedCategoriesLength =
-            _controller.filterParameters.categoriesIds.length;
 
         return CustomScrollView(
           slivers: [
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 25),
               sliver: _sliverToChild(
-                Row(
-                  children: [
-                    Text(
-                      'SEARCH COLLECTIONS',
-                      style: Get.textTheme.bodyLarge!.copyWith(
-                        color: CstColors.a,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Spacer(),
-                    Text(
-                      selectedCategoriesLength != 0
-                          ? '$selectedCategoriesLength categories | '
-                          : 'All Categories',
-                      style: Get.textTheme.bodyMedium!.copyWith(
-                        color: CstColors.b,
-                        height: 0.4,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    if (selectedCategoriesLength != 0)
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _controller.setCategoriesFilter(List.empty());
-                          });
-                        },
-                        child: Text(
-                          'All',
-                          style: Get.textTheme.bodyMedium!.copyWith(
-                            color: CstColors.g,
-                            height: 0.4,
-                            fontWeight: FontWeight.w400,
+                ValueListenableBuilder(
+                    valueListenable: _categoriesChangeNotifier,
+                    builder: (_, __, ___) {
+                      final selectedCategoriesLength =
+                          _controller.filterParameters.categoriesNames.length;
+                      return Row(
+                        children: [
+                          Text(
+                            'SEARCH COLLECTIONS',
+                            style: Get.textTheme.bodyLarge!.copyWith(
+                              color: CstColors.a,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
-                      ),
-                  ],
-                ),
+                          Spacer(),
+                          Text(
+                            selectedCategoriesLength != 0
+                                ? '$selectedCategoriesLength categories | '
+                                : 'All Categories',
+                            style: Get.textTheme.bodyMedium!.copyWith(
+                              color: CstColors.b,
+                              height: 0.4,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          if (selectedCategoriesLength != 0)
+                            GestureDetector(
+                              onTap: () {
+                                _controller.setCategoriesFilter(
+                                    List.empty(growable: true));
+                                _categoriesChangeNotifier.notifyListeners();
+                              },
+                              child: Text(
+                                'All',
+                                style: Get.textTheme.bodyMedium!.copyWith(
+                                  color: CstColors.g,
+                                  backgroundColor: Colors.transparent,
+                                  height: 0.4,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    }),
               ),
             ),
             _sliverToChild(
-              _CategoriesCostumizationList(),
+              ValueListenableBuilder(
+                valueListenable: _categoriesChangeNotifier,
+                builder: (_, __, ___) {
+                  return _CategoriesCostumizationList(
+                    onChangeList: _categoriesChangeNotifier.notifyListeners,
+                  );
+                },
+              ),
             ),
             SliverPadding(
               padding: EdgeInsets.fromLTRB(25, 10, 25, 0),
@@ -209,7 +223,8 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
 }
 
 class _CategoriesCostumizationList extends StatelessWidget {
-  _CategoriesCostumizationList({super.key});
+  _CategoriesCostumizationList({super.key, this.onChangeList});
+  final Function()? onChangeList;
   final ProductsController _productsController = ProductsController.instance;
   final ctrls.SearchControllerV2 _controller =
       ctrls.SearchControllerV2.instance;
@@ -217,7 +232,8 @@ class _CategoriesCostumizationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> selectedCategories =
-        _controller.filterParameters.categoriesIds;
+        _controller.filterParameters.categoriesNames;
+    print('test 15: list length: ${selectedCategories.length}');
     return FutureBuilder<List<Category>>(
       future: _productsController.categories(),
       initialData: _productsController.loadedCategories,
@@ -242,12 +258,14 @@ class _CategoriesCostumizationList extends StatelessWidget {
                 : CategorieItem(
                     onCheck: (isChecked) {
                       if (isChecked) {
-                        selectedCategories.add(snapshot.data!.elementAt(i).id);
+                        selectedCategories
+                            .add(snapshot.data!.elementAt(i).name);
                       } else {
                         selectedCategories
-                            .remove(snapshot.data!.elementAt(i).id);
+                            .remove(snapshot.data!.elementAt(i).name);
                       }
                       _controller.setCategoriesFilter(selectedCategories);
+                      if (onChangeList != null) onChangeList!();
                     },
                     checked: selectedCategories
                         .contains(snapshot.data!.elementAt(i).id),
