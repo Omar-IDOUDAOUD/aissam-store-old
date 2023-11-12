@@ -8,6 +8,7 @@ import 'package:aissam_store/view/add_checkout_address/add_checkout_address.dart
 import 'package:aissam_store/view/auth/authentication.dart';
 import 'package:aissam_store/view/auth/email_verification.dart';
 import 'package:aissam_store/view/checkout/chackout.dart';
+import 'package:aissam_store/view/conversation/conversation.dart';
 import 'package:aissam_store/view/fullscreen_image/fullscreen_image.dart';
 import 'package:aissam_store/view/home/home.dart';
 import 'package:aissam_store/view/onboarding/greeting/greeting.dart';
@@ -152,8 +153,12 @@ class AissamStore extends StatelessWidget {
           name: '/splash_screen',
           page: () => SplashScreen(),
         ),
+        GetPage(
+          name: '/conversation',
+          page: () => ConversationPage(),
+        ),
       ],
-      initialRoute: '/splash_screen',
+      initialRoute: '/conversation',
       // initialBinding: AuthenticationServiceBinding(),
       enableLog: true,
       logWriterCallback: localLogWriter,
