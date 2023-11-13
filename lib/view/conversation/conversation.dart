@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:aissam_store/core/constants/colors.dart';
+import 'package:aissam_store/view/conversation/message_modal.dart';
+import 'package:aissam_store/view/conversation/widgets/messages/models.dart';
 import 'package:aissam_store/view/conversation/widgets/text_field.dart';
 import 'package:aissam_store/view/public/appbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,15 +28,24 @@ class _ConversationPageState extends State<ConversationPage> {
           Positioned.fill(
             child: CustomScrollView(
               slivers: [
-                SliverPersistentHeader(
-                  delegate: CustomAppBarSliver(),
-                  floating: true,
-                ),
-                SliverList.builder(
-                  itemCount: Colors.accents.length,
-                  itemBuilder: (_, i) => Container(
-                    height: 70,
-                    color: Colors.accents.elementAt(i),
+                _appBar(),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  sliver: SliverList.separated(
+                    separatorBuilder: (_, i) =>
+                        SizedBox(height: MessageWidgetConstants.spacing),
+                    itemCount: 200,
+                    itemBuilder: (_, i) => buildMessageWidget(
+                      MessageWidgetParameters(
+                        data: Message(
+                          dateTime: DateTime.now(),
+                          content: 'Hello!! ifiosdfio isjdfj sdf i siofsidjr',
+                          type: MessageType.audio,
+                          isClientMessage: i.isEven,
+                        ),
+                        isTheFirstMessage: true,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -50,4 +61,32 @@ class _ConversationPageState extends State<ConversationPage> {
       ),
     );
   }
+
+  Widget _appBar() => CustomAppBarSliver.sliverPersistentHeader(
+        floating: true,
+        data: CustomAppBarData(
+          leadingIcon: FluentIcons.chevron_left_20_regular,
+          actions: [ActionIcon(FluentIcons.more_vertical_24_regular)],
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Customer chat service',
+                maxLines: 1,
+                style: Get.textTheme.headlineSmall!.copyWith(
+                  color: CstColors.a,
+                  fontWeight: FontWeight.w600,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Text(
+                'Not available now',
+                style: Get.textTheme.bodySmall!.copyWith(
+                  color: Colors.redAccent.shade400,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 }
