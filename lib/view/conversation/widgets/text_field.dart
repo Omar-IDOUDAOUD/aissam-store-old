@@ -147,12 +147,10 @@ class _MessageTextFieldState extends State<MessageTextField> {
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              // Expanded(
-                              //   child: ColoredBox(color: Colors.green),
-                              // )
                             ],
                           )
                         : TextField(
+                            scrollPhysics: BouncingScrollPhysics(),
                             controller: _controller,
                             focusNode: _focusNode,
                             style: Get.textTheme.bodyLarge!.copyWith(
@@ -168,8 +166,6 @@ class _MessageTextFieldState extends State<MessageTextField> {
                     useSlideAnimation: false,
                   ),
                 ),
-                //
-
                 _animatedSwitcher(
                   _showAttachmentIcon
                       ? _padded(
@@ -180,7 +176,6 @@ class _MessageTextFieldState extends State<MessageTextField> {
                         )
                       : SizedBox.shrink(),
                 ),
-
                 _animatedSwitcher(
                   _showLocationIcon
                       ? _padded(
@@ -191,7 +186,6 @@ class _MessageTextFieldState extends State<MessageTextField> {
                         )
                       : SizedBox.shrink(key: ValueKey(_showLocationIcon)),
                 ),
-
                 _animatedSwitcher(
                   GestureDetector(
                     key: ValueKey(_addPhotoIconKeyValue),
@@ -224,7 +218,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                 SizedBox(width: 10),
                 _animatedSwitcher(
                   GestureDetector(
-                    onTap: () => _switchMode(!_isRecordingMode),
+                    onPanDown: (d) => _switchMode(!_isRecordingMode),
                     key: ValueKey(_showSendButton),
                     child: IconLoader(
                       _showSendButton
@@ -258,7 +252,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
       switchInCurve: Curves.easeOutBack,
       switchOutCurve: Curves.easeInBack,
       transitionBuilder: (c, a) {
-        final slideAnimation = (a.isDismissed
+        final slideAnimation = (a.isCompleted
                 ? Tween<Offset>(
                     begin: Offset(-0.6, 0), //0.8
                     end: Offset.zero, //1
