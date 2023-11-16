@@ -1,5 +1,9 @@
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/conversation/message_modal.dart';
+import 'package:aissam_store/view/conversation/widgets/messages/audio.dart';
+import 'package:aissam_store/view/conversation/widgets/messages/file.dart';
+import 'package:aissam_store/view/conversation/widgets/messages/image_video.dart';
+import 'package:aissam_store/view/conversation/widgets/messages/link.dart';
 import 'package:aissam_store/view/conversation/widgets/messages/product_link.dart';
 import 'package:aissam_store/view/conversation/widgets/messages/text.dart';
 import 'package:aissam_store/view/public/space.dart';
@@ -14,17 +18,21 @@ abstract class MessageWidgetConstants {
   static Radius get maxBorderRaduis => Radius.circular(20);
   static double get spacing => 5;
   static Color get clientBackroundColor => Colors.grey.shade300;
-  static Color get sellerBackroundColor => Colors.deepPurpleAccent.shade400;
+  static Color get sellerBackroundColor => Colors.deepPurpleAccent;
+  static Color get clientContentColor => CstColors.a;
+  static Color get sellerContentColor => Colors.white;
   static TextStyle get clientTextStyle =>
       Get.textTheme.bodyLarge!.copyWith(color: CstColors.a, height: 1.4);
   static TextStyle get sellerTextStyle =>
       Get.textTheme.bodyLarge!.copyWith(color: Colors.white, height: 1.4);
   static TextStyle get datetimeTextStyle =>
       Get.textTheme.bodySmall!.copyWith(color: Colors.grey, height: 1.2);
+  static double normaleMessageWidth = Get.size.width * 0.6;
 }
 
 abstract class MessageWidgetVaraiblesSets {
   Color get backroundColor;
+  Color get contentMainColor;
   TextStyle get contentTextStyle;
   BorderRadius borderRadius(bool isTheFirstMessage);
 }
@@ -35,6 +43,10 @@ class ClientMessageWidgetSets extends MessageWidgetVaraiblesSets {
 
   @override
   TextStyle get contentTextStyle => MessageWidgetConstants.clientTextStyle;
+
+  @override
+  // TODO: implement contentMainColor
+  Color get contentMainColor => MessageWidgetConstants.clientContentColor;
 
   @override
   BorderRadius borderRadius(bool isTheFirstMessage) {
@@ -55,6 +67,10 @@ class SellerMessageWidgetSets extends MessageWidgetVaraiblesSets {
 
   @override
   TextStyle get contentTextStyle => MessageWidgetConstants.sellerTextStyle;
+
+  @override
+  // TODO: implement contentMainColor
+  Color get contentMainColor => MessageWidgetConstants.sellerContentColor;
 
   @override
   BorderRadius borderRadius(bool isTheFirstMessage) {
@@ -80,12 +96,17 @@ class MessageWidgetParameters {
 Widget buildMessageWidget(MessageWidgetParameters parameters) {
   switch (parameters.data.type) {
     case MessageType.text:
-    case MessageType.audio:
-    case MessageType.link:
-    case MessageType.media:
       return TextMessage(parameters: parameters);
+    case MessageType.imageVideo:
+      return ImageVideoMessage(parameters: parameters);
     case MessageType.productLink:
       return ProductLinkMessage(parameters: parameters);
+    case MessageType.audio:
+      return AudioMessage(parameters: parameters);
+    case MessageType.file:
+      return FileMessage(parameters: parameters);
+    case MessageType.link:
+      return LinkMessage(parameters: parameters);
   }
 }
 

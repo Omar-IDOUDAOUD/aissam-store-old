@@ -5,6 +5,7 @@ import 'package:aissam_store/core/utils/icon_loader.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/rendering/sliver_persistent_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -110,7 +111,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ? null
             : [
                 BoxShadow(
-                  offset: Offset(0, 4),
                   blurStyle: BlurStyle.outer,
                   blurRadius: 35,
                   color: Colors.black.withOpacity(.15),
@@ -132,7 +132,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               children: [
                 if (_appBarParameters.leadingIcon != null)
                   IconLoader(_appBarParameters.leadingIcon!,
-                      color: CstColors.a, width: 20),
+                      color: CstColors.a, width: 25),
                 Expanded(
                   child: _appBarParameters.title,
                 ),
@@ -145,11 +145,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       child: IconLoader(
                           _appBarParameters.actions!.elementAt(index).icon,
                           color: CstColors.a,
-                          width: 20),
+                          width: 25),
                     ),
                   )
                 else if (_appBarParameters.leadingIcon != null)
-                  SizedBox(width: 20),
+                  SizedBox(width: 25),
               ],
             ),
           ),

@@ -38,7 +38,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
     _controller.dispose();
   }
 
-  final _anDurSeperator = 50.milliseconds.delay;
+  final _anDurSeperator = 25.milliseconds.delay;
   Future<void> _sendButtonAppearencHandler() async {
     if (_controller.text.isNotEmpty && _showAddPhotoIcon) {
       _showAttachmentIcon = false;
@@ -129,8 +129,11 @@ class _MessageTextFieldState extends State<MessageTextField> {
                         ? Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              IconLoader(FluentIcons.delete_24_regular,
-                                  color: Colors.redAccent.shade400),
+                              IconLoader(
+                                FluentIcons.delete_24_regular,
+                                color: Colors.redAccent.shade400,
+                                height: 25,
+                              ),
                               SizedBox(width: 10),
                               SizedBox(
                                 height: 20,
@@ -171,7 +174,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                       ? _padded(
                           IconLoader(FluentIcons.attach_24_regular,
                               color: Colors.indigoAccent.shade700,
-                              width: 30,
+                              width: 25,
                               key: ValueKey(_showAttachmentIcon)),
                         )
                       : SizedBox.shrink(),
@@ -181,7 +184,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                       ? _padded(
                           IconLoader(FluentIcons.location_24_regular,
                               color: Colors.indigoAccent.shade700,
-                              width: 30,
+                              height: 25,
                               key: ValueKey(_showLocationIcon)),
                         )
                       : SizedBox.shrink(key: ValueKey(_showLocationIcon)),
@@ -202,7 +205,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                                 ? FluentIcons.camera_add_24_regular
                                 : FluentIcons.chevron_left_24_filled,
                         color: Colors.indigoAccent.shade700,
-                        width: 30,
+                        height: 25,
                       ),
                     ),
                   ),
@@ -225,7 +228,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                           ? FluentIcons.send_24_filled
                           : FluentIcons.mic_24_filled,
                       color: Colors.greenAccent.shade700,
-                      width: 30,
+                      height: 25,
                     ),
                   ),
                   useSlideAnimation: true,

@@ -15,7 +15,8 @@ class Message {
 enum MessageType {
   text,
   audio,
-  media,
+  imageVideo,
+  file,
   productLink,
   link,
 }

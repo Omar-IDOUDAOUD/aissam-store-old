@@ -2,7 +2,7 @@
 
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/conversation/message_modal.dart';
-import 'package:aissam_store/view/conversation/widgets/sections_by_date.dart';
+import 'package:aissam_store/view/conversation/widgets/chat_product_card.dart';
 import 'package:aissam_store/view/conversation/widgets/messages/models.dart';
 import 'package:aissam_store/view/conversation/widgets/text_field.dart';
 import 'package:aissam_store/view/public/appbar.dart';
@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class ConversationPage extends StatefulWidget {
   const ConversationPage({super.key});
@@ -30,98 +31,26 @@ class _ConversationPageState extends State<ConversationPage> {
             child: CustomScrollView(
               slivers: [
                 _appBar(),
-                // SliverList(
-                //   delegate: SliverChildBuilderDelegate(
-                //     (context, index) => MessagesSectionByDate(
-                //       messages: [],
-                //       date: DateTime.now(),
-                //     ),
-                //     childCount: 200,
-                //   ),
-                // ),
-
-                ...List.generate(
-                  100,
-                  (index) => MessagesSectionByDate(
-                    messages: [],
-                    date: DateTime.now(),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                  sliver: SliverList.separated(
+                    separatorBuilder: (_, __) => SizedBox(height: 10),
+                    itemBuilder: (context, i) => i == 0
+                        ? ChatProductCard()
+                        : buildMessageWidget(
+                            MessageWidgetParameters(
+                              data: Message(
+                                dateTime: DateTime.now(),
+                                content:
+                                    'Hello!! difhsd iohsd iosdf isdf iod sdusd iuvj ernf dvb rbdf ejd',
+                                type: MessageType.file,
+                                isClientMessage: i.isEven,
+                              ),
+                              isTheFirstMessage: true,
+                            ),
+                          ),
                   ),
                 ),
-
-                // SliverList.builder(
-                //   itemCount: 15,
-                //   itemBuilder: (_, i) =>
-                // )
-
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
-                // MessagesSectionByDate(
-                //   messages: [],
-                //   date: DateTime.now(),
-                // ),
               ],
             ),
           ),
