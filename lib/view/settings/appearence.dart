@@ -5,28 +5,32 @@ import 'package:aissam_store/view/public/button.dart';
 import 'package:aissam_store/view/public/radio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   final bool isLightTheme;
 
-  _HeaderDelegate({this.isLightTheme = true});
+  _HeaderDelegate({this.isLightTheme = true, required TickerProvider vsync})
+      : _vsync = vsync;
+  final TickerProvider _vsync;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final showShadow = shrinkOffset >= maxExtent - minExtent;
+    // final showShadow = shrinkOffset >= maxExtent - minExtent;
     final extandProgress =
         1 - min(shrinkOffset, maxExtent - minExtent) / (maxExtent - minExtent);
-    final toolBarColor =
-        Color.lerp(Colors.white, Colors.deepPurple.shade50, extandProgress);
+    // final toolBarColor =
+    //     Color.lerp(Colors.white, Colors.deepPurple.shade50, extandProgress);
     return AnimatedPhysicalModel(
+      borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
       shape: BoxShape.rectangle,
       duration: 100.milliseconds,
       shadowColor: Colors.black54.withOpacity(.2),
-      color: toolBarColor!,
-      elevation: showShadow ? 10 : 0,
+      color: Colors.white,
+      elevation: 20,
       child: Stack(
         children: [
           Positioned(
@@ -67,7 +71,6 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
             left: 20,
             child: GestureDetector(
               onTap: Get.back,
-
               child: SvgPicture.asset(
                 'assets/icons/ic_fluent_chevron_left_24_filled.svg',
                 color: CstColors.a,
@@ -101,15 +104,14 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Text(
-                  'Appearence',
-                  style: Get.textTheme.headlineLarge!.copyWith(
-                    color: CstColors.a,
-                    height: 1.1,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                      
+                    Text(
+                      'Appearence',
+                      style: Get.textTheme.headlineLarge!.copyWith(
+                        color: CstColors.a,
+                        height: 1.1,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     Text(
                       isLightTheme ? 'Light Theme' : 'Dark Theme',
                       style: Get.textTheme.bodyMedium!.copyWith(
@@ -129,12 +131,19 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
+  // TODO: implement snapConfiguration
+  FloatingHeaderSnapConfiguration? get snapConfiguration =>
+      FloatingHeaderSnapConfiguration(
+          curve: Curves.linearToEaseOut, duration: 300.milliseconds);
+  @override
+  TickerProvider? get vsync => _vsync;
+  @override
   // TODO: implement maxExtent
   double get maxExtent => 140;
 
   @override
   // TODO: implement minExtent
-  double get minExtent => 60;
+  double get minExtent => 70;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
@@ -150,14 +159,17 @@ class SettingsAppearence extends StatefulWidget {
   State<SettingsAppearence> createState() => _SettingsAppearenceState();
 }
 
-class _SettingsAppearenceState extends State<SettingsAppearence> {
+class _SettingsAppearenceState extends State<SettingsAppearence>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
-            delegate: _HeaderDelegate(isLightTheme: activeTheme == 'Light'),
+            delegate: _HeaderDelegate(
+                isLightTheme: activeTheme == 'Light', vsync: this),
+            floating: true,
             pinned: true,
           ),
           SliverFillRemaining(
@@ -180,33 +192,32 @@ class _SettingsAppearenceState extends State<SettingsAppearence> {
                       ],
                     ),
                     Spacer(),
-                     Button(
-                    isHeightMinimize: true,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 22,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Save',
-                            textAlign: TextAlign.center,
-                            style: Get.textTheme.bodyLarge!.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
+                    Button(
+                      isHeightMinimize: true,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 22,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Save',
+                              textAlign: TextAlign.center,
+                              style: Get.textTheme.bodyLarge!.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                           ),
-                        ),
-                        SvgPicture.asset(
-                          'assets/icons/ic_fluent_checkmark_24_filled.svg',
-                          color: Colors.white,
-                          width: 22,
-                        ),
-                      ],
+                          SvgPicture.asset(
+                            'assets/icons/ic_fluent_checkmark_24_filled.svg',
+                            color: Colors.white,
+                            width: 22,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                 
                     SizedBox(height: 5),
                   ],
                 )),

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/public/button.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter/material.dart';
@@ -10,22 +11,25 @@ import 'package:get/get.dart';
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   final bool isLightTheme;
 
-  _HeaderDelegate({this.isLightTheme = true});
+  _HeaderDelegate({this.isLightTheme = true, required TickerProvider vsync})
+      : _vsync = vsync;
+  final TickerProvider _vsync;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final showShadow = shrinkOffset >= maxExtent - minExtent;
+    // final showShadow = shrinkOffset >= maxExtent - minExtent;
     final extandProgress =
         1 - min(shrinkOffset, maxExtent - minExtent) / (maxExtent - minExtent);
-    final toolBarColor =
-        Color.lerp(Colors.white, Colors.deepPurple.shade50, extandProgress);
+    // final toolBarColor =
+    //     Color.lerp(Colors.white, Colors.deepPurple.shade50, extandProgress);
     return AnimatedPhysicalModel(
       shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
       duration: 100.milliseconds,
       shadowColor: Colors.black54.withOpacity(.2),
-      color: toolBarColor!,
-      elevation: showShadow ? 10 : 0,
+      color: Colors.white,
+      elevation: 20,
       child: Stack(
         children: [
           Positioned(
@@ -75,14 +79,14 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Text(
-                  'Notifications',
-                  style: Get.textTheme.headlineLarge!.copyWith(
-                    color: CstColors.a,
-                    height: 1.1,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
+                    Text(
+                      'Notifications',
+                      style: Get.textTheme.headlineLarge!.copyWith(
+                        color: CstColors.a,
+                        height: 1.1,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     Text(
                       'Active',
                       style: Get.textTheme.bodyMedium!.copyWith(
@@ -102,12 +106,19 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
+  // TODO: implement snapConfiguration
+  FloatingHeaderSnapConfiguration? get snapConfiguration =>
+      FloatingHeaderSnapConfiguration(
+          curve: Curves.linearToEaseOut, duration: 300.milliseconds);
+  @override
+  TickerProvider? get vsync => _vsync;
+  @override
   // TODO: implement maxExtent
   double get maxExtent => 140;
 
   @override
   // TODO: implement minExtent
-  double get minExtent => 60;
+  double get minExtent => 70;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
@@ -123,14 +134,16 @@ class SettingsNotifications extends StatefulWidget {
   State<SettingsNotifications> createState() => _SettingsNotificationsState();
 }
 
-class _SettingsNotificationsState extends State<SettingsNotifications> {
+class _SettingsNotificationsState extends State<SettingsNotifications>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
-            delegate: _HeaderDelegate(),
+            delegate: _HeaderDelegate(vsync: this),
+            floating: true,
             pinned: true,
           ),
           SliverFillRemaining(
@@ -198,7 +211,6 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
                     ),
                   ),
                   SizedBox(height: 5),
-                 
                 ],
               ),
             ),

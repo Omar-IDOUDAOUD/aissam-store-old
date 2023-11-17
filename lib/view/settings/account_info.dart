@@ -4,24 +4,29 @@ import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/view/public/button.dart';
 import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/rendering/sliver_persistent_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
+  _HeaderDelegate({required TickerProvider vsync}) : _vsync = vsync;
+  final TickerProvider _vsync;
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final showShadow = shrinkOffset >= maxExtent - minExtent;
+    // final showShadow = shrinkOffset >= maxExtent - minExtent;
     final extandProgress =
         1 - min(shrinkOffset, maxExtent - minExtent) / (maxExtent - minExtent);
-    final toolBarColor =
-        Color.lerp(Colors.white, Colors.deepPurple.shade50, extandProgress);
+    // final toolBarColor =
+    //     Color.lerp(Colors.white, Colors.deepPurple.shade50, extandProgress);
     return AnimatedPhysicalModel(
       shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
       duration: 100.milliseconds,
       shadowColor: Colors.black54.withOpacity(.2),
-      color: toolBarColor!,
-      elevation: showShadow ? 10 : 0,
+      color: Colors.white,
+      elevation: 20,
       child: Stack(
         children: [
           Positioned(
@@ -65,7 +70,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: toolBarColor, width: 2),
+                      border: Border.all(color: Colors.white, width: 2),
                       color: CstColors.a,
                     ),
                     child: Padding(
@@ -107,6 +112,15 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
+  // TODO: implement snapConfiguration
+  FloatingHeaderSnapConfiguration? get snapConfiguration =>
+      FloatingHeaderSnapConfiguration(
+          curve: Curves.linearToEaseOut, duration: 300.milliseconds);
+
+  @override
+  TickerProvider? get vsync => _vsync;
+
+  @override
   // TODO: implement maxExtent
   double get maxExtent => 140;
 
@@ -128,7 +142,8 @@ class SettingsAccountInfo extends StatefulWidget {
   State<SettingsAccountInfo> createState() => _SettingsAccountInfoState();
 }
 
-class _SettingsAccountInfoState extends State<SettingsAccountInfo> {
+class _SettingsAccountInfoState extends State<SettingsAccountInfo>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,8 +151,9 @@ class _SettingsAccountInfoState extends State<SettingsAccountInfo> {
         slivers: [
           // SliverT
           SliverPersistentHeader(
-            delegate: _HeaderDelegate(),
+            delegate: _HeaderDelegate(vsync: this),
             pinned: true,
+            floating: true,
           ),
           SliverFillRemaining(
             fillOverscroll: false,
@@ -236,8 +252,8 @@ class _SettingsAccountInfoState extends State<SettingsAccountInfo> {
                       ],
                     ),
                   ),
-                  Spacer(), 
-                   Button(
+                  Spacer(),
+                  Button(
                     isHeightMinimize: true,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -153,7 +153,7 @@ class AissamStore extends StatelessWidget {
           page: () => SplashScreen(),
         ),
       ],
-      initialRoute: '/splash_screen',
+      initialRoute: '/settings/user_addresses',
       // initialBinding: AuthenticationServiceBinding(),
       enableLog: true,
       logWriterCallback: localLogWriter,
