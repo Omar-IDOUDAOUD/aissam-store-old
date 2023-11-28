@@ -6,7 +6,8 @@ import 'package:dio/dio.dart';
 abstract class ProductsServerConsts {
   static const String header_auth_username = 'aissam-store-sdproducts-db-api';
   static const String header_auth_pass = '%C7c,(9H;9PnwDN';
-  static const String baseUrl = "http://192.168.8.165/aissam-store-products";
+  static const String baseUrl =
+      "http://192.168.8.165:8080/aissam-store-products";
 }
 
 abstract class ProductsServerPathsConsts {
