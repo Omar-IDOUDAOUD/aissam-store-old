@@ -2,7 +2,7 @@
 
 import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
-import 'package:aissam_store/models/category.dart';
+import 'package:aissam_store/data/model/category.dart';
 import 'package:aissam_store/view/home/tabs/main/widgets/list_title.dart';
 import 'package:aissam_store/view/home/tabs/main/widgets/products_list.dart';
 import 'package:aissam_store/view/home/tabs/widgets/categorie_item.dart';

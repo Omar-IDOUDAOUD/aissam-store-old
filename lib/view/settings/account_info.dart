@@ -31,7 +31,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
               onTap: Get.back,
               child: SvgPicture.asset(
                 'assets/icons/ic_fluent_chevron_left_24_filled.svg',
-                color: CstColors.a,
+                color: ColorsConsts.a,
                 width: 20,
                 // alignment: Alignment.center,
               ),
@@ -45,7 +45,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: CstColors.a,
+                color: ColorsConsts.a,
               ),
             ),
           ),
@@ -66,7 +66,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: toolBarColor, width: 2),
-                      color: CstColors.a,
+                      color: ColorsConsts.a,
                     ),
                     child: Padding(
                       padding: EdgeInsets.all(4 + 2 * extandProgress),
@@ -93,7 +93,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Text(
                   'Account Information',
                   style: Get.textTheme.headlineLarge!.copyWith(
-                    color: CstColors.a,
+                    color: ColorsConsts.a,
                     height: 1.1,
                     fontWeight: FontWeight.normal,
                   ),
@@ -197,7 +197,7 @@ class _SettingsAccountInfoState extends State<SettingsAccountInfo> {
                   Text(
                     'You account will be permanently removed from the application. All your data will be lost!',
                     style: Get.textTheme.bodyLarge!.copyWith(
-                      color: CstColors.b,
+                      color: ColorsConsts.b,
                       fontWeight: FontWeight.w400,
                       height: 1.2,
                     ),
@@ -236,8 +236,8 @@ class _SettingsAccountInfoState extends State<SettingsAccountInfo> {
                       ],
                     ),
                   ),
-                  Spacer(), 
-                   Button(
+                  Spacer(),
+                  Button(
                     isHeightMinimize: true,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -280,7 +280,7 @@ class _SettingsAccountInfoState extends State<SettingsAccountInfo> {
         Text(
           label,
           style: Get.textTheme.bodyLarge!.copyWith(
-            color: CstColors.a,
+            color: ColorsConsts.a,
             fontWeight: FontWeight.bold,
           ),
         ),

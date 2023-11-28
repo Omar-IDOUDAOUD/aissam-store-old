@@ -1,7 +1,7 @@
 import 'package:aissam_store/core/utils/hex_color.dart';
 import 'package:flutter/material.dart';
 
-abstract class CstColors {
+abstract class ColorsConsts {
   /// black: 33363F
   static Color a = HexColor('#33363F');
 

@@ -188,7 +188,7 @@ class _LangMenuItemState extends State<_LangMenuItem> {
           Expanded(
             child: Text('Arabic',
                 style: Get.textTheme.bodyLarge!.copyWith(
-                  color: CstColors.a,
+                  color: ColorsConsts.a,
                   fontWeight: FontWeight.normal,
                 )),
           ),

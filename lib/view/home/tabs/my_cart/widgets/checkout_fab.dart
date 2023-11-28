@@ -1,10 +1,11 @@
-import 'package:aissam_store/core/constants/colors.dart'; 
+import 'package:aissam_store/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class CheckoutFAB extends StatefulWidget {
-  const CheckoutFAB({super.key, required this.isExpand, required this.onExpand});
+  const CheckoutFAB(
+      {super.key, required this.isExpand, required this.onExpand});
 
   final bool isExpand;
   final Function() onExpand;
@@ -22,7 +23,7 @@ class _CheckoutFABState extends State<CheckoutFAB> {
       padding: EdgeInsets.symmetric(horizontal: widget.isExpand ? 25 : 15),
       height: 50,
       minWidth: 50,
-      color: CstColors.a,
+      color: ColorsConsts.a,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(widget.isExpand ? 15 : 10),
       ),
@@ -60,8 +61,7 @@ class _CheckoutFABState extends State<CheckoutFAB> {
           return;
         }
 
-        Get.toNamed('/checkout'); 
-       
+        Get.toNamed('/checkout');
       },
     );
   }

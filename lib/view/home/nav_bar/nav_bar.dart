@@ -158,7 +158,7 @@ class _NavBarItemState extends State<NavBarItem> {
               width: 5,
               height: 5,
               decoration:
-                  BoxDecoration(color: CstColors.a, shape: BoxShape.circle),
+                  BoxDecoration(color: ColorsConsts.a, shape: BoxShape.circle),
             ),
           ),
         )

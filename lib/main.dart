@@ -41,55 +41,55 @@ class AissamStore extends StatelessWidget {
       theme: ThemeData(
         textTheme: TextTheme(
           headlineLarge: TextStyle(
-            color: CstColors.a,
+            color: ColorsConsts.a,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 26,
           ),
           headlineMedium: TextStyle(
-            color: CstColors.a,
+            color: ColorsConsts.a,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 20,
           ),
           headlineSmall: TextStyle(
-            color: CstColors.c,
+            color: ColorsConsts.c,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 17,
           ),
           bodyLarge: TextStyle(
-            color: CstColors.b,
+            color: ColorsConsts.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 15,
           ),
           bodyMedium: TextStyle(
-            color: CstColors.b,
+            color: ColorsConsts.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 13,
           ),
           bodySmall: TextStyle(
-            color: CstColors.b,
+            color: ColorsConsts.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 11.5,
           ),
           displayLarge: TextStyle(
-            color: CstColors.b,
+            color: ColorsConsts.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 10.5,
           ),
           displayMedium: TextStyle(
-            color: CstColors.b,
+            color: ColorsConsts.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 10,
           ),
           displaySmall: TextStyle(
-            color: CstColors.b,
+            color: ColorsConsts.b,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 8.5,
@@ -159,8 +159,8 @@ class AissamStore extends StatelessWidget {
         //   showCupertinoParallax: false,
         // )
       ],
-      initialRoute: '/splash_screen',
-      initialBinding: AuthenticationServiceBinding(),
+      initialRoute: '/testing',
+      // initialBinding: AuthenticationServiceBinding(),
       // home: TestPage(),
     );
   }

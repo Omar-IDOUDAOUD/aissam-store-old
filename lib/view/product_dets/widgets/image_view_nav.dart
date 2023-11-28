@@ -125,7 +125,7 @@ class _ImageViewNavButtonsState extends State<ImageViewNavButtons> {
           Text(
             'Best Seller',
             style: Get.textTheme.displayLarge!.copyWith(
-              color: CstColors.e,
+              color: ColorsConsts.e,
               fontWeight: FontWeight.w500,
             ),
           ),

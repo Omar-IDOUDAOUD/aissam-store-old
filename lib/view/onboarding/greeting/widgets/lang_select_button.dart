@@ -110,8 +110,8 @@ class _LangSelectButtonState extends State<LangSelectButton> {
                   SizedBox(width: 7),
                   Text(
                     'English',
-                    style:
-                        Get.textTheme.bodyMedium!.copyWith(color: CstColors.c),
+                    style: Get.textTheme.bodyMedium!
+                        .copyWith(color: ColorsConsts.c),
                   ),
                 ],
               ),

@@ -1,5 +1,5 @@
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/models/category.dart';
+import 'package:aissam_store/data/model/category.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -57,8 +57,9 @@ class _CategorieItemState extends State<CategorieItem> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color:
-                              widget.checked ? CstColors.g : Colors.transparent,
+                          color: widget.checked
+                              ? ColorsConsts.g
+                              : Colors.transparent,
                           width: widget.checked ? 2.5 : 0,
                         ),
                       ),
@@ -66,7 +67,7 @@ class _CategorieItemState extends State<CategorieItem> {
                     CircleAvatar(
                       radius: 10,
                       backgroundColor: widget.checked
-                          ? CstColors.g
+                          ? ColorsConsts.g
                           : Colors.black.withOpacity(.1),
                       child: AnimatedScale(
                         duration: 100.milliseconds,
@@ -86,7 +87,7 @@ class _CategorieItemState extends State<CategorieItem> {
             Text(
               widget.data.name,
               style: Get.textTheme.displayLarge!.copyWith(
-                color: widget.checked ? CstColors.g : CstColors.b,
+                color: widget.checked ? ColorsConsts.g : ColorsConsts.b,
               ),
             )
           ],

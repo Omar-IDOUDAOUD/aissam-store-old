@@ -24,7 +24,7 @@ class HistoryPart extends StatelessWidget {
           return Text(
             'HISTORY',
             style: Get.textTheme.bodyMedium!.copyWith(
-              color: CstColors.b,
+              color: ColorsConsts.b,
               fontWeight: FontWeight.w400,
             ),
           );
@@ -69,7 +69,7 @@ class _HistoryItem extends StatelessWidget {
                 Text(
                   data.searchQuery,
                   style: Get.textTheme.headlineMedium!.copyWith(
-                    color: CstColors.a,
+                    color: ColorsConsts.a,
                     height: 1.2,
                     fontWeight: FontWeight.w400,
                   ),
@@ -77,7 +77,7 @@ class _HistoryItem extends StatelessWidget {
                 Text(
                   data.searchDateTime.toString(),
                   style: Get.textTheme.bodySmall!.copyWith(
-                    color: CstColors.c,
+                    color: ColorsConsts.c,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

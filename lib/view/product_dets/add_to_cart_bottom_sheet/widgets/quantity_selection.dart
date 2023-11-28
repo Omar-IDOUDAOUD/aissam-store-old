@@ -1,5 +1,3 @@
-
-
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,7 +23,7 @@ class _QuantitySelectionState extends State<QuantitySelection> {
           children: [_getSmallText('Item price:'), _getText('185.00 MAD')],
         ),
         SizedBox(
-          child: DecoratedBox(decoration: BoxDecoration(color: CstColors.c)),
+          child: DecoratedBox(decoration: BoxDecoration(color: ColorsConsts.c)),
           height: 15,
           width: 0.5,
         ),
@@ -34,7 +32,7 @@ class _QuantitySelectionState extends State<QuantitySelection> {
           children: [_getSmallText('Total price:'), _getText('370.00 MAD')],
         ),
         SizedBox(
-          child: DecoratedBox(decoration: BoxDecoration(color: CstColors.c)),
+          child: DecoratedBox(decoration: BoxDecoration(color: ColorsConsts.c)),
           height: 15,
           width: 0.5,
         ),
@@ -63,7 +61,7 @@ class _QuantitySelectionState extends State<QuantitySelection> {
   _getButton(String iconPath) {
     return CircleAvatar(
       radius: 20,
-      backgroundColor: CstColors.b.withOpacity(.5),
+      backgroundColor: ColorsConsts.b.withOpacity(.5),
       child: SvgPicture.asset(
         iconPath,
         height: 15,
@@ -75,7 +73,7 @@ class _QuantitySelectionState extends State<QuantitySelection> {
     return Text(
       text,
       style: Get.textTheme.bodySmall!.copyWith(
-        color: CstColors.a,
+        color: ColorsConsts.a,
       ),
     );
   }
@@ -84,7 +82,7 @@ class _QuantitySelectionState extends State<QuantitySelection> {
     return Text(
       text,
       style: Get.textTheme.bodyMedium!.copyWith(
-        color: CstColors.a,
+        color: ColorsConsts.a,
       ),
     );
   }

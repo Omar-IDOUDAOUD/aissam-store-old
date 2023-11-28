@@ -1,6 +1,6 @@
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/shared/pagination_data_result.dart';
-import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/data/model/product.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 

@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:aissam_store/controller/user.dart';
-import 'package:aissam_store/models/user.dart';
+import 'package:aissam_store/data/model/user.dart';
 import 'package:aissam_store/services/auth/auth_failed_errors.dart';
 import 'package:aissam_store/services/auth/auth_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';

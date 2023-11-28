@@ -160,7 +160,7 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
               onTap: widget.onClose,
               child: SvgPicture.asset(
                 'assets/icons/back.svg',
-                color: CstColors.a,
+                color: ColorsConsts.a,
               ),
             ),
           ),
@@ -179,10 +179,10 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
                   ),
                   style: _minimizeTitle
                       ? Get.textTheme.headlineMedium!.copyWith(
-                          color: CstColors.a,
+                          color: ColorsConsts.a,
                         )
                       : Get.textTheme.headlineLarge!.copyWith(
-                          color: CstColors.a,
+                          color: ColorsConsts.a,
                         ),
                   duration: _anDur,
                   curve: _anCur,
@@ -194,11 +194,11 @@ class _MoreProductsTabState extends State<MoreProductsTab> {
                     child: Text(widget.subTitle!),
                     style: _minimizeTitle
                         ? Get.textTheme.bodyMedium!.copyWith(
-                            color: CstColors.c,
+                            color: ColorsConsts.c,
                             height: 1,
                           )
                         : Get.textTheme.bodyLarge!.copyWith(
-                            color: CstColors.c,
+                            color: ColorsConsts.c,
                             height: 1,
                           ),
                   ),

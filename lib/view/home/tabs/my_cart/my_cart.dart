@@ -174,7 +174,7 @@ class _MyCartTabState extends State<MyCartTab> {
                   'View Checkout History',
                   textAlign: TextAlign.center,
                   style: Get.textTheme.bodyLarge!.copyWith(
-                    color: CstColors.b,
+                    color: ColorsConsts.b,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

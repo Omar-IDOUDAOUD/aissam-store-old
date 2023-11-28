@@ -6,7 +6,7 @@ import 'dart:math';
 
 import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/models/category.dart';
+import 'package:aissam_store/data/model/category.dart';
 import 'package:aissam_store/view/home/tabs/widgets/categorie_item.dart';
 import 'package:aissam_store/view/home/tabs/widgets/loading_category_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -98,7 +98,7 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
                           Text(
                             'SEARCH COLLECTIONS',
                             style: Get.textTheme.bodyLarge!.copyWith(
-                              color: CstColors.a,
+                              color: ColorsConsts.a,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -108,7 +108,7 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
                                 ? '$selectedCategoriesLength categories | '
                                 : 'All Categories',
                             style: Get.textTheme.bodyMedium!.copyWith(
-                              color: CstColors.b,
+                              color: ColorsConsts.b,
                               height: 0.4,
                               fontWeight: FontWeight.w400,
                             ),
@@ -123,7 +123,7 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
                               child: Text(
                                 'All',
                                 style: Get.textTheme.bodyMedium!.copyWith(
-                                  color: CstColors.g,
+                                  color: ColorsConsts.g,
                                   backgroundColor: Colors.transparent,
                                   height: 0.4,
                                   fontWeight: FontWeight.w400,
@@ -154,7 +154,7 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
                     Text(
                       'SUGGESTIONS',
                       style: Get.textTheme.bodyLarge!.copyWith(
-                        color: CstColors.a,
+                        color: ColorsConsts.a,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -163,7 +163,7 @@ class _SuggestionsPartState extends State<SuggestionsPart> {
                         dimension: 15,
                         child: CircularProgressIndicator(
                           strokeWidth: 1.5,
-                          color: CstColors.b,
+                          color: ColorsConsts.b,
                         ),
                       )
                   ],
@@ -304,12 +304,12 @@ class _SuggestionItem extends StatelessWidget {
             TextSpan(
               text: boldClip,
               style: Get.textTheme.headlineSmall!
-                  .copyWith(fontWeight: FontWeight.bold, color: CstColors.a),
+                  .copyWith(fontWeight: FontWeight.bold, color: ColorsConsts.a),
             ),
             TextSpan(
               text: normalClip,
-              style: Get.textTheme.headlineSmall!
-                  .copyWith(fontWeight: FontWeight.normal, color: CstColors.c),
+              style: Get.textTheme.headlineSmall!.copyWith(
+                  fontWeight: FontWeight.normal, color: ColorsConsts.c),
             ),
           ],
         ),

@@ -186,11 +186,11 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                 labelStyle: Get.textTheme.bodySmall,
                 unselectedLabelStyle: Get.textTheme.bodySmall,
                 labelColor: Colors.white,
-                unselectedLabelColor: CstColors.a,
+                unselectedLabelColor: ColorsConsts.a,
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: CstColors.a,
+                    color: ColorsConsts.a,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black87.withOpacity(.2),
@@ -228,7 +228,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                           _isRegistering ? 'Create Accaount' : 'Welcom back.',
                           textAlign: TextAlign.center,
                           style: Get.textTheme.headlineMedium!.copyWith(
-                            color: CstColors.a,
+                            color: ColorsConsts.a,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -238,7 +238,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                               : "We're excited to have you here again!",
                           textAlign: TextAlign.center,
                           style: Get.textTheme.bodyLarge!.copyWith(
-                            color: CstColors.c,
+                            color: ColorsConsts.c,
                             fontWeight: FontWeight.w400,
                             height: 1.3,
                           ),
@@ -401,19 +401,19 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                     SizedBox(
                       height: 1,
                       width: 40,
-                      child: ColoredBox(color: CstColors.c),
+                      child: ColoredBox(color: ColorsConsts.c),
                     ),
                     const SizedBox(width: 10),
                     Text('Other Sign Up Methods',
                         style: Get.textTheme.bodySmall!.copyWith(
                           fontWeight: FontWeight.w400,
-                          color: CstColors.c,
+                          color: ColorsConsts.c,
                         )),
                     const SizedBox(width: 10),
                     SizedBox(
                       height: 1,
                       width: 40,
-                      child: ColoredBox(color: CstColors.c),
+                      child: ColoredBox(color: ColorsConsts.c),
                     )
                   ],
                 ),
@@ -453,7 +453,7 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                     SizedBox(
                       width: 1,
                       height: 15,
-                      child: ColoredBox(color: CstColors.b),
+                      child: ColoredBox(color: ColorsConsts.b),
                     ),
                     const SizedBox(width: 7),
                     _singUpMethodSquare(
@@ -497,14 +497,14 @@ class _AthenticationStatePage extends State<AuthenticationPage>
                     text: 'You have an accaount ? ',
                     style: Get.textTheme.bodySmall!.copyWith(
                       // fontWeight: FontWeight.w400,
-                      color: CstColors.c,
+                      color: ColorsConsts.c,
                     ),
                   ),
                   TextSpan(
                     text: 'Log-In',
                     style: Get.textTheme.bodySmall!.copyWith(
                       // fontWeight: FontWeight.w400,
-                      color: CstColors.a,
+                      color: ColorsConsts.a,
                       decoration: TextDecoration.underline,
                     ),
                   )

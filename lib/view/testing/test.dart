@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
+import 'package:aissam_store/data/source/products.dart';
+import 'package:aissam_store/data/source/suggestions.dart';
 import 'package:aissam_store/firebase_options.dart';
 
-import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/data/model/product.dart';
 import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:aissam_store/view/home/tabs/widgets/loading_product_card.dart';
 import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
@@ -12,7 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:get/get.dart';
+import 'package:dio/dio.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({Key? key}) : super(key: key);
@@ -22,27 +26,44 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  bool _canRequestData = true;
+  TextEditingController textEditingController =
+      TextEditingController(text: 'smart');
 
-  bool _listener(n) {
-    print('listener called, ${n.toString()}');
-    return true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    x();
+  }
+
+  var response = "no response yet";
+
+  void x() async {
+    final x = ProductsSearchDataSource(
+        searchQuery: textEditingController.text, limit: 3);
+    print('Start Receiving data:');
+    final res = await x.run();
+    print('data recuived!');
+    setState(() {
+      response = res.toString();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NotificationListener<ScrollUpdateNotification>(
-        onNotification: (ScrollUpdateNotification n) {
-          if (n.metrics.pixels >= n.metrics.maxScrollExtent)
-            print('load more data');
-          return true;
-        },
-        child: ListView.builder(
-          itemCount: 50,
-          itemBuilder: (_, i) => ListTile(
-            title: Text('Hello $i'),
-          ),
+      body: Center(
+        child: Column(
+          children: [
+            TextField(
+              controller: textEditingController,
+            ),
+            InkWell(
+              child: Text('send'),
+              onTap: x,
+            ),
+            Expanded(child: Text(response)),
+          ],
         ),
       ),
     );

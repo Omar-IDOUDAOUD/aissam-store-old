@@ -39,8 +39,8 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
               const Spacer(),
               Text(
                 '+15',
-                style: Get.textTheme.headlineSmall!
-                    .copyWith(color: CstColors.b, fontWeight: FontWeight.w400),
+                style: Get.textTheme.headlineSmall!.copyWith(
+                    color: ColorsConsts.b, fontWeight: FontWeight.w400),
               ),
             ],
           ),

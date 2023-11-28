@@ -28,7 +28,7 @@ class _PaymentState extends State<Payment> {
                   Text(
                     'PAYMENT METHODE',
                     style: Get.textTheme.bodyLarge!.copyWith(
-                      color: CstColors.a,
+                      color: ColorsConsts.a,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -126,7 +126,7 @@ class _PaymentState extends State<Payment> {
       child: Text(
         text,
         style: Get.textTheme.bodyMedium!.copyWith(
-          color: CstColors.a,
+          color: ColorsConsts.a,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -174,7 +174,7 @@ class __PaymentMethodeCardState extends State<_PaymentMethodeCard> {
                   textAlign: TextAlign.end,
                   style: Get.textTheme.bodySmall!.copyWith(
                     height: 1.2,
-                    color: CstColors.b,
+                    color: ColorsConsts.b,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -184,7 +184,7 @@ class __PaymentMethodeCardState extends State<_PaymentMethodeCard> {
           Text(
             'Credit Card',
             style: Get.textTheme.bodySmall!.copyWith(
-              color: CstColors.a,
+              color: ColorsConsts.a,
               fontWeight: FontWeight.w500,
             ),
           )

@@ -28,14 +28,14 @@ class _EmailFieldState extends State<EmailField> {
             });
           },
           style: Get.textTheme.bodyLarge!.copyWith(
-            color: widget.errorMessage != null ? Colors.red : CstColors.a,
+            color: widget.errorMessage != null ? Colors.red : ColorsConsts.a,
             fontWeight: FontWeight.w400,
             height: 1.6,
           ),
           controller: widget.controller,
           decoration: InputDecoration(
             hintStyle: Get.textTheme.bodyLarge!.copyWith(
-              color: CstColors.b,
+              color: ColorsConsts.b,
               fontWeight: FontWeight.w400,
               height: 1.6,
             ),
@@ -51,7 +51,7 @@ class _EmailFieldState extends State<EmailField> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide:
-                  BorderSide(color: CstColors.b.withOpacity(.5), width: 4),
+                  BorderSide(color: ColorsConsts.b.withOpacity(.5), width: 4),
             ),
             border: OutlineInputBorder(
               borderSide: BorderSide.none,

@@ -95,7 +95,7 @@ class AissamLogo extends StatelessWidget {
             text: "FOR WOMEN'S CLOTHING",
             style: Get.textTheme.headlineMedium!.copyWith(
                 fontWeight: FontWeight.w400,
-                color: CstColors.a,
+                color: ColorsConsts.a,
                 letterSpacing: 0.5,
                 height: 1.3,
                 fontSize: 11),

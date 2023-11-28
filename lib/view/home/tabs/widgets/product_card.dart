@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:aissam_store/core/utils/hex_color.dart';
-import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/data/model/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -222,14 +222,14 @@ class _ProductCardState extends State<ProductCard> {
                           Text(
                             widget.data.categories!.first,
                             style: Get.textTheme.bodySmall!.copyWith(
-                              color: CstColors.c,
+                              color: ColorsConsts.c,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
                             '${widget.data.price} USD',
                             style: Get.textTheme.bodySmall!.copyWith(
-                              color: CstColors.a,
+                              color: ColorsConsts.a,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -244,7 +244,7 @@ class _ProductCardState extends State<ProductCard> {
                         maxLines: 2,
                         overflow: TextOverflow.fade,
                         style: Get.textTheme.bodyMedium!.copyWith(
-                          color: CstColors.a,
+                          color: ColorsConsts.a,
                           fontWeight: FontWeight.w700,
                           height: 1.3,
                         ),
@@ -255,7 +255,7 @@ class _ProductCardState extends State<ProductCard> {
                           Text(
                             '${widget.data.colors!.length} colors',
                             style: Get.textTheme.bodyMedium!.copyWith(
-                              color: CstColors.a,
+                              color: ColorsConsts.a,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -289,7 +289,7 @@ class _ProductCardState extends State<ProductCard> {
                           Text(
                             widget.data.rankingAverage.toString(),
                             style: Get.textTheme.bodyMedium!.copyWith(
-                              color: CstColors.b,
+                              color: ColorsConsts.b,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -297,7 +297,7 @@ class _ProductCardState extends State<ProductCard> {
                           Text(
                             '${widget.data.reviews} reviews',
                             style: Get.textTheme.bodyMedium!.copyWith(
-                              color: CstColors.b,
+                              color: ColorsConsts.b,
                               fontWeight: FontWeight.w500,
                             ),
                           ),

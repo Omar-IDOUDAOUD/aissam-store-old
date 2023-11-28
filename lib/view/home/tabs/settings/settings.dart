@@ -49,7 +49,7 @@ class _SettingsTabState extends State<SettingsTab> {
                 Text(
                   'LOGOUT',
                   style: Get.textTheme.headlineSmall!.copyWith(
-                    color: CstColors.a,
+                    color: ColorsConsts.a,
                   ),
                 ),
                 SvgPicture.asset(
@@ -89,7 +89,7 @@ class _SettingsTabState extends State<SettingsTab> {
             label,
             style: Get.textTheme.headlineMedium!.copyWith(
               fontWeight: FontWeight.w400,
-              color: CstColors.a,
+              color: ColorsConsts.a,
             ),
           ),
           Spacer(),
@@ -118,7 +118,7 @@ class _Header extends StatelessWidget {
                 'Fatima zahra',
                 style: Get.textTheme.headlineLarge!.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: CstColors.a,
+                  color: ColorsConsts.a,
                   height: 1,
                 ),
               ),
@@ -126,7 +126,7 @@ class _Header extends StatelessWidget {
                 'Good Morning',
                 style: Get.textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: CstColors.b,
+                  color: ColorsConsts.b,
                   height: 1.2,
                 ),
               ),

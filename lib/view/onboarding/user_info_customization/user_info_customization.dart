@@ -1,7 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'package:aissam_store/controller/user.dart';
-import 'package:aissam_store/models/user.dart';
+import 'package:aissam_store/data/model/user.dart';
 import 'package:aissam_store/view/public/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

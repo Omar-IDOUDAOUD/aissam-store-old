@@ -33,7 +33,8 @@ class __ColorSelectionState extends State<ColorSelection> {
             ),
           ),
           SizedBox(
-            child: DecoratedBox(decoration: BoxDecoration(color: CstColors.c)),
+            child:
+                DecoratedBox(decoration: BoxDecoration(color: ColorsConsts.c)),
             height: 20,
             width: 1,
           ),
@@ -55,7 +56,7 @@ class __ColorSelectionState extends State<ColorSelection> {
             child: Text(
               'Preview',
               style: Get.textTheme.displaySmall!.copyWith(
-                color: CstColors.a,
+                color: ColorsConsts.a,
               ),
             ),
           ),
@@ -98,7 +99,7 @@ class __ColorSelectionState extends State<ColorSelection> {
                 child: Text(
                   colorName,
                   style: Get.textTheme.displaySmall!
-                      .copyWith(height: 1.1, color: CstColors.a),
+                      .copyWith(height: 1.1, color: ColorsConsts.a),
                   textAlign: TextAlign.center,
                 ),
               ),

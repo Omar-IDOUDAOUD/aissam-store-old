@@ -1,6 +1,6 @@
 import 'package:aissam_store/controller/search.dart';
-import 'package:aissam_store/models/user.dart';
-import 'package:aissam_store/models/user_data.dart';
+import 'package:aissam_store/data/model/user.dart';
+import 'package:aissam_store/data/model/user_data.dart';
 import 'package:aissam_store/services/auth/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

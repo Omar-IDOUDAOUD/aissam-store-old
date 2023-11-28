@@ -34,7 +34,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         });
       },
       style: Get.textTheme.bodyLarge!.copyWith(
-        color: widget.errorOccure ? Colors.red : CstColors.a,
+        color: widget.errorOccure ? Colors.red : ColorsConsts.a,
         fontWeight: FontWeight.w400,
         height: 1.6,
       ),
@@ -87,14 +87,14 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                 Icon(
                   CupertinoIcons.chevron_down,
                   size: 15,
-                  color: CstColors.a,
+                  color: ColorsConsts.a,
                 ),
               ],
             ),
           ),
         ),
         hintStyle: Get.textTheme.bodyLarge!.copyWith(
-          color: CstColors.b,
+          color: ColorsConsts.b,
           fontWeight: FontWeight.w400,
           height: 1.6,
         ),
@@ -107,7 +107,8 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         focusColor: widget.errorOccure ? Colors.red[100] : Colors.grey.shade400,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: CstColors.b.withOpacity(.5), width: 4),
+          borderSide:
+              BorderSide(color: ColorsConsts.b.withOpacity(.5), width: 4),
         ),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
@@ -234,21 +235,21 @@ class _ColorDropdownMenuState extends State<_ColorDropdownMenu> {
                     height: _searchFieldItemHeight,
                     child: TextField(
                       style: Get.textTheme.bodyLarge!.copyWith(
-                        color: CstColors.a,
+                        color: ColorsConsts.a,
                       ),
                       decoration: InputDecoration(
                         hintText: 'Search color',
                         hintStyle: Get.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.normal,
-                          color: CstColors.c,
+                          color: ColorsConsts.c,
                         ),
                         border: UnderlineInputBorder(
                           borderSide:
-                              BorderSide(color: CstColors.b, width: 1.5),
+                              BorderSide(color: ColorsConsts.b, width: 1.5),
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderSide:
-                              BorderSide(color: CstColors.a, width: 1.5),
+                              BorderSide(color: ColorsConsts.a, width: 1.5),
                         ),
                         prefixIconConstraints: const BoxConstraints(
                           maxWidth: 25,
@@ -256,7 +257,7 @@ class _ColorDropdownMenuState extends State<_ColorDropdownMenu> {
                         ),
                         prefixIcon: SvgPicture.asset(
                           'assets/icons/search_small.svg',
-                          color: CstColors.c,
+                          color: ColorsConsts.c,
                           alignment: Alignment.centerLeft,
                           fit: BoxFit.scaleDown,
                         ),
@@ -326,13 +327,13 @@ class __colorMenuItemState extends State<_colorMenuItem> {
               children: [
                 Text('Charcoal',
                     style: Get.textTheme.bodyLarge!.copyWith(
-                      color: CstColors.a,
+                      color: ColorsConsts.a,
                       fontWeight: FontWeight.normal,
                     )),
                 Text('54D8F2',
                     style: Get.textTheme.bodySmall!.copyWith(
                       height: 1.2,
-                      color: CstColors.b,
+                      color: ColorsConsts.b,
                       fontWeight: FontWeight.normal,
                     )),
               ],
@@ -347,7 +348,7 @@ class __colorMenuItemState extends State<_colorMenuItem> {
               duration: 200.milliseconds,
               child: SvgPicture.asset(
                 'assets/icons/ic_fluent_checkmark_24_filled.svg',
-                color: CstColors.a,
+                color: ColorsConsts.a,
                 width: 18,
               ),
             ),

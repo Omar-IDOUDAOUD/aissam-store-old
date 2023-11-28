@@ -23,7 +23,7 @@ class _LoadingFavoriteCardState extends State<LoadingFavoriteCard> {
 
   Widget _getStar(bool fill) => SvgPicture.asset(
         'assets/icons/preview_star.svg',
-        color: fill ? CstColors.a : CstColors.a.withOpacity(.5),
+        color: fill ? ColorsConsts.a : ColorsConsts.a.withOpacity(.5),
         height: 15,
       );
 }

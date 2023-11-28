@@ -67,7 +67,7 @@ class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
                 width: 25,
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.center,
-                color: CstColors.b,
+                color: ColorsConsts.b,
               ),
               SizedBox(
                 width: 5,
@@ -78,7 +78,7 @@ class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: Get.textTheme.headlineSmall!.copyWith(
-                    color: isHintNotText ? CstColors.c : CstColors.a,
+                    color: isHintNotText ? ColorsConsts.c : ColorsConsts.a,
                     fontWeight: FontWeight.w400,
                     height: 1.2,
                   ),
@@ -98,7 +98,7 @@ class SearchBarHeaderPersistent extends SliverPersistentHeaderDelegate {
                     fit: BoxFit.scaleDown,
                     allowDrawingOutsideViewBox: true,
                     alignment: Alignment.center,
-                    color: CstColors.c,
+                    color: ColorsConsts.c,
                   ),
                 ),
                 SizedBox(
@@ -208,7 +208,7 @@ class _SearchBarV2State extends State<SearchBarV2> {
                         padding: EdgeInsets.symmetric(horizontal: 3),
                         child: Icon(
                           Icons.filter_list_rounded,
-                          color: CstColors.a,
+                          color: ColorsConsts.a,
                           size: 25,
                         ),
                       ),

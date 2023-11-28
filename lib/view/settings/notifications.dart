@@ -44,7 +44,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
               onTap: Get.back,
               child: SvgPicture.asset(
                 'assets/icons/ic_fluent_chevron_left_24_filled.svg',
-                color: CstColors.a,
+                color: ColorsConsts.a,
                 width: 20,
                 // alignment: Alignment.center,
               ),
@@ -58,7 +58,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: CstColors.a,
+                color: ColorsConsts.a,
               ),
             ),
           ),
@@ -75,18 +75,18 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Text(
-                  'Notifications',
-                  style: Get.textTheme.headlineLarge!.copyWith(
-                    color: CstColors.a,
-                    height: 1.1,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
+                    Text(
+                      'Notifications',
+                      style: Get.textTheme.headlineLarge!.copyWith(
+                        color: ColorsConsts.a,
+                        height: 1.1,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     Text(
                       'Active',
                       style: Get.textTheme.bodyMedium!.copyWith(
-                        color: CstColors.b,
+                        color: ColorsConsts.b,
                         // height: 1.2,
                         fontWeight: FontWeight.normal,
                       ),
@@ -144,7 +144,7 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
                   Text(
                     'System notifications',
                     style: Get.textTheme.bodyLarge!.copyWith(
-                      color: CstColors.a,
+                      color: ColorsConsts.a,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -156,7 +156,7 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
                     child: Text(
                       'Receive notifications about lastest updates from us',
                       style: Get.textTheme.bodyMedium!.copyWith(
-                        color: CstColors.b,
+                        color: ColorsConsts.b,
                         fontWeight: FontWeight.normal,
                         height: 1.2,
                       ),
@@ -198,7 +198,6 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
                     ),
                   ),
                   SizedBox(height: 5),
-                 
                 ],
               ),
             ),
@@ -217,7 +216,7 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
         Text(
           label,
           style: Get.textTheme.headlineSmall!.copyWith(
-            color: CstColors.a,
+            color: ColorsConsts.a,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -227,8 +226,8 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
           padding: 3,
           value: v,
           toggleSize: 20,
-          inactiveColor: CstColors.b.withOpacity(.5),
-          activeColor: CstColors.a,
+          inactiveColor: ColorsConsts.b.withOpacity(.5),
+          activeColor: ColorsConsts.a,
           onToggle: (x) {
             setState(() {
               v = x;

@@ -92,7 +92,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
                 Text(
                   'Filter Search Results',
                   style: Get.textTheme.headlineSmall!.copyWith(
-                    color: CstColors.a,
+                    color: ColorsConsts.a,
                   ),
                 ),
                 const SizedBox(
@@ -191,12 +191,12 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       height: 60,
-      color: recommendedButton ? CstColors.a : Colors.grey.shade300,
+      color: recommendedButton ? ColorsConsts.a : Colors.grey.shade300,
       child: Center(
         child: Text(
           label,
           style: Get.textTheme.bodyLarge!.copyWith(
-            color: recommendedButton ? Colors.white : CstColors.a,
+            color: recommendedButton ? Colors.white : ColorsConsts.a,
             fontWeight: FontWeight.normal,
           ),
         ),
@@ -212,14 +212,14 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
         Text(
           title,
           style: Get.textTheme.headlineSmall!.copyWith(
-            color: CstColors.a,
+            color: ColorsConsts.a,
             // fontWeight: FontWeight.w600,
           ),
         ),
         Text(
           actionLabel,
           style: Get.textTheme.bodySmall!.copyWith(
-            color: CstColors.a,
+            color: ColorsConsts.a,
           ),
         ),
       ],
@@ -249,7 +249,7 @@ class _SearchFilterDialogState extends State<SearchFilterDialog> {
         child: Text(
           name,
           style: Get.textTheme.bodyLarge!.copyWith(
-            color: isSelected ? Colors.white : CstColors.a,
+            color: isSelected ? Colors.white : ColorsConsts.a,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -313,12 +313,12 @@ class _SelectColorDropdownMenuState extends State<SelectColorDropdownMenu> {
                 Text(
                   widget.selectedColors.length.toString() + 'Color',
                   style: Get.textTheme.bodyLarge!.copyWith(
-                    color: CstColors.a,
+                    color: ColorsConsts.a,
                   ),
                 ),
                 Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: CstColors.a,
+                  color: ColorsConsts.a,
                 ),
               ],
             ),
@@ -445,21 +445,21 @@ class _ColorDropdownMenuState extends State<_ColorDropdownMenu> {
                     height: _searchFieldItemHeight,
                     child: TextField(
                       style: Get.textTheme.bodyLarge!.copyWith(
-                        color: CstColors.a,
+                        color: ColorsConsts.a,
                       ),
                       decoration: InputDecoration(
                         hintText: 'Search color',
                         hintStyle: Get.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.normal,
-                          color: CstColors.c,
+                          color: ColorsConsts.c,
                         ),
                         border: UnderlineInputBorder(
                           borderSide:
-                              BorderSide(color: CstColors.b, width: 1.5),
+                              BorderSide(color: ColorsConsts.b, width: 1.5),
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderSide:
-                              BorderSide(color: CstColors.a, width: 1.5),
+                              BorderSide(color: ColorsConsts.a, width: 1.5),
                         ),
                         prefixIconConstraints: const BoxConstraints(
                           maxWidth: 25,
@@ -467,7 +467,7 @@ class _ColorDropdownMenuState extends State<_ColorDropdownMenu> {
                         ),
                         prefixIcon: SvgPicture.asset(
                           'assets/icons/search_small.svg',
-                          color: CstColors.c,
+                          color: ColorsConsts.c,
                           alignment: Alignment.centerLeft,
                           fit: BoxFit.scaleDown,
                         ),
@@ -555,13 +555,13 @@ class __colorMenuItemState extends State<_colorMenuItem> {
               children: [
                 Text(widget.color.name,
                     style: Get.textTheme.bodyLarge!.copyWith(
-                      color: CstColors.a,
+                      color: ColorsConsts.a,
                       fontWeight: FontWeight.normal,
                     )),
                 Text(widget.color.hex,
                     style: Get.textTheme.bodySmall!.copyWith(
                       height: 1.2,
-                      color: CstColors.b,
+                      color: ColorsConsts.b,
                       fontWeight: FontWeight.normal,
                     )),
               ],
@@ -576,7 +576,7 @@ class __colorMenuItemState extends State<_colorMenuItem> {
               duration: 200.milliseconds,
               child: SvgPicture.asset(
                 'assets/icons/ic_fluent_checkmark_24_filled.svg',
-                color: CstColors.a,
+                color: ColorsConsts.a,
                 width: 18,
               ),
             ),

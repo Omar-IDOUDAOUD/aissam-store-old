@@ -6,8 +6,8 @@ import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/shared/products_collections.dart';
 import 'package:aissam_store/core/utils/hex_color.dart';
-import 'package:aissam_store/models/category.dart';
-import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/data/model/category.dart';
+import 'package:aissam_store/data/model/product.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -185,9 +185,9 @@ class ProductsController extends GetxController {
         images: imgs..shuffle(),
         price: Random.secure().nextDouble() * 200.0,
         rankingAverage: Random.secure().nextDouble() * 5.0,
-        sells: Random.secure().nextInt(100),
+        sales: Random.secure().nextInt(100),
         reviews: Random.secure().nextInt(100),
-        timestamp: Timestamp.now(),
+        timestamp: DateTime.now(),
         savesNumber: Random.secure().nextInt(50),
       ),
     );

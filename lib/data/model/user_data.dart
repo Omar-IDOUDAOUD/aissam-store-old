@@ -6,7 +6,7 @@ import 'package:aissam_store/controller/search.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:aissam_store/models/cart_item.dart';
+import 'package:aissam_store/data/model/cart_item.dart';
 
 class UserData {
   String? id;

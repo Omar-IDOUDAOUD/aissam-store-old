@@ -140,7 +140,7 @@ class _ImagesAndColorsAlbumState extends State<ImagesAndColorsAlbum> {
         width: 4,
         child: DecoratedBox(
           decoration: BoxDecoration(
-              color: CstColors.a,
+              color: ColorsConsts.a,
               borderRadius:
                   const BorderRadius.horizontal(right: Radius.circular(4))),
         ),
@@ -196,7 +196,7 @@ class _ListImageState extends State<_ListImage> {
               decoration: BoxDecoration(
                 border: Border.all(
                   width: widget.focus ? 2 : 0,
-                  color: widget.focus ? CstColors.a : Colors.transparent,
+                  color: widget.focus ? ColorsConsts.a : Colors.transparent,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -258,7 +258,7 @@ class __ListColorState extends State<_ListColor> {
               decoration: BoxDecoration(
                 border: Border.all(
                   width: widget.focus ? 2 : 0,
-                  color: widget.focus ? CstColors.a : Colors.transparent,
+                  color: widget.focus ? ColorsConsts.a : Colors.transparent,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -294,7 +294,7 @@ class __ListColorState extends State<_ListColor> {
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       style: Get.textTheme.bodySmall!.copyWith(
-                        color: CstColors.a,
+                        color: ColorsConsts.a,
                         height: 1,
                         fontSize: 8,
                         fontStyle: FontStyle.italic,

@@ -47,7 +47,7 @@ class _CustomButtonState extends State<CustomButton> {
       focusElevation: 0,
       highlightElevation: 0,
       hoverElevation: 0,
-      color: widget.primaryButton ? CstColors.a : widget.backroundColor,
+      color: widget.primaryButton ? ColorsConsts.a : widget.backroundColor,
       onPressed: widget.onTap ?? () {},
       padding:
           EdgeInsets.symmetric(horizontal: widget.smallWidthButton ? 28 : 35),

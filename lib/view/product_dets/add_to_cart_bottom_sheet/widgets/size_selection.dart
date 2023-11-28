@@ -1,10 +1,6 @@
-
-
 import 'package:aissam_store/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
 
 class SizeSelection extends StatefulWidget {
   const SizeSelection({super.key});
@@ -60,7 +56,7 @@ class __SizeSelectionState extends State<SizeSelection> {
           child: Text(
             name,
             style: Get.textTheme.bodyLarge!.copyWith(
-              color: _selectedSize == index ? Colors.white : CstColors.a,
+              color: _selectedSize == index ? Colors.white : ColorsConsts.a,
               fontWeight: FontWeight.w500,
             ),
           ),

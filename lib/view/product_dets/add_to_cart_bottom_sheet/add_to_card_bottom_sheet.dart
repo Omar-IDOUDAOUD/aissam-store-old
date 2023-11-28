@@ -12,13 +12,13 @@ class AddToCartBottomSheet extends StatefulWidget {
     this.onDispose,
     this.animationDur,
     required this.pageController,
-    required this.title, 
+    required this.title,
   });
   final Function()? onDispose;
   // final Function()? onSave;
   final Duration? animationDur;
   final PageController pageController;
-  final String title; 
+  final String title;
 
   @override
   State<AddToCartBottomSheet> createState() => _AddToCartBottomSheetState();
@@ -51,7 +51,7 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
         ),
         Center(
           child: Text(
-           widget.title,
+            widget.title,
             style: Get.textTheme.headlineSmall!
                 .copyWith(color: Colors.black, fontWeight: FontWeight.w700),
           ),
@@ -96,21 +96,21 @@ class _FirstPart extends StatelessWidget {
           Text(
             'Premium Jersey Hijab - Rose Quartz',
             style: Get.textTheme.headlineMedium!.copyWith(
-              color: CstColors.a,
+              color: ColorsConsts.a,
               height: 1.2,
             ),
           ),
           SizedBox(height: 5),
           Text(
             "Size",
-            style: Get.textTheme.headlineSmall!.copyWith(color: CstColors.a),
+            style: Get.textTheme.headlineSmall!.copyWith(color: ColorsConsts.a),
           ),
           SizedBox(height: 5),
           SizeSelection(),
           SizedBox(height: 10),
           Text(
             "Color",
-            style: Get.textTheme.headlineSmall!.copyWith(color: CstColors.a),
+            style: Get.textTheme.headlineSmall!.copyWith(color: ColorsConsts.a),
           ),
           SizedBox(height: 5),
           ColorSelection(),
@@ -119,13 +119,14 @@ class _FirstPart extends StatelessWidget {
             children: [
               Text(
                 "Quantity",
-                style:
-                    Get.textTheme.headlineSmall!.copyWith(color: CstColors.a),
+                style: Get.textTheme.headlineSmall!
+                    .copyWith(color: ColorsConsts.a),
               ),
               Spacer(),
               Text(
                 "2 items",
-                style: Get.textTheme.bodyMedium!.copyWith(color: CstColors.b),
+                style:
+                    Get.textTheme.bodyMedium!.copyWith(color: ColorsConsts.b),
               ),
             ],
           ),
@@ -146,10 +147,11 @@ class _SecondPart extends StatelessWidget {
       children: [
         SizedBox(height: 10),
         Text('Added to cart successfully',
-            style: Get.textTheme.headlineSmall!.copyWith(color: CstColors.a)),
+            style:
+                Get.textTheme.headlineSmall!.copyWith(color: ColorsConsts.a)),
         // SizedBox(height: 5),
         Text('Checkout now to place your order',
-            style: Get.textTheme.bodySmall!.copyWith(color: CstColors.b)),
+            style: Get.textTheme.bodySmall!.copyWith(color: ColorsConsts.b)),
         SizedBox(height: 20),
         SvgPicture.asset(
           'assets/icons/ic_fluent_checkmark_circle_24_regular.svg',

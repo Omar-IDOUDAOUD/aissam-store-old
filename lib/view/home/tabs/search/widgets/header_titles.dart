@@ -89,7 +89,7 @@ class _TabHeaderTitlesState extends State<TabHeaderTitles> {
                           padding: EdgeInsets.symmetric(horizontal: 3),
                           child: Icon(
                             Icons.filter_list_rounded,
-                            color: CstColors.a,
+                            color: ColorsConsts.a,
                             size: 25,
                           ),
                         ),
@@ -104,7 +104,7 @@ class _TabHeaderTitlesState extends State<TabHeaderTitles> {
                 style: Get.textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.w500,
                   height: 1.2,
-                  color: CstColors.a,
+                  color: ColorsConsts.a,
                 ),
               ),
               if (_isResultsTab)

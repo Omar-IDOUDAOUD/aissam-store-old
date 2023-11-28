@@ -1,6 +1,6 @@
 import 'package:aissam_store/controller/favoritres.dart';
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/data/model/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -80,12 +80,12 @@ class _FavoriteCardState extends State<FavoriteCard> {
                       Text(
                         widget.data.title!,
                         style: Get.textTheme.bodyLarge!
-                            .copyWith(color: CstColors.a, height: 1.2),
+                            .copyWith(color: ColorsConsts.a, height: 1.2),
                       ),
                       Text(
                         widget.data.price.toString(),
                         style: Get.textTheme.bodyMedium!.copyWith(
-                          color: CstColors.b,
+                          color: ColorsConsts.b,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -130,7 +130,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
 
   Widget _getStar(bool fill) => SvgPicture.asset(
         'assets/icons/preview_star.svg',
-        color: fill ? CstColors.a : CstColors.a.withOpacity(.5),
+        color: fill ? ColorsConsts.a : ColorsConsts.a.withOpacity(.5),
         height: 15,
       );
   Widget _getCircleButton(

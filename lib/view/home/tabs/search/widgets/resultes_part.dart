@@ -1,6 +1,6 @@
 import 'package:aissam_store/controller/search.dart';
 import 'package:aissam_store/core/constants/colors.dart';
-import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/data/model/product.dart';
 import 'package:aissam_store/view/home/tabs/widgets/loading_product_card.dart';
 import 'package:aissam_store/view/home/tabs/widgets/product_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -101,7 +101,7 @@ class _TabsBarState extends State<TabsBar> {
       isScrollable: true,
       indicatorSize: TabBarIndicatorSize.label,
       indicator: BoxDecoration(
-          color: CstColors.g, borderRadius: BorderRadius.circular(5)),
+          color: ColorsConsts.g, borderRadius: BorderRadius.circular(5)),
       indicatorPadding: EdgeInsets.only(top: 22.5),
       labelPadding: EdgeInsets.symmetric(horizontal: 5),
       onTap: (i) async {
@@ -125,8 +125,8 @@ class _TabsBarState extends State<TabsBar> {
             title,
             style: Get.textTheme.bodyMedium!.copyWith(
               color: widget.tabController.index == index
-                  ? CstColors.g
-                  : CstColors.b,
+                  ? ColorsConsts.g
+                  : ColorsConsts.b,
               fontWeight: widget.tabController.index == index
                   ? FontWeight.w500
                   : FontWeight.w400,
@@ -152,8 +152,8 @@ class _TabsBarState extends State<TabsBar> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
                         color: widget.tabController.index == index
-                            ? CstColors.g
-                            : CstColors.b,
+                            ? ColorsConsts.g
+                            : ColorsConsts.b,
                       ),
                       child: Padding(
                         padding:

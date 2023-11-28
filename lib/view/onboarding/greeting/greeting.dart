@@ -43,7 +43,7 @@ class _OnBoardingGreetingPageState extends State<OnBoardingGreetingPage> {
             height: 1.1,
           ),
         ),
-        backgroundColor: CstColors.a,
+        backgroundColor: ColorsConsts.a,
         margin: const EdgeInsets.all(25),
         borderRadius: 10,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

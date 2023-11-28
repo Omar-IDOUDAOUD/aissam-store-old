@@ -22,14 +22,14 @@ class _AddCheckoutAddressState extends State<AddCheckoutAddress> {
         title: Text(
           'Add Address',
           style: Get.textTheme.headlineMedium!
-              .copyWith(color: CstColors.a, fontWeight: FontWeight.w700),
+              .copyWith(color: ColorsConsts.a, fontWeight: FontWeight.w700),
         ),
         centerTitle: true,
         leading: IconButton(
           onPressed: Get.back,
           icon: SvgPicture.asset(
             'assets/icons/ic_fluent_chevron_left_24_filled.svg',
-            color: CstColors.a,
+            color: ColorsConsts.a,
             height: 25,
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerRight,
@@ -159,7 +159,7 @@ class _AddCheckoutAddressState extends State<AddCheckoutAddress> {
       child: Text(
         text,
         style: Get.textTheme.bodyMedium!.copyWith(
-          color: CstColors.a,
+          color: ColorsConsts.a,
           fontWeight: FontWeight.w500,
         ),
       ),

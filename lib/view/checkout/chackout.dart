@@ -60,7 +60,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         title: Text(
           'Checkout',
           style: Get.textTheme.headlineMedium!.copyWith(
-            color: CstColors.a,
+            color: ColorsConsts.a,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -69,7 +69,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           onPressed: Get.back,
           icon: SvgPicture.asset(
             'assets/icons/ic_fluent_chevron_left_24_filled.svg',
-            color: CstColors.a,
+            color: ColorsConsts.a,
             height: 25,
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerRight,
@@ -147,7 +147,7 @@ class _Header extends StatelessWidget {
     return SizedBox(
       height: 85,
       child: ColoredBox(
-        color: CstColors.b.withOpacity(.2),
+        color: ColorsConsts.b.withOpacity(.2),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -179,7 +179,7 @@ class _Header extends StatelessWidget {
         child: SizedBox(
           height: 1,
           width: 17,
-          child: ColoredBox(color: active ? CstColors.a : CstColors.b),
+          child: ColoredBox(color: active ? ColorsConsts.a : ColorsConsts.b),
         ),
       );
   _getStepIndex(bool active, String label, String icon, Function() onTap) =>
@@ -190,13 +190,13 @@ class _Header extends StatelessWidget {
           children: [
             SvgPicture.asset(
               icon,
-              color: active ? CstColors.a : CstColors.b,
+              color: active ? ColorsConsts.a : ColorsConsts.b,
               width: 30,
             ),
             Text(
               label,
               style: Get.textTheme.displayMedium!.copyWith(
-                color: active ? CstColors.a : CstColors.b,
+                color: active ? ColorsConsts.a : ColorsConsts.b,
                 fontWeight: active ? FontWeight.bold : FontWeight.w500,
               ),
             )

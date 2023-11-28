@@ -33,7 +33,7 @@ class _ButtonState extends State<Button> {
       highlightElevation: 0,
       padding: EdgeInsets.zero,
       hoverElevation: 0,
-      color: widget.isOutline ? Colors.transparent : CstColors.a,
+      color: widget.isOutline ? Colors.transparent : ColorsConsts.a,
       onPressed: widget.enabled ? widget.onPressed : () {},
       splashColor: Colors.black.withOpacity(.1),
       focusColor: Colors.transparent,
@@ -42,7 +42,7 @@ class _ButtonState extends State<Button> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(widget.isHeightMinimize ? 12 : 15),
         side: widget.isOutline
-            ? BorderSide(color: CstColors.a, width: 2)
+            ? BorderSide(color: ColorsConsts.a, width: 2)
             : BorderSide.none,
       ),
       child: DecoratedBox(

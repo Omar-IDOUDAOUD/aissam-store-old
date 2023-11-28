@@ -2,10 +2,11 @@
 
 import 'dart:ui';
 
-import 'package:aissam_store/core/utils/hex_color.dart';
-import 'package:aissam_store/models/category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'package:aissam_store/core/utils/hex_color.dart';
+import 'package:aissam_store/data/model/category.dart';
 
 class Product {
   final String? id;
@@ -20,8 +21,8 @@ class Product {
   /// color hex
   List<String>? colors;
   List<String>? categories;
-  Timestamp? timestamp;
-  int? sells;
+  DateTime? timestamp;
+  int? sales;
   int? savesNumber;
   Product({
     this.id,
@@ -35,7 +36,7 @@ class Product {
     this.colors,
     this.categories,
     this.timestamp,
-    this.sells,
+    this.sales,
     this.savesNumber,
     // this.tags,
   });
@@ -77,27 +78,26 @@ class Product {
       'categories': categories,
       'colors': colors,
       'timestamp': FieldValue.serverTimestamp(),
-      'sells': sells,
+      'sells': sales,
       'saves_number': savesNumber,
     };
   }
 
-  factory Product.fromMap(Map<String, dynamic> data, String id) {
+  factory Product.fromMap(Map<String, dynamic> data) {
     return Product(
-      id: id,
+      id: data['id'].toString(),
       title: data['title'],
       description: data['description'],
-      price: data['price'] as double,
-      reviews: data['reviews'] as int,
-      rankingAverage: data['ranking_average'] as double,
-      thumbnailPicture: data['thumbnail'],
-      images: data['images'],
-      categories: data['categories'],
-      colors: data['colors'],
-      timestamp: data['timestamp'] as Timestamp,
-      sells: data['sells'],
+      price: double.parse(data['price']),
+      reviews: data['reviews'],
+      rankingAverage: double.parse(data['ranking_average']),
+      thumbnailPicture: data['thumbnail_picture'],
+      images: List.castFrom<dynamic, String>(data['images']),
+      categories: List.castFrom<dynamic, String>(data['categories']),
+      colors: List.castFrom<dynamic, String>(data['colors']),
+      timestamp: DateTime.parse(data['timestamp']),
+      sales: data['sales'],
       savesNumber: data['saves_number'],
-      // number: data['number'] as int,
     );
   }
 
@@ -118,8 +118,8 @@ class Product {
           (data['categories'] as List).map((e) => e.toString()).toList(),
       images: (data['images'] as List).map((e) => e.toString()).toList(),
       colors: (data['colors'] as List).map((e) => e.toString()).toList(),
-      timestamp: data['timestamp'] as Timestamp,
-      sells: data['sells'] as int,
+      timestamp: DateTime.parse(data['timestamp']),
+      sales: data['sells'] as int,
       savesNumber: data['sells'] as int,
       // number: data['number'] as int,
     );
@@ -139,7 +139,12 @@ class Product {
         reviews: 5,
         rankingAverage: 4,
         savesNumber: 5,
-        sells: 10,
-        timestamp: Timestamp.now(),
+        sales: 10,
+        timestamp: DateTime.now(),
       );
+
+  @override
+  String toString() {
+    return 'Product(id: $id, title: $title, description: $description, price: $price, reviews: $reviews, rankingAverage: $rankingAverage, thumbnailPicture: $thumbnailPicture, images: $images, colors: $colors, categories: $categories, timestamp: $timestamp, sales: $sales, savesNumber: $savesNumber)';
+  }
 }

@@ -22,7 +22,7 @@ class _ShippingState extends State<Shipping> {
               Text(
                 'ADDRESSES',
                 style: Get.textTheme.bodyLarge!.copyWith(
-                  color: CstColors.a,
+                  color: ColorsConsts.a,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -80,7 +80,7 @@ class AddressCard extends StatelessWidget {
                 Text(
                   'Home',
                   style: Get.textTheme.bodyMedium!.copyWith(
-                    color: CstColors.a,
+                    color: ColorsConsts.a,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -101,13 +101,14 @@ class AddressCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                   child: Row(
                     children: [
                       Text(
                         'Edit',
                         style: Get.textTheme.displayLarge!.copyWith(
-                          color: CstColors.c,
+                          color: ColorsConsts.c,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -116,7 +117,7 @@ class AddressCard extends StatelessWidget {
                       ),
                       SvgPicture.asset(
                         "assets/icons/ic_fluent_edit_24_filled.svg",
-                        color: CstColors.c,
+                        color: ColorsConsts.c,
                         height: 11,
                       )
                     ],
@@ -127,7 +128,7 @@ class AddressCard extends StatelessWidget {
               if (isSelected)
                 SvgPicture.asset(
                   "assets/icons/ic_fluent_checkmark_24_filled.svg",
-                  color: CstColors.c,
+                  color: ColorsConsts.c,
                   height: 20,
                 ),
               const SizedBox(height: 3),
@@ -144,7 +145,7 @@ class AddressCard extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: Get.textTheme.bodyMedium!.copyWith(
-        color: CstColors.b,
+        color: ColorsConsts.b,
         fontWeight: FontWeight.w400,
         height: 1.2,
       ),

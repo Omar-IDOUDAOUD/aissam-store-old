@@ -27,7 +27,7 @@ class _ReviewState extends State<Review> {
                     'Noah Tankin\n68 Baker St...',
                     style: Get.textTheme.bodyMedium!.copyWith(
                       height: 1.2,
-                      color: CstColors.b,
+                      color: ColorsConsts.b,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -57,7 +57,7 @@ class _ReviewState extends State<Review> {
                         textAlign: TextAlign.end,
                         style: Get.textTheme.bodySmall!.copyWith(
                           height: 1.2,
-                          color: CstColors.b,
+                          color: ColorsConsts.b,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -72,7 +72,7 @@ class _ReviewState extends State<Review> {
                     '6 total items',
                     style: Get.textTheme.bodyMedium!.copyWith(
                       height: 1.2,
-                      color: CstColors.b,
+                      color: ColorsConsts.b,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -81,7 +81,7 @@ class _ReviewState extends State<Review> {
                 Text(
                   'TOTAL',
                   style: Get.textTheme.bodyLarge!.copyWith(
-                    color: CstColors.a,
+                    color: ColorsConsts.a,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -97,7 +97,8 @@ class _ReviewState extends State<Review> {
             height: 2,
             child: Row(
               children: List.generate(
-                (Get.size.width - 25 * 2) ~/ (5 + 4), //5: dash width, 4: hosrizontal padding(left+right)
+                (Get.size.width - 25 * 2) ~/
+                    (5 + 4), //5: dash width, 4: hosrizontal padding(left+right)
                 (index) {
                   return Expanded(
                     child: Padding(
@@ -105,7 +106,7 @@ class _ReviewState extends State<Review> {
                       child: SizedBox(
                         height: 2,
                         child: DecoratedBox(
-                          decoration: BoxDecoration(color: CstColors.a),
+                          decoration: BoxDecoration(color: ColorsConsts.a),
                         ),
                       ),
                     ),
@@ -124,7 +125,7 @@ class _ReviewState extends State<Review> {
                 'Total price',
                 style: Get.textTheme.bodyMedium!.copyWith(
                   height: 1.2,
-                  color: CstColors.a,
+                  color: ColorsConsts.a,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -132,7 +133,7 @@ class _ReviewState extends State<Review> {
                 '1116.00 MAD',
                 style: Get.textTheme.bodyMedium!.copyWith(
                   height: 1.2,
-                  color: CstColors.a,
+                  color: ColorsConsts.a,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -145,8 +146,6 @@ class _ReviewState extends State<Review> {
       ),
     );
   }
-
-
 
   _getDivider() => SizedBox(
         height: 20,
@@ -166,7 +165,7 @@ class _ReviewState extends State<Review> {
           child: Text(
             title1,
             style: Get.textTheme.bodyLarge!.copyWith(
-              color: CstColors.a,
+              color: ColorsConsts.a,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -179,7 +178,7 @@ class _ReviewState extends State<Review> {
               Text(
                 title2,
                 style: Get.textTheme.bodyLarge!.copyWith(
-                  color: CstColors.a,
+                  color: ColorsConsts.a,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -190,7 +189,8 @@ class _ReviewState extends State<Review> {
       ],
     );
   }
-    _getRow2(String title, double price) {
+
+  _getRow2(String title, double price) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -198,7 +198,7 @@ class _ReviewState extends State<Review> {
           title,
           style: Get.textTheme.bodyMedium!.copyWith(
             height: 1.2,
-            color: CstColors.a,
+            color: ColorsConsts.a,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -206,7 +206,7 @@ class _ReviewState extends State<Review> {
           '$price MAD',
           style: Get.textTheme.bodyMedium!.copyWith(
             height: 1.2,
-            color: CstColors.b,
+            color: ColorsConsts.b,
             fontWeight: FontWeight.w500,
           ),
         ),

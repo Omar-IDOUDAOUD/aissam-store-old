@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:isolate';
 
 import 'package:aissam_store/core/utils/iterable_distinct_extension.dart';
-import 'package:aissam_store/models/category.dart';
+import 'package:aissam_store/data/model/category.dart';
 import 'package:aissam_store/view/home/tabs/search/filter_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 import 'package:aissam_store/controller/product.dart';
 import 'package:aissam_store/controller/user.dart';
 import 'package:aissam_store/core/shared/pagination_data_result.dart';
-import 'package:aissam_store/models/product.dart';
+import 'package:aissam_store/data/model/product.dart';
 import 'package:aissam_store/view/home/tabs/search/widgets/resultes_part.dart';
 
 class SearchHistoryItem {

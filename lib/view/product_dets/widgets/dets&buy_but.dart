@@ -40,13 +40,14 @@ class DetsAndBuyButton extends StatelessWidget {
                       style: Get.textTheme.headlineSmall!.copyWith(
                         height: 1.25,
                         fontWeight: FontWeight.w500,
-                        color: CstColors.a,
+                        color: ColorsConsts.a,
                       ),
                     ),
                     _getBodySmallText('${price.toStringAsFixed(2)} MAD',
-                        CstColors.a, FontWeight.w700),
+                        ColorsConsts.a, FontWeight.w700),
                     const SizedBox(height: 7),
-                    _getBodySmallText('Details', CstColors.b, FontWeight.w600),
+                    _getBodySmallText(
+                        'Details', ColorsConsts.b, FontWeight.w600),
                     _getRichText('Material', '12-gouge cashmere'),
                     _getRichText('Shipping', 'in 2 to 5 days'),
                     _getRichText('Returns', 'ithin 30 days'),
@@ -71,13 +72,14 @@ class DetsAndBuyButton extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 0),
-          _getBodySmallText('Description', CstColors.b, FontWeight.w600),
+          _getBodySmallText('Description', ColorsConsts.b, FontWeight.w600),
           _getBodyMediumText(
               'Our cult-favorite premium jersey is super-soft, effortiess and made to last. it comes in our cult-favorite muted blush',
-              CstColors.a,
+              ColorsConsts.a,
               FontWeight.w500),
           const SizedBox(height: 7),
-          _getBodySmallText('Chat with seller', CstColors.b, FontWeight.w600),
+          _getBodySmallText(
+              'Chat with seller', ColorsConsts.b, FontWeight.w600),
           _getChatWithSellerMethod('Phone Call', '+21276858745', () {}),
           _getChatWithSellerMethod('WhatsApp', '', () {})
         ],
@@ -89,9 +91,9 @@ class DetsAndBuyButton extends StatelessWidget {
       String label, String subLabel, Function onTap) {
     return Row(
       children: [
-        _getBodySmallText(label, CstColors.a, FontWeight.w600),
+        _getBodySmallText(label, ColorsConsts.a, FontWeight.w600),
         const Spacer(),
-        _getBodyMediumText(subLabel, CstColors.c, FontWeight.normal),
+        _getBodyMediumText(subLabel, ColorsConsts.c, FontWeight.normal),
         const SizedBox(
           width: 5,
         ),
@@ -110,14 +112,14 @@ class DetsAndBuyButton extends StatelessWidget {
           TextSpan(
             text: '$txt1: ',
             style: Get.textTheme.bodySmall!.copyWith(
-              color: CstColors.a,
+              color: ColorsConsts.a,
               fontWeight: FontWeight.w600,
             ),
           ),
           TextSpan(
             text: txt2,
             style: Get.textTheme.bodySmall!.copyWith(
-              color: CstColors.b,
+              color: ColorsConsts.b,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -154,7 +156,7 @@ class DetsAndBuyButton extends StatelessWidget {
           Text(
             '35 review',
             style: Get.textTheme.bodySmall!.copyWith(
-              color: CstColors.a,
+              color: ColorsConsts.a,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -162,7 +164,7 @@ class DetsAndBuyButton extends StatelessWidget {
       );
   Widget _getStar(bool fill) => SvgPicture.asset(
         'assets/icons/preview_star.svg',
-        color: fill ? CstColors.a : CstColors.a.withOpacity(.5),
+        color: fill ? ColorsConsts.a : ColorsConsts.a.withOpacity(.5),
         height: 15,
       );
 }
@@ -283,7 +285,7 @@ class _BuyButtonState extends State<_BuyButton>
       child: Container(
         width: 80,
         decoration: BoxDecoration(
-          color: CstColors.a,
+          color: ColorsConsts.a,
           borderRadius: BorderRadius.circular(18),
         ),
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),

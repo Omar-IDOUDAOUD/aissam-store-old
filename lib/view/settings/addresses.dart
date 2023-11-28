@@ -45,7 +45,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
               onTap: Get.back,
               child: SvgPicture.asset(
                 'assets/icons/ic_fluent_chevron_left_24_filled.svg',
-                color: CstColors.a,
+                color: ColorsConsts.a,
                 width: 20,
                 // alignment: Alignment.center,
               ),
@@ -59,7 +59,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: CstColors.a,
+                color: ColorsConsts.a,
               ),
             ),
           ),
@@ -76,18 +76,18 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Text(
-                  'Addresses',
-                  style: Get.textTheme.headlineLarge!.copyWith(
-                    color: CstColors.a,
-                    height: 1.1,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
+                    Text(
+                      'Addresses',
+                      style: Get.textTheme.headlineLarge!.copyWith(
+                        color: ColorsConsts.a,
+                        height: 1.1,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     Text(
                       '2 added',
                       style: Get.textTheme.bodyMedium!.copyWith(
-                        color: CstColors.b,
+                        color: ColorsConsts.b,
                         // height: 1.2,
                         fontWeight: FontWeight.normal,
                       ),
@@ -152,7 +152,7 @@ class _SettingsAddressesState extends State<SettingsAddresses> {
                       child: Text(
                         'Add Address',
                         style: Get.textTheme.bodyLarge!.copyWith(
-                          color: CstColors.a,
+                          color: ColorsConsts.a,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

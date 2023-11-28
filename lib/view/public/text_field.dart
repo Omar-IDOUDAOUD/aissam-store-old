@@ -117,13 +117,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
       focusNode: widget.focusNode,
       enabled: widget.enabled,
       style: Get.textTheme.headlineSmall!.copyWith(
-        color: CstColors.a,
+        color: ColorsConsts.a,
         fontWeight: FontWeight.w400,
         height: 1.6,
       ),
       decoration: InputDecoration(
         hintStyle: Get.textTheme.headlineSmall!.copyWith(
-          color: CstColors.a.withOpacity(.8),
+          color: ColorsConsts.a.withOpacity(.8),
           fontWeight: FontWeight.w400,
           height: 1.6,
         ),
@@ -140,7 +140,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   width: 25,
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.center,
-                  color: _isFocus ? CstColors.c : CstColors.b,
+                  color: _isFocus ? ColorsConsts.c : ColorsConsts.b,
                 ),
               )
             : null,
@@ -153,7 +153,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         suffixIcon: _getCurrentSuffixIcon(),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(widget.borderRadius),
-          borderSide: BorderSide(color: CstColors.b.withOpacity(.5), width: 4),
+          borderSide:
+              BorderSide(color: ColorsConsts.b.withOpacity(.5), width: 4),
         ),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
@@ -181,7 +182,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         fit: BoxFit.scaleDown,
         allowDrawingOutsideViewBox: true,
         alignment: Alignment.center,
-        color: CstColors.c,
+        color: ColorsConsts.c,
       ),
     );
   }

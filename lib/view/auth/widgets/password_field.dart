@@ -32,7 +32,7 @@ class _PasswordFieldState extends State<PasswordField> {
             });
           },
           style: Get.textTheme.bodyLarge!.copyWith(
-            color: widget.errorMessage != null ? Colors.red : CstColors.a,
+            color: widget.errorMessage != null ? Colors.red : ColorsConsts.a,
             fontWeight: FontWeight.w400,
             height: 1.6,
           ),
@@ -40,7 +40,7 @@ class _PasswordFieldState extends State<PasswordField> {
           obscureText: _obscurePassword ?? false,
           decoration: InputDecoration(
             hintStyle: Get.textTheme.bodyLarge!.copyWith(
-              color: CstColors.b,
+              color: ColorsConsts.b,
               fontWeight: FontWeight.w400,
               height: 1.6,
             ),
@@ -53,7 +53,7 @@ class _PasswordFieldState extends State<PasswordField> {
                       _obscurePassword!
                           ? CupertinoIcons.eye
                           : CupertinoIcons.eye_slash,
-                      color: CstColors.c,
+                      color: ColorsConsts.c,
                       size: 20,
                     ),
                   )
@@ -70,7 +70,7 @@ class _PasswordFieldState extends State<PasswordField> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide:
-                  BorderSide(color: CstColors.b.withOpacity(.5), width: 4),
+                  BorderSide(color: ColorsConsts.b.withOpacity(.5), width: 4),
             ),
             border: OutlineInputBorder(
               borderSide: BorderSide.none,

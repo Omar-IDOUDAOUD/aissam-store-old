@@ -82,20 +82,20 @@ class _CartItemState extends State<CartItem> {
                                   Text(
                                     'Premier Jersey Hijabs - Rose Quartz',
                                     style: Get.textTheme.bodyLarge!.copyWith(
-                                        color: CstColors.a, height: 1.2),
+                                        color: ColorsConsts.a, height: 1.2),
                                   ),
                                   Spacer(),
                                   Text(
                                     '1 item',
                                     style: Get.textTheme.bodyMedium!.copyWith(
-                                      color: CstColors.b,
+                                      color: ColorsConsts.b,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                   Text(
                                     '185.00 MAD',
                                     style: Get.textTheme.bodyMedium!.copyWith(
-                                      color: CstColors.a,
+                                      color: ColorsConsts.a,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -143,7 +143,7 @@ class _CartItemState extends State<CartItem> {
       GetSnackBar(
         dismissDirection: DismissDirection.down,
         duration: 5.seconds,
-        backgroundColor: CstColors.a,
+        backgroundColor: ColorsConsts.a,
         animationDuration: 450.milliseconds,
         isDismissible: true,
         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
@@ -192,13 +192,13 @@ class _CartItemState extends State<CartItem> {
                     Icon(
                       CupertinoIcons.restart,
                       size: 18,
-                      color: CstColors.a,
+                      color: ColorsConsts.a,
                     ),
                     SizedBox(width: 5),
                     Text(
                       "Restor",
                       style: Get.textTheme.bodyLarge!.copyWith(
-                        color: CstColors.a,
+                        color: ColorsConsts.a,
                       ),
                     ),
                   ],
@@ -213,7 +213,7 @@ class _CartItemState extends State<CartItem> {
 
   Widget _getStar(bool fill) => SvgPicture.asset(
         'assets/icons/preview_star.svg',
-        color: fill ? CstColors.a : CstColors.a.withOpacity(.5),
+        color: fill ? ColorsConsts.a : ColorsConsts.a.withOpacity(.5),
         height: 15,
       );
 }
